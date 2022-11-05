@@ -1,0 +1,68 @@
+import datetime
+
+from django.db import models
+from django.contrib.auth import get_user_model
+from django.utils import timezone
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
+User = get_user_model()
+
+
+# Create your models here.
+
+class Garment(models.Model):
+    garment_name = models.CharField(max_length=200)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    purchase_date = models.DateField(null=True)
+    purchase_price = models.FloatField(null=True)
+    # image = models.ImageField(upload_to='garments/%Y/%m/%d')
+    # nfc_id = models.IntField()???
+    # qr_id = models.IntField()???
+
+    def __str__(self):
+        return self.garment_name
+
+    def clean(self):
+        if self.purchase_date:
+            # Make sure purchase_date is in the past
+            now = timezone.now()        
+            if self.purchase_date > now:
+                raise ValidationError(_('Purchase Date must be in the past.'))
+            # Set the pub_date for published items if it hasn't been set already.
+            if self.purchase_date == None:
+                self.purchase_date = datetime.date.today()
+        # TODO: check other stuff as well
+
+
+class GarmentWear(models.Model):
+    garment = models.ForeignKey(Garment, on_delete=models.CASCADE)
+    scan_date = models.DateTimeField()
+    wearer = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    # wearer - is the creator of the table row stored? if so, no need to store
+
+
+class Outfit(models.Model):
+    name = models.CharField(max_length=200)
+    garments = models.ManyToManyField(Garment, symmetrical=False)
+
+    # style
+    # dress_code
+    # season
+    # list of garments? 
+
+    def __str__(self):
+        return self.name
+
+
+class OutfitWear(models.Model):
+    outfit = models.ForeignKey(Outfit, on_delete=models.CASCADE)
+    scan_date = models.DateTimeField()
+    wearer = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+# class OutfitGarment(models.Model):
+#    garment = models.ForeignKey(Garment, on_delete=models.CASCADE)
+#    outfit = models.ForeignKey(Outfit, on_delete=models.CASCADE)
+#
+#    def __str__(self):
+#        return f"{self.garment} as part of {self.outfit}"
