@@ -1,49 +1,21 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.views import generic
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.models import User
 
+from rest_framework import viewsets, authentication, exceptions
+
+from .serializers import UserSerializer, GarmentSerializer
 from .models import Garment
 
-
-def index(request):
-    return HttpResponse("Hello, world. You're at the index.")
-
-
-class WardrobeView(generic.ListView):
-    model = Garment
-    template_name = 'closet/wardrobe.html'
-
-    def get_queryset(self):
-        # only show the garments in the current user's wardrobe
-        return Garment.objects.filter(owner=self.request.user)
+class UserViewSet(viewsets.ModelViewSet):
+	queryset = User.objects.all()
+	serializer_class = UserSerializer
 
 
-class GarmentView(generic.DetailView):
-    model = Garment
-    template_name = 'closet/garment.html'
+class GarmentView(viewsets.ModelViewSet):
+    queryset = Garment.objects.all()
+    serializer_class = GarmentSerializer
 
+    # def get_queryset(self):
+    # 	user = self.request.user
+    # 	return Garment.objects.filter('owner': user)
 
-class GarmentCreateView(CreateView):
-    """Create a new garment"""
-    model = Garment
-    fields = ['garment_name']
-    success_url = '/closet/wardrobe/'
-
-    def form_valid(self, form):
-        garment = form.save(commit=False)
-        garment.owner = self.request.user
-        garment.save()
-
-        return HttpResponseRedirect(self.success_url)
-
-
-class GarmentUpdateView(UpdateView):
-    model = Garment
-    fields = ['garment_name', 'purchase_date', 'purchase_price']
-    template_name_suffix = '_update_form'
-    success_url = '/closet/wardrobe/'
-
-class GarmentDeleteView(DeleteView):
-    """docstring for GarmentDeleteView"""
-    model = Garment
-    success_url = '/closet/wardrobe/'

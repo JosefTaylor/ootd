@@ -26,7 +26,7 @@ class Garment(models.Model):
     def clean(self):
         if self.purchase_date:
             # Make sure purchase_date is in the past
-            now = timezone.now()        
+            now = timezone.now().date()
             if self.purchase_date > now:
                 raise ValidationError(_('Purchase Date must be in the past.'))
             # Set the pub_date for published items if it hasn't been set already.
