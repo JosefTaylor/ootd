@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 
 from rest_framework import viewsets, authentication, exceptions
 
-from .serializers import UserSerializer, GarmentSerializer
-from .models import Garment
+from .serializers import UserSerializer, GarmentSerializer, GarmentWearSerializer
+from .models import Garment, GarmentWear
 
 class UserViewSet(viewsets.ModelViewSet):
 	queryset = User.objects.all()
@@ -15,7 +15,15 @@ class GarmentView(viewsets.ModelViewSet):
     queryset = Garment.objects.all()
     serializer_class = GarmentSerializer
 
-    # def get_queryset(self):
-    # 	user = self.request.user
-    # 	return Garment.objects.filter('owner': user)
+    def get_queryset(self):
+    	user = self.request.user
+    	return Garment.objects.filter(owner= user)
+
+class GarmentWearView(viewsets.ModelViewSet):
+    queryset = GarmentWear.objects.all()
+    serializer_class = GarmentWearSerializer
+
+    def get_queryset(self):
+    	user = self.request.user
+    	return Garment.objects.filter('owner': user)
 

@@ -41,6 +41,18 @@ class GarmentWear(models.Model):
     wearer = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     # wearer - is the creator of the table row stored? if so, no need to store
 
+    def __str__(self):
+        return f'{self.garment.garment_name} on {self.scan_date.date()}'
+
+    def wearer_name(self):
+        return self.wearer.username
+
+    def owner_name(self):
+        return self.garment.owner.username
+
+    def garment_name(self):
+        return self.garment.garment_name
+
 
 class Outfit(models.Model):
     name = models.CharField(max_length=200)

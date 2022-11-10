@@ -26,6 +26,7 @@ router = routers.DefaultRouter()
 
 router.register(r'users', views.UserViewSet, 'user')
 router.register(r'garments', views.GarmentView, 'garment')
+router.register(r'garmentwears', views.GarmentWearView, 'garmentwear')
 
 urlpatterns = [
 	path('', include(router.urls)),
