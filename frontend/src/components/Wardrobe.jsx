@@ -25,9 +25,12 @@ class Wardrobe extends Component {
         this.handleChange = this.handleChange.bind(this)
     }
 
-    filterBySearch(garment) {
+    filterBySearch(garments) {
+        return garments.filter(garment => {
         const name = garment.garment_name.toLowerCase();
-        return (name.includes(this.state.filterText.toLowerCase()))
+        const filterText =  this.state.filterText.toLowerCase();
+        return name.includes(filterText);
+        })
     }
 
     handleChange(event) {
@@ -44,7 +47,7 @@ class Wardrobe extends Component {
                     />
                 <table>
                     <WardrobeGarment 
-                        garments={this.props.garmentList.filter(garment => this.filterBySearch(garment))}
+                        garments={this.filterBySearch(this.props.garmentList)}
                         />
                 </table>
                 <button>New Garment</button>

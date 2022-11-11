@@ -1,40 +1,54 @@
 import React, { Component } from "react";
 
-function CredentialField(props) {
-	return (
-		<input 
-		type="text"
-		placeholder={props.placeholder}
-		/>
-		)
-}
-
-function LoginButton(props) {
-	return (
-		<button>{props.label}</button>
-		)
-}
-
 class Login extends Component {
 
 	render() {
 		return (			
-		<div>
-		<div>
-			<CredentialField 
-			placeholder="username"/>
-		</div>
-		<div>
-			<CredentialField 
-			placeholder="password"/>
-		</div>
-		<div>
-			<LoginButton label="sign in"/>
-		</div>
-		<div>
-			<LoginButton label="register"/>
-		</div>
-		</div>
+		<form action="/api-auth/login" method="GET">
+		<table>
+		<tbody>
+		<tr>
+			<td>
+				<label for="username" hidden>Username</label>
+				<input 
+					type="text" 
+					id="username" 
+					name="username" 
+					placeholder="username"
+					required />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="password" hidden>Password</label>
+				<input 
+					type="password" 
+					id="password" 
+					name="password" 
+					placeholder="password" 
+					minlength="8" 
+					required />
+			</td>
+		</tr>
+		<tr>
+			<td><input
+					type="submit"
+					value="Log in"/>
+			</td>
+		</tr>
+		<tr>
+			<td><input
+					type="submit"
+					formAction="/register"
+					value="Register"/>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="/api-auth/password_reset">Forgot Password?</a></td>
+		</tr>
+		</tbody>
+		</table>
+		</form>
 		)
 	}
 }

@@ -39,6 +39,15 @@ class WornToday extends Component {
         this.handleClick = this.handleClick.bind(this)
     }
 
+
+    filterByDate(wears) {
+        return wears.filter(wear => {
+            const date = new Date(wear.scan_date).toDateString()
+            const today = this.state.daySelected.toDateString()
+            return date === today;
+        })
+    }
+
     handleClick(n) {
         return (event) => {
             let newDay = new Date(this.state.daySelected)
@@ -58,7 +67,7 @@ class WornToday extends Component {
                 </h2>
                 <table>
                     <GarmentWear 
-                        garmentWearList={this.props.garmentWearList.filter(wear => new Date(wear.scan_date).toDateString() === this.state.daySelected.toDateString())}
+                        garmentWearList={this.filterByDate(this.props.garmentWearList)}
                         />
                 </table>
                 <button>Add To Outfit</button>

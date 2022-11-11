@@ -43,7 +43,7 @@ class App extends Component {
      return (
        <div>
       <UserHeader/>
-       <WornToday 
+      <WornToday 
          garmentWearList={this.state.garmentWearList}
          />
        <Wardrobe 
