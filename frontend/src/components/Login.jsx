@@ -4,26 +4,36 @@ function CredentialField(props) {
 	return (
 		<input 
 		type="text"
-		placeholder={this.props.placeholder}
+		placeholder={props.placeholder}
 		/>
 		)
 }
 
 function LoginButton(props) {
 	return (
-		<button>{this.props.label}</button>
+		<button>{props.label}</button>
 		)
 }
 
 class Login extends Component {
 
 	render() {
-		return (
+		return (			
 		<div>
-			<CredentialField placeholder="username"/>
-			<CredentialField placeholder="password"/>
+		<div>
+			<CredentialField 
+			placeholder="username"/>
+		</div>
+		<div>
+			<CredentialField 
+			placeholder="password"/>
+		</div>
+		<div>
 			<LoginButton label="sign in"/>
+		</div>
+		<div>
 			<LoginButton label="register"/>
+		</div>
 		</div>
 		)
 	}

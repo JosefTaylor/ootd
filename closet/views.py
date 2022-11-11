@@ -12,7 +12,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class GarmentView(viewsets.ModelViewSet):
-    queryset = Garment.objects.all()
     serializer_class = GarmentSerializer
 
     def get_queryset(self):
@@ -20,10 +19,12 @@ class GarmentView(viewsets.ModelViewSet):
     	return Garment.objects.filter(owner= user)
 
 class GarmentWearView(viewsets.ModelViewSet):
-    queryset = GarmentWear.objects.all()
     serializer_class = GarmentWearSerializer
 
     def get_queryset(self):
     	user = self.request.user
-    	return Garment.objects.filter('owner': user)
+    	return GarmentWear.objects.filter(wearer= user)
 
+ # class UserLoggedInView(viewsets.UserViewSet):
+
+ #    def current_user = self request.user

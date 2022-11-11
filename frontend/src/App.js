@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+
+import axios from 'axios';
+
 import Wardrobe from "./components/Wardrobe";
 import WornToday from "./components/GarmentWear";
 import Login from "./components/Login";
-import axios from 'axios';
-
+import UserHeader from "./components/Header";
+import LoginHeader from "./components/Header";
 
 class App extends Component {
 
@@ -11,8 +14,12 @@ class App extends Component {
     super(props);
     this.state = { 
       garmentList: [],
-      garmentWearList: [] 
+      garmentWearList: [],
+      authenticated: true,
     };
+  }
+
+  setupUser() {
   }
 
   refreshList() {
@@ -27,15 +34,15 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.setupUser();
     this.refreshList();
   }
 
   render() {
-      // if user is logged in:
+    if (this.state.authenticated) {
      return (
        <div>
-       <h1>User Home Page
-       </h1>
+      <UserHeader/>
        <WornToday 
          garmentWearList={this.state.garmentWearList}
          />
@@ -44,13 +51,14 @@ class App extends Component {
          />
        </div>
        );
-    //  //else if user is logged out:
-    // return (
-    //   <div>
-    //     <h1>OOTD Home Page</h1>
-    //     <Login/>
-    //   </div>       
-    // );
+    } else {
+    return (
+      <div>
+      <LoginHeader/>
+      <Login/>
+      </div>    
+    );
+  }
   }
 }
 

@@ -1,15 +1,6 @@
 import React, { Component } from "react";
 import FilterBar from "./FilterBar";
 
-// function FilterBar(props) {
-//     return (
-//         <input
-//             value={props.value}
-//             onChange={props.onChange}
-//             />
-//         )
-// }
-
 
 function WardrobeGarment(props) {
     const garments = props.garments
