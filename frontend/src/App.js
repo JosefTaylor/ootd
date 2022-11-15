@@ -24,18 +24,22 @@ class App extends Component {
 
   refreshList() {
     axios   //Axios to send and receive HTTP requests
-    .get("http://localhost:8000/garments/", {withCredentials: true}) //specify a user here?
+    .get("http://localhost:8000/garments/", {withCredentials: true})
     .then(response => {this.setState({ garmentList: response.data })})
     .catch(err => console.log(err));
     axios   //Axios to send and receive HTTP requests
-    .get("http://localhost:8000/garmentwears/", {withCredentials: true}) //specify a user here?
+    .get("http://localhost:8000/garmentwears/", {withCredentials: true})
     .then(response => {this.setState({ garmentWearList: response.data })})
     .catch(err => console.log(err));
   }
 
   componentDidMount() {
-    this.setupUser();
     this.refreshList();
+    if (this.state.garmentList.length > 0) {
+     this.setState({ authenticated: true })
+    } else {
+      this.setState({ authenticated: false })
+    }
   }
 
   render() {

@@ -4,7 +4,7 @@ class Login extends Component {
 
 	render() {
 		return (			
-		<form action="/api-auth/login" method="GET">
+		<form method="post" action="/api-auth/login">
 		<table>
 		<tbody>
 		<tr>
@@ -39,7 +39,7 @@ class Login extends Component {
 		<tr>
 			<td><input
 					type="submit"
-					formAction="/register"
+					formAction="/api-auth/register"
 					value="Register"/>
 			</td>
 		</tr>

@@ -16,24 +16,26 @@ from .serializers import (
 from .models import Garment, GarmentWear
 
 class UserViewSet(viewsets.ModelViewSet):
-	queryset = User.objects.all()
-	serializer_class = UserSerializer
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
-
+    def get_queryset(self):
+        return [self.request.user]
+        
 class GarmentView(viewsets.ModelViewSet):
     serializer_class = GarmentSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-    	user = self.request.user
-    	return Garment.objects.filter(owner= user)
+        user = self.request.user
+        return Garment.objects.filter(owner= user)
 
 class GarmentWearView(viewsets.ModelViewSet):
     serializer_class = GarmentWearSerializer
 
     def get_queryset(self):
-    	user = self.request.user
-    	return GarmentWear.objects.filter(wearer= user)
+        user = self.request.user
+        return GarmentWear.objects.filter(wearer= user)
 
  # class UserLoggedInView(viewsets.UserViewSet):
 
