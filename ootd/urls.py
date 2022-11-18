@@ -31,5 +31,6 @@ router.register(r'garmentwears', views.GarmentWearView, 'garmentwear')
 urlpatterns = [
 	path('', include(router.urls)),
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('rest_framework.urls')),
+    path('garments/<int:pk>/', views.GarmentDetailView.as_view(), name='garmentdetail'),
 ]

@@ -35,7 +35,6 @@ class GarmentSerializer(serializers.HyperlinkedModelSerializer):
 		model = Garment
 		fields = (
 			'url',
-			'id',
 			'garment_name', 
 			'owner', 
 			'purchase_date', 

@@ -3,10 +3,12 @@ from django.contrib.auth.models import User
 import datetime
 
 from rest_framework import (
+    generics,
     viewsets, 
     authentication, 
     exceptions, 
     permissions,
+    mixins
     )
 
 from .serializers import (
@@ -26,7 +28,19 @@ class UserViewSet(viewsets.ModelViewSet):
         
 class GarmentView(viewsets.ModelViewSet):
     serializer_class = GarmentSerializer
-    #permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Garment.objects.filter(owner= user)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user.url)
+
+class GarmentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    model = Garment
+    serializer_class = GarmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
@@ -39,9 +53,8 @@ class GarmentWearView(viewsets.ModelViewSet):
         user = self.request.user
         return GarmentWear.objects.filter(wearer= user)
 
-    def do_a_thing(self):
-        # self.request.data.wearer = self.request.user
-        self.request.data.scan_date = datetime.now()
+    def perform_create(self, serializer):
+        serializer.save(wearer=self.request.user)
 
 
 class UserWardrobeView(viewsets.ModelViewSet):
