@@ -14,16 +14,16 @@ function PrettyPrintGarmentWear(wear) {
 function GarmentWear(props) {
     const garmentWearList = props.garmentWearList
     const listItems = garmentWearList.map((garmentWear) =>
-        <tr key={garmentWear.id}>
-            <td>{PrettyPrintGarmentWear(garmentWear)}</td>
-            <td><button 
-            onClick={props.onDelete} 
-            data-url={garmentWear.url}>
-            Remove</button></td>
-        </tr>
+        <div key={garmentWear.id}>
+            {PrettyPrintGarmentWear(garmentWear)}
+            <button 
+                onClick={props.onDelete} 
+                data-url={garmentWear.url}>
+                Remove</button>
+        </div>
         )
     return (
-        <tbody>{listItems}</tbody>
+        <ul>{listItems}</ul>
     )    
 }
 
@@ -59,12 +59,10 @@ class WornToday extends Component {
     render() {
         return (
             <div>
-                <table>
-                    <GarmentWear 
-                        garmentWearList={this.filterByDate(this.props.garmentWearList)}
-                        onDelete={this.handleDelete}
-                        />
-                </table>
+                <GarmentWear 
+                    garmentWearList={this.filterByDate(this.props.garmentWearList)}
+                    onDelete={this.handleDelete}
+                    />
             </div>
         )
     }

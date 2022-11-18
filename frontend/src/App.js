@@ -22,7 +22,7 @@ class App extends Component {
       user: {url:"http://localhost:8000/users/1/"},
       daySelected: new Date()
     };
-    this.handleClick = this.handleClick.bind(this)
+    this.handleDateClick = this.handleDateClick.bind(this)
     this.refreshList = this.refreshList.bind(this)
   }
 
@@ -40,7 +40,7 @@ class App extends Component {
     .catch(err => console.log(err));
   }
 
-  handleClick(n) {
+  handleDateClick(n) {
     return (event) => {
       let newDay = new Date(this.state.daySelected)
       newDay.setDate(this.state.daySelected.getDate() + n)
@@ -61,12 +61,13 @@ class App extends Component {
     if (this.state.authenticated) {
      return (
       // <GarmentEdit user={this.state.user}/>
-        <div>
+        <div style={{textAlign:'center',}}>
           <UserHeader/>
           <h2>
           <DateSelector 
           date={this.state.daySelected.toDateString()} 
-          onClick={this.handleClick}
+          onClick={this.handleDateClick}
+          onChange={this.handleDatePick}
           />  
           </h2>
           <WornToday 
