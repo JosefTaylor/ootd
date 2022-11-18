@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
+import datetime
 
 from rest_framework import (
     viewsets, 
@@ -12,6 +13,7 @@ from .serializers import (
     UserSerializer, 
     GarmentSerializer, 
     GarmentWearSerializer,
+    UserWardrobeSerializer,
     )
 from .models import Garment, GarmentWear
 
@@ -24,7 +26,7 @@ class UserViewSet(viewsets.ModelViewSet):
         
 class GarmentView(viewsets.ModelViewSet):
     serializer_class = GarmentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
@@ -37,6 +39,14 @@ class GarmentWearView(viewsets.ModelViewSet):
         user = self.request.user
         return GarmentWear.objects.filter(wearer= user)
 
- # class UserLoggedInView(viewsets.UserViewSet):
+    def do_a_thing(self):
+        # self.request.data.wearer = self.request.user
+        self.request.data.scan_date = datetime.now()
 
- #    def current_user = self request.user
+
+class UserWardrobeView(viewsets.ModelViewSet):
+    serializer_class = UserWardrobeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return self.request.user

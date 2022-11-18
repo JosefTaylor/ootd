@@ -15,13 +15,26 @@ class  UserSerializer(serializers.HyperlinkedModelSerializer):
 			'email'
 			)
 
+class  UserWardrobeSerializer(serializers.HyperlinkedModelSerializer):
+	"""docstring for  UserSerializer"""
+	class Meta:
+		model = User
+		fields = (
+			'url',  
+			'username', 
+			'garment_wear_urls'			
+			'garment_wear_names'
+			'garment_urls'
+			'garment_names'
+			)
+
 
 class GarmentSerializer(serializers.HyperlinkedModelSerializer):
 
 	class Meta:
 		model = Garment
 		fields = (
-			'url', 
+			'url',
 			'id',
 			'garment_name', 
 			'owner', 
@@ -35,10 +48,10 @@ class GarmentWearSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = GarmentWear
 		fields = (
-			'url',  
-			'id',
+			'url',
 			'garment', 
 			'scan_date', 
+			'wearer',
 			'wearer_name', 
 			'owner_name', 
 			'garment_name'

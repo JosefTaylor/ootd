@@ -1,12 +1,13 @@
 import React, { Component } from "react";
-import DateSelector from "./DateSelector";
+import axios from 'axios';
 
 
 function PrettyPrintGarmentWear(wear) {
+    const wear_date = new Date(wear.scan_date).toDateString()
     if (wear.wearer_name === wear.owner_name) {
-        return `You wore ${wear.garment_name} on ${wear.scan_date}.`;
+        return `You wore ${wear.garment_name} on ${wear_date}`;
     } else {
-        return `You wore ${wear.owner_name}'s ${wear.garment_name} on ${wear.scan_date}`;
+        return `You wore ${wear.owner_name}'s ${wear.garment_name} on ${wear_date}`;
     }
 }
 
@@ -14,14 +15,11 @@ function GarmentWear(props) {
     const garmentWearList = props.garmentWearList
     const listItems = garmentWearList.map((garmentWear) =>
         <tr key={garmentWear.id}>
-            <td>
-            <input 
-                name='addToOutfit' 
-                type="checkbox"
-                />
-            </td>
             <td>{PrettyPrintGarmentWear(garmentWear)}</td>
-            <td><button>Don't wear</button></td>
+            <td><button 
+            onClick={props.onDelete} 
+            data-url={garmentWear.url}>
+            Remove</button></td>
         </tr>
         )
     return (
@@ -34,43 +32,39 @@ class WornToday extends Component {
         super(props)
         this.state = {
             filterText: '',
-            daySelected: new Date()
-        };
-        this.handleClick = this.handleClick.bind(this)
+        }
+
+        this.handleDelete = this.handleDelete.bind(this)
+    }
+
+    handleDelete(event) {
+        console.log("I'll delete " + event.target.dataset.url)
+        axios
+            .delete(event.target.dataset.url, {
+                withCredentials: true, 
+            })
+            .then()
+            .catch(err => console.log(err));
     }
 
 
     filterByDate(wears) {
         return wears.filter(wear => {
             const date = new Date(wear.scan_date).toDateString()
-            const today = this.state.daySelected.toDateString()
+            const today = this.props.daySelected.toDateString()
             return date === today;
         })
-    }
-
-    handleClick(n) {
-        return (event) => {
-            let newDay = new Date(this.state.daySelected)
-            newDay.setDate(this.state.daySelected.getDate() + n)
-            this.setState({daySelected: newDay})
-        }
     }
 
     render() {
         return (
             <div>
-                <h2>
-                    <DateSelector 
-                        date={this.state.daySelected.toDateString()} 
-                        onClick={this.handleClick}
-                        />  
-                </h2>
                 <table>
                     <GarmentWear 
                         garmentWearList={this.filterByDate(this.props.garmentWearList)}
+                        onDelete={this.handleDelete}
                         />
                 </table>
-                <button>Add To Outfit</button>
             </div>
         )
     }
