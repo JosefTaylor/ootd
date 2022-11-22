@@ -15,39 +15,57 @@ from .serializers import (
     UserSerializer, 
     GarmentSerializer, 
     GarmentWearSerializer,
-    UserWardrobeSerializer,
+    # UserWardrobeSerializer,
     )
-from .models import Garment, GarmentWear
 
+from .models import (
+    Garment, 
+    GarmentWear,
+    Fashionista
+    )
+
+## Users and Fashionistas ##
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        return [self.request.user]
-        
+        user = self.request.user
+        if user.is_superuser:
+            return Fashionista.objects.all()
+        else:
+            return Fashionista.objects.filter(user= user)
+
+
+## Garments ##
 class GarmentView(viewsets.ModelViewSet):
     serializer_class = GarmentSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
-        return Garment.objects.filter(owner= user)
+        if user.is_superuser:
+            return Garment.objects.all()
+        else:
+            return Garment.objects.filter(owner= user)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user.url)
 
-class GarmentDetailView(generics.RetrieveUpdateDestroyAPIView):
-    model = Garment
-    serializer_class = GarmentSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        user = self.request.user
-        return Garment.objects.filter(owner= user)
+# class GarmentDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     model = Garment
+#     serializer_class = GarmentSerializer
+#     permission_classes = [permissions.IsAuthenticated]
 
+#     def get_queryset(self):
+#         user = self.request.user
+#         return Garment.objects.filter(owner= user)
+
+## Garment Wears ##
 class GarmentWearView(viewsets.ModelViewSet):
+    model = GarmentWear
     serializer_class = GarmentWearSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
@@ -57,9 +75,11 @@ class GarmentWearView(viewsets.ModelViewSet):
         serializer.save(wearer=self.request.user)
 
 
-class UserWardrobeView(viewsets.ModelViewSet):
-    serializer_class = UserWardrobeSerializer
+class GarmentWearDeleteView(generics.DestroyAPIView):
+    model = GarmentWear
+    serializer_class = GarmentWearSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return self.request.user
+        user = self.request.user
+        return GarmentWear.objects.filter(wearer= user)

@@ -2,43 +2,41 @@ from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
-from closet.models import Garment, GarmentWear, Outfit, OutfitWear
+from closet.models import (
+	Garment, 
+	GarmentWear, 
+	Outfit, 
+	OutfitWear,
+	Fashionista
+	)
 
-class  UserSerializer(serializers.HyperlinkedModelSerializer):
-	"""docstring for  UserSerializer"""
-	class Meta:
-		model = User
-		fields = (
-			'url',  
-			'id',
-			'username', 
-			'email'
-			)
 
-class  UserWardrobeSerializer(serializers.HyperlinkedModelSerializer):
-	"""docstring for  UserSerializer"""
+class GarmentMiniSerializer(serializers.HyperlinkedModelSerializer):
+
 	class Meta:
-		model = User
+		model = Garment
 		fields = (
-			'url',  
-			'username', 
-			'garment_wear_urls'			
-			'garment_wear_names'
-			'garment_urls'
-			'garment_names'
+			'url',
+			'garment_name',
+			'owner',
 			)
 
 
 class GarmentSerializer(serializers.HyperlinkedModelSerializer):
+
 
 	class Meta:
 		model = Garment
 		fields = (
 			'url',
 			'garment_name', 
-			'owner', 
+			#'owner', 
 			'purchase_date', 
-			'purchase_price'
+			'purchase_price',
+			'deaq_date', 
+			'deaq_price',
+			'cost_per_wear',
+			'is_active',
 			)
 
 
@@ -54,4 +52,26 @@ class GarmentWearSerializer(serializers.HyperlinkedModelSerializer):
 			'wearer_name', 
 			'owner_name', 
 			'garment_name'
+			)
+
+
+class  UserSerializer(serializers.HyperlinkedModelSerializer):
+#class  UserSerializer(serializers.HyperlinkedModelSerializer):
+	"""docstring for  UserSerializer"""
+
+	garments = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='garment-detail')
+	garment_wears = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='garmentwear-detail')
+
+	class Meta:
+		model = Fashionista
+		fields = (
+			# 'url',
+			'user',
+			'username',
+			'email',
+			'bio',
+		    'garments',
+			'garment_names',
+			'garment_wears',
+			'garment_wear_names',
 			)

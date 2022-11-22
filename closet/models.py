@@ -1,4 +1,5 @@
 import datetime
+import math
 
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -7,18 +8,47 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
-
-
 # Create your models here.
+
+class Fashionista(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.CharField(max_length=500)
+    # TODO three_words = models.ListField()
+    # TODO picture = models.ImageField(upload_to='fashionistas/')
+
+    def __str__(self):
+        return self.user.username
+
+    def username(self):
+        return self.user.username
+
+    def email(self):
+        return self.user.email
+
+    def garments(self):        
+        return Garment.objects.filter(owner= self.user)
+
+    def garment_names(self):
+        return [str(garment) for garment in self.garments()]
+
+
+    def garment_wears(self):
+        return GarmentWear.objects.filter(wearer= self.user)
+
+    def garment_wear_names(self):
+        return [str(wear) for wear in self.garment_wears()]
+
 
 class Garment(models.Model):
     garment_name = models.CharField(max_length=200)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     purchase_date = models.DateField(null=True)
     purchase_price = models.FloatField(null=True)
-    # image = models.ImageField(upload_to='garments/%Y/%m/%d')
-    # nfc_id = models.IntField()???
-    # qr_id = models.IntField()???
+    deaq_date = models.DateField(blank=True, null=True)
+    deaq_price = models.FloatField(blank=True, null=True, default=0)
+    # TODO image = models.ImageField(upload_to='garments/%Y/%m/%d')
+    # TODO nfc_id = models.IntField()???
+    # TODO qr_id = models.IntField()???
 
     def __str__(self):
         return self.garment_name
@@ -34,6 +64,13 @@ class Garment(models.Model):
                 self.purchase_date = datetime.date.today()
         # TODO: check other stuff as well
 
+    def cost_per_wear(self):
+        cost = self.purchase_price - self.deaq_price
+        num_wears = max(1, len(GarmentWear.objects.filter(garment= self)))
+        return cost/num_wears
+
+    def is_active(self):
+        return not self.deaq_date or self.deaq_date > datetime.date.today()
 
 class GarmentWear(models.Model):
     garment = models.ForeignKey(Garment, on_delete=models.CASCADE)
@@ -42,7 +79,13 @@ class GarmentWear(models.Model):
     # wearer - is the creator of the table row stored? if so, no need to store
 
     def __str__(self):
-        return f'{self.garment.garment_name} on {self.scan_date.date()}'
+        if self.wearer == self.garment.owner:
+            return (f"{self.wearer.username} wore their " + 
+            f"{self.garment.garment_name}")
+        else:
+            return (f"{self.wearer.username} wore " + 
+            f"{self.garment.owner.username}'s " +
+            f"{self.garment.garment_name}")
 
     def wearer_name(self):
         return self.wearer.username
