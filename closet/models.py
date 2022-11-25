@@ -28,19 +28,12 @@ class Fashionista(models.Model):
     def garments(self):        
         return Garment.objects.filter(owner= self.user)
 
-    def garment_names(self):
-        return [str(garment) for garment in self.garments()]
-
-
     def garment_wears(self):
         return GarmentWear.objects.filter(wearer= self.user)
 
-    def garment_wear_names(self):
-        return [str(wear) for wear in self.garment_wears()]
-
 
 class Garment(models.Model):
-    garment_name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     purchase_date = models.DateField(null=True)
     purchase_price = models.FloatField(null=True)
@@ -51,7 +44,7 @@ class Garment(models.Model):
     # TODO qr_id = models.IntField()???
 
     def __str__(self):
-        return self.garment_name
+        return self.name
 
     def clean(self):
         if self.purchase_date:
@@ -81,11 +74,11 @@ class GarmentWear(models.Model):
     def __str__(self):
         if self.wearer == self.garment.owner:
             return (f"{self.wearer.username} wore their " + 
-            f"{self.garment.garment_name}")
+            f"{self.garment.name}")
         else:
             return (f"{self.wearer.username} wore " + 
             f"{self.garment.owner.username}'s " +
-            f"{self.garment.garment_name}")
+            f"{self.garment.name}")
 
     def wearer_name(self):
         return self.wearer.username
@@ -94,7 +87,7 @@ class GarmentWear(models.Model):
         return self.garment.owner.username
 
     def garment_name(self):
-        return self.garment.garment_name
+        return self.garment.name
 
 
 class Outfit(models.Model):

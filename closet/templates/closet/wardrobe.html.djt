@@ -9,7 +9,7 @@
     <p>Here is your wardrobe:</p>
     <ul>
     {% for garment in garment_list %}
-        <li><a href={% url 'closet:garment_detail' garment.id %}>{{ garment.garment_name }}</a></li>
+        <li><a href={% url 'closet:garment_detail' garment.id %}>{{ garment.name }}</a></li>
     {% endfor %}
     </ul>
 {% else %}

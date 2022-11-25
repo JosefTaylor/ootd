@@ -11,17 +11,6 @@ from closet.models import (
 	)
 
 
-class GarmentMiniSerializer(serializers.HyperlinkedModelSerializer):
-
-	class Meta:
-		model = Garment
-		fields = (
-			'url',
-			'garment_name',
-			'owner',
-			)
-
-
 class GarmentSerializer(serializers.HyperlinkedModelSerializer):
 
 
@@ -29,8 +18,9 @@ class GarmentSerializer(serializers.HyperlinkedModelSerializer):
 		model = Garment
 		fields = (
 			'url',
-			'garment_name', 
-			#'owner', 
+			'id',
+			'name', 
+			'owner', 
 			'purchase_date', 
 			'purchase_price',
 			'deaq_date', 
@@ -46,6 +36,7 @@ class GarmentWearSerializer(serializers.HyperlinkedModelSerializer):
 		model = GarmentWear
 		fields = (
 			'url',
+			'id',
 			'garment', 
 			'scan_date', 
 			'wearer',
@@ -59,19 +50,30 @@ class  UserSerializer(serializers.HyperlinkedModelSerializer):
 #class  UserSerializer(serializers.HyperlinkedModelSerializer):
 	"""docstring for  UserSerializer"""
 
-	garments = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='garment-detail')
-	garment_wears = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='garmentwear-detail')
-
 	class Meta:
 		model = Fashionista
 		fields = (
-			# 'url',
 			'user',
 			'username',
 			'email',
 			'bio',
+			)
+
+
+class  DashboardSerializer(serializers.HyperlinkedModelSerializer):
+#class  UserSerializer(serializers.HyperlinkedModelSerializer):
+	"""docstring for  UserSerializer"""
+
+	# garments = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='garment-detail')
+	# garment_wears = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='garmentwear-detail')
+	garments = GarmentSerializer(many=True)
+	garment_wears = GarmentWearSerializer(many=True)
+
+	class Meta:
+		model = Fashionista
+		fields = (
+			'user',
+			'username',
 		    'garments',
-			'garment_names',
 			'garment_wears',
-			'garment_wear_names',
 			)

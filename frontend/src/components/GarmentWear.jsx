@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import axios from 'axios';
+import API from "../axiosApi";
 
+import Stack from "./Stack";
 
 function PrettyPrintGarmentWear(wear) {
-    const wear_date = new Date(wear.scan_date).toDateString()
+    const wear_date = new Date(wear.scan_date).toDateString();
     if (wear.wearer_name === wear.owner_name) {
         return `You wore ${wear.garment_name} on ${wear_date}`;
     } else {
@@ -12,59 +13,51 @@ function PrettyPrintGarmentWear(wear) {
 }
 
 function GarmentWear(props) {
-    const garmentWearList = props.garmentWearList
-    const listItems = garmentWearList.map((garmentWear) =>
+    const garmentWearList = props.garmentWearList;
+    const listItems = garmentWearList.map((garmentWear) => (
         <div key={garmentWear.id}>
             {PrettyPrintGarmentWear(garmentWear)}
-            <button 
-                onClick={props.onDelete} 
-                data-url={garmentWear.url}>
-                Remove</button>
+            <button onClick={props.onDelete} data-url={garmentWear.url}>
+                Remove
+            </button>
         </div>
-        )
-    return (
-        <ul>{listItems}</ul>
-    )    
+    ));    
+    return <div>{listItems}</div>;
 }
 
 class WornToday extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
-            filterText: '',
-        }
+            filterText: "",
+        };
 
-        this.handleDelete = this.handleDelete.bind(this)
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     handleDelete(event) {
-        console.log("I'll delete " + event.target.dataset.url)
-        axios
-            .delete(event.target.dataset.url, {
-                withCredentials: true, 
+        API.delete(event.target.dataset.url)
+            .then((response) => {
+                this.props.onChange();
             })
-            .then()
-            .catch(err => console.log(err));
+            .catch((err) => console.log(err));
     }
 
-
     filterByDate(wears) {
-        return wears.filter(wear => {
-            const date = new Date(wear.scan_date).toDateString()
-            const today = this.props.daySelected.toDateString()
+        return wears.filter((wear) => {
+            const date = new Date(wear.scan_date).toDateString();
+            const today = this.props.daySelected.toDateString();
             return date === today;
-        })
+        });
     }
 
     render() {
         return (
-            <div>
-                <GarmentWear 
-                    garmentWearList={this.filterByDate(this.props.garmentWearList)}
-                    onDelete={this.handleDelete}
-                    />
-            </div>
-        )
+            <GarmentWear
+                garmentWearList={this.filterByDate(this.props.garmentWearList)}
+                onDelete={this.handleDelete}
+            />
+        );
     }
 }
 

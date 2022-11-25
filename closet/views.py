@@ -15,7 +15,7 @@ from .serializers import (
     UserSerializer, 
     GarmentSerializer, 
     GarmentWearSerializer,
-    # UserWardrobeSerializer,
+    DashboardSerializer,
     )
 
 from .models import (
@@ -27,6 +27,17 @@ from .models import (
 ## Users and Fashionistas ##
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_superuser:
+            return Fashionista.objects.all()
+        else:
+            return Fashionista.objects.filter(user= user)
+
+class DashboardViewSet(viewsets.ModelViewSet):
+    serializer_class = DashboardSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
@@ -49,17 +60,20 @@ class GarmentView(viewsets.ModelViewSet):
             return Garment.objects.filter(owner= user)
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user.url)
+        serializer.save(owner=self.request.user)
 
 
-# class GarmentDetailView(generics.RetrieveUpdateDestroyAPIView):
-#     model = Garment
-#     serializer_class = GarmentSerializer
-#     permission_classes = [permissions.IsAuthenticated]
+class GarmentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    model = Garment
+    serializer_class = GarmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
-#     def get_queryset(self):
-#         user = self.request.user
-#         return Garment.objects.filter(owner= user)
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_superuser:
+            return Garment.objects.all()
+        else:
+            return Garment.objects.filter(owner= user)
 
 ## Garment Wears ##
 class GarmentWearView(viewsets.ModelViewSet):
@@ -69,7 +83,10 @@ class GarmentWearView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        return GarmentWear.objects.filter(wearer= user)
+        if user.is_superuser:
+            return GarmentWear.objects.all()
+        else:
+            return GarmentWear.objects.filter(wearer= user)
 
     def perform_create(self, serializer):
         serializer.save(wearer=self.request.user)
@@ -82,4 +99,7 @@ class GarmentWearDeleteView(generics.DestroyAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return GarmentWear.objects.filter(wearer= user)
+        if user.is_superuser:
+            return GarmentWear.objects.all()
+        else:
+            return GarmentWear.objects.filter(wearer= user)

@@ -27,11 +27,12 @@ router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet, 'user')
 router.register(r'garments', views.GarmentView, 'garment')
 router.register(r'garmentwears', views.GarmentWearView, 'garmentwear')
+router.register(r'dashboard', views.DashboardViewSet, 'dashboard')
 
 urlpatterns = [
 	path('', include(router.urls)),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    # path('garments/<int:pk>/', views.GarmentDetailView.as_view(), name='garment-detail'),
-    path('garmentwears/<int:pk>/', views.GarmentWearDeleteView.as_view(), name='garmentweardelete'),
+    path('garments/<int:pk>/', views.GarmentDetailView.as_view(), name='garment-detail'),
+    path('garmentweardelete/<int:pk>/', views.GarmentWearDeleteView.as_view(), name='garmentweardelete'),
 ]

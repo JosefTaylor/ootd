@@ -8,7 +8,7 @@ class DateSelector extends Component {
         return (
             <div>
             <button onClick={this.props.onClick(-1)}>{"<"}</button>
-            {this.props.date}
+            {this.props.date.toDateString()}
             <button onClick={this.props.onClick(1)}>{">"}</button>
             </div>
         );

@@ -1,3 +1,11 @@
 .App {
   text-align: center;
 }
+
+body {
+  background-color: #282c34;
+  color: blue;
+  padding: 40px;
+  font-family: Arial;
+  text-align: center;
+}
