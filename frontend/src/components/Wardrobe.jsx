@@ -119,7 +119,7 @@ class WardrobeGarment extends Component {
             <form onSubmit={this.handleSubmit} action="submit">
                 <div>
                     <div>
-                        <label for="garment_name" hidden>
+                        <label htmlFor="garment_name" hidden>
                             garment name
                         </label>
                         <input
@@ -134,7 +134,7 @@ class WardrobeGarment extends Component {
                 </div>
                 <div>
                     <div>
-                        <label for="purchase_date" hidden>
+                        <label htmlFor="purchase_date" hidden>
                             purchase date
                         </label>
                         <input
@@ -149,7 +149,7 @@ class WardrobeGarment extends Component {
                 </div>
                 <div>
                     <div>
-                        <label for="purchase_price" hidden>
+                        <label htmlFor="purchase_price" hidden>
                             purchase price
                         </label>
                         <input
