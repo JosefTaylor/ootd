@@ -3,9 +3,14 @@
 }
 
 body {
-  background-color: #282c34;
-  color: blue;
-  padding: 40px;
+  background-color: white;
+  color: black;
   font-family: Arial;
   text-align: center;
+}
+
+.pad-16 {
+  padding-top: 16px !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
 }

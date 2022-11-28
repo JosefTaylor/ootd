@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Splitter, SplitterItem } from "./layouts/Splitter";
 
 
 
@@ -6,11 +7,17 @@ class DateSelector extends Component {
 
     render() {
         return (
-            <div>
-            <button onClick={this.props.onClick(-1)}>{"<"}</button>
-            {this.props.date.toDateString()}
-            <button onClick={this.props.onClick(1)}>{">"}</button>
-            </div>
+            <Splitter>
+                <SplitterItem>
+                    <button onClick={this.props.onClick(-1)}>{"<"}</button>
+                </SplitterItem>
+                <SplitterItem>
+                    {this.props.date.toDateString()}
+                </SplitterItem>
+                <SplitterItem>
+                    <button onClick={this.props.onClick(1)}>{">"}</button>
+                </SplitterItem>
+            </Splitter>
         );
     }
 }

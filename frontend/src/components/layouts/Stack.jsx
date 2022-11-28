@@ -2,7 +2,7 @@ import "./Stack.css"
 
 export function Stack({children}) {
     return (
-        <div className="flex-container">
+        <div className="stack-container">
             {children}
         </div>
     );
@@ -10,6 +10,6 @@ export function Stack({children}) {
 
 export function StackItem({children}) {
     return (
-        <div className="flex-item">{children}</div>
+        <div>{children}</div>
         );
 }

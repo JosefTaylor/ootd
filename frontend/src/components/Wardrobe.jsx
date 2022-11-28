@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import FilterBar from "./FilterBar";
 import API from "../axiosApi";
-import {Stack, StackItem} from "./Stack";
+//import { Stack, StackItem } from "./layouts/Stack";
+import "./layouts/Stack.css";
+import { Splitter, SplitterItem } from "./layouts/Splitter";
+//import { Grid } from "./layouts/Grid"
 
 class WardrobeGarment extends Component {
     constructor(props) {
@@ -91,13 +94,18 @@ class WardrobeGarment extends Component {
 
     displayRow() {
         return (
-            <div>
-                {this.props.garment.name} -
+            <Splitter>
+                <div className="garment-name">
+                {this.props.garment.name}
+                </div>
+                <div className="cost-per-wear">
                 {new Intl.NumberFormat("en-US", {
                     currency: "USD",
                     style: "currency",
                 }).format(this.props.garment.cost_per_wear)}
                 /wear
+                </div>
+                <SplitterItem>
                 <button
                     onClick={this.props.onWear}
                     value={this.props.garment.url}
@@ -110,14 +118,15 @@ class WardrobeGarment extends Component {
                 >
                     edit
                 </button>
-            </div>
+                </SplitterItem>
+            </Splitter>
         );
     }
 
     editRow() {
         return (
-            <Stack>
-                <StackItem>
+            <div className="stack-container">
+                <div>
                     <label htmlFor="garment_name" hidden>
                         garment name
                     </label>
@@ -129,8 +138,8 @@ class WardrobeGarment extends Component {
                         onChange={this.handleChange}
                         placeholder="name"
                     />
-                </StackItem>
-                <StackItem>
+                </div>
+                <div>
                     <label htmlFor="purchase_date" hidden>
                         purchase date
                     </label>
@@ -142,8 +151,8 @@ class WardrobeGarment extends Component {
                         value={this.state.purchase_date}
                         onChange={this.handleChange}
                     />
-                </StackItem>
-                <StackItem>
+                </div>
+                <div>
                     <label htmlFor="purchase_price" hidden>
                         purchase price
                     </label>
@@ -155,8 +164,8 @@ class WardrobeGarment extends Component {
                         value={this.state.purchase_price}
                         onChange={this.handleChange}
                     />
-                </StackItem>
-                <StackItem>
+                </div>
+                <div>
                     <input
                         type="button"
                         value="Save"
@@ -172,8 +181,8 @@ class WardrobeGarment extends Component {
                         value="Delete"
                         onClick={this.handleDelete}
                     />
-                </StackItem>
-            </Stack>
+                </div>
+            </div>
         );
     }
 
@@ -191,16 +200,16 @@ class WardrobeGarment extends Component {
 
 function WardrobeTable(props) {
     const listItems = props.garments.map((garment) => (
-        <StackItem key={garment.id}>
+        <div key={garment.id}>
             <WardrobeGarment
                 garment={garment}
                 onWear={props.onWear}
                 onChange={props.onChange}
             />
-        </StackItem>
+        </div>
     ));
 
-    return <Stack>{listItems}</Stack>;
+    return <div className="stack-container">{listItems}</div>;
 }
 
 class Wardrobe extends Component {
@@ -227,22 +236,30 @@ class Wardrobe extends Component {
 
     render() {
         return (
-            <div>
-                <h2>Your Wardrobe</h2>
-                <FilterBar
-                    value={this.state.filterText}
-                    onChange={this.handleChange}
-                />
-                <WardrobeTable
-                    garments={this.filterGarments(this.props.garmentList)}
-                    onWear={this.props.onWear}
-                    onChange={this.props.onChange}
-                />
-                <WardrobeGarment
-                    mode={"new"}
-                    newName={this.state.filterText}
-                    onChange={this.props.onChange}
-                />
+            <div className="stack-container">
+                <div>
+                    <h2>Your Wardrobe</h2>
+                    </div>
+                <div>
+                    <FilterBar
+                        value={this.state.filterText}
+                        onChange={this.handleChange}
+                    />
+                </div>
+                <div>
+                    <WardrobeTable
+                        garments={this.filterGarments(this.props.garmentList)}
+                        onWear={this.props.onWear}
+                        onChange={this.props.onChange}
+                    />
+                </div>
+                <div>
+                    <WardrobeGarment
+                        mode={"new"}
+                        newName={this.state.filterText}
+                        onChange={this.props.onChange}
+                    />
+                </div>
             </div>
         );
     }

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import API from "../axiosApi";
 
-import {Stack, StackItem} from "./Stack";
+import {Stack, StackItem} from "./layouts/Stack";
+import { Splitter, SplitterItem } from "./layouts/Splitter";
 
 function PrettyPrintGarmentWear(wear) {
     const wear_date = new Date(wear.scan_date).toDateString();
@@ -18,12 +19,18 @@ function GarmentWear(props) {
     const garmentWearList = props.garmentWearList;
     const items = garmentWearList.map((wear) => (
         <StackItem key={wear.id}>
-            {PrettyPrintGarmentWear(wear)}
-            <button onClick={props.onDelete(wear)}>
-                Remove
-            </button>
+            <Splitter>
+                <SplitterItem>
+                    {PrettyPrintGarmentWear(wear)}
+                </SplitterItem>
+                <SplitterItem>
+                    <button onClick={props.onDelete(wear)}>
+                        Remove
+                    </button>
+                </SplitterItem>
+            </Splitter>
         </StackItem>
-    ));
+        ));
     return <Stack>{items}</Stack>;
 }
 

@@ -1,0 +1,26 @@
+.splitter-container {
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.garment-name {
+    text-align: start;
+    width: 250px;
+}
+
+.cost-per-wear {
+    text-align: end;
+    width: 130px;
+}
+
+.header {
+    background-color: aquamarine;
+}
+.header-end {
+    width: 100px;
+    align-self: center;
+}

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import "./App.css";
+import "./components/layouts/Wrapper.css"
 import API from "./axiosApi";
 
 import Wardrobe from "./components/Wardrobe";
@@ -9,7 +10,8 @@ import Login from "./components/Login";
 import UserHeader from "./components/Header";
 import LoginHeader from "./components/Header";
 import DateSelector from "./components/DateSelector";
-//import Stack from "./components/Stack";
+import { Stack, StackItem } from "./components/layouts/Stack";
+import { Wrapper } from "./components/layouts/Wrapper"
 
 class App extends Component {
   constructor(props) {
@@ -67,21 +69,31 @@ class App extends Component {
       return (
         <div>
           <UserHeader userName={this.state.userName} />
-          <DateSelector
-            date={this.state.daySelected}
-            onClick={this.handleDateClick}
-            onChange={this.handleDatePick}
-          />
-          <WornToday
-            garmentWearList={this.state.garmentWearList}
-            daySelected={this.state.daySelected}
-            onChange={this.refreshList}
-          />
-          <Wardrobe
-            garmentList={this.state.garmentList}
-            onWear={this.handleWear}
-            onChange={this.refreshList}
-          />
+          <div className="wrapper pad-16">
+            <Stack>
+              <StackItem>
+                <DateSelector
+                date={this.state.daySelected}
+                onClick={this.handleDateClick}
+                onChange={this.handleDatePick}
+                />
+              </StackItem>
+              <StackItem>
+                <WornToday
+                garmentWearList={this.state.garmentWearList}
+                daySelected={this.state.daySelected}
+                onChange={this.refreshList}
+                />
+              </StackItem>
+              <StackItem>
+                <Wardrobe
+                garmentList={this.state.garmentList}
+                onWear={this.handleWear}
+                onChange={this.refreshList}
+                />
+              </StackItem>
+            </Stack>
+          </div>
         </div>
       );
     } else {
