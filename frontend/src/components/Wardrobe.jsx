@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import FilterBar from "./FilterBar";
 import API from "../axiosApi";
-import Stack from "./Stack";
+import {Stack, StackItem} from "./Stack";
 
 class WardrobeGarment extends Component {
     constructor(props) {
@@ -116,68 +116,64 @@ class WardrobeGarment extends Component {
 
     editRow() {
         return (
-            <form onSubmit={this.handleSubmit} action="submit">
-                <div>
-                    <div>
-                        <label htmlFor="garment_name" hidden>
-                            garment name
-                        </label>
-                        <input
-                            type="text"
-                            id="garment_name"
-                            name="garment_name"
-                            value={this.state.garment_name}
-                            onChange={this.handleChange}
-                            placeholder="name"
-                        />
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <label htmlFor="purchase_date" hidden>
-                            purchase date
-                        </label>
-                        <input
-                            type="date"
-                            id="purchase_date"
-                            name="purchase_date"
-                            placeholder="purchase_date"
-                            value={this.state.purchase_date}
-                            onChange={this.handleChange}
-                        />
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <label htmlFor="purchase_price" hidden>
-                            purchase price
-                        </label>
-                        <input
-                            type="number"
-                            id="purchase_price"
-                            name="purchase_price"
-                            placeholder="purchase_price"
-                            value={this.state.purchase_price}
-                            onChange={this.handleChange}
-                        />
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <input type="submit" value="Save" />
-                        <input
-                            type="button"
-                            value="Cancel"
-                            onClick={this.handleCancel}
-                        />
-                        <input
-                            type="button"
-                            value="Delete"
-                            onClick={this.handleDelete}
-                        />
-                    </div>
-                </div>
-            </form>
+            <Stack>
+                <StackItem>
+                    <label htmlFor="garment_name" hidden>
+                        garment name
+                    </label>
+                    <input
+                        type="text"
+                        id="garment_name"
+                        name="garment_name"
+                        value={this.state.garment_name}
+                        onChange={this.handleChange}
+                        placeholder="name"
+                    />
+                </StackItem>
+                <StackItem>
+                    <label htmlFor="purchase_date" hidden>
+                        purchase date
+                    </label>
+                    <input
+                        type="date"
+                        id="purchase_date"
+                        name="purchase_date"
+                        placeholder="purchase_date"
+                        value={this.state.purchase_date}
+                        onChange={this.handleChange}
+                    />
+                </StackItem>
+                <StackItem>
+                    <label htmlFor="purchase_price" hidden>
+                        purchase price
+                    </label>
+                    <input
+                        type="number"
+                        id="purchase_price"
+                        name="purchase_price"
+                        placeholder="purchase_price"
+                        value={this.state.purchase_price}
+                        onChange={this.handleChange}
+                    />
+                </StackItem>
+                <StackItem>
+                    <input
+                        type="button"
+                        value="Save"
+                        onClick={this.handleSubmit}
+                    />
+                    <input
+                        type="button"
+                        value="Cancel"
+                        onClick={this.handleCancel}
+                    />
+                    <input
+                        type="button"
+                        value="Delete"
+                        onClick={this.handleDelete}
+                    />
+                </StackItem>
+            </Stack>
         );
     }
 
@@ -195,16 +191,16 @@ class WardrobeGarment extends Component {
 
 function WardrobeTable(props) {
     const listItems = props.garments.map((garment) => (
-        <div key={garment.id}>
+        <StackItem key={garment.id}>
             <WardrobeGarment
                 garment={garment}
                 onWear={props.onWear}
                 onChange={props.onChange}
             />
-        </div>
+        </StackItem>
     ));
 
-    return <div>{listItems}</div>;
+    return <Stack>{listItems}</Stack>;
 }
 
 class Wardrobe extends Component {

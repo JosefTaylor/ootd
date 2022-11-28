@@ -9,7 +9,7 @@ import Login from "./components/Login";
 import UserHeader from "./components/Header";
 import LoginHeader from "./components/Header";
 import DateSelector from "./components/DateSelector";
-import Stack from "./components/Stack";
+//import Stack from "./components/Stack";
 
 class App extends Component {
   constructor(props) {
