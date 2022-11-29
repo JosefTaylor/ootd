@@ -7,6 +7,10 @@
     gap: 10px;
 }
 
+.splitter-container > .item {
+    border: 1px solid orange;
+}
+
 .garment-name {
     text-align: start;
     width: 250px;

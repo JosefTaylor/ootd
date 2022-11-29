@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Splitter, SplitterItem } from "./layouts/Splitter";
 
 export default class UserHeader extends Component {
 	constructor(props) {

@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 import API from "../axiosApi";
 
-import {Stack, StackItem} from "./layouts/Stack";
-import { Splitter, SplitterItem } from "./layouts/Splitter";
-
 function PrettyPrintGarmentWear(wear) {
     const wear_date = new Date(wear.scan_date).toDateString();
     console.log("pretty printing "+ wear.garment_name)
@@ -18,20 +15,20 @@ function PrettyPrintGarmentWear(wear) {
 function GarmentWear(props) {
     const garmentWearList = props.garmentWearList;
     const items = garmentWearList.map((wear) => (
-        <StackItem key={wear.id}>
-            <Splitter>
-                <SplitterItem>
+        <div className="stack-item" key={wear.id}>
+            <div className="splitter-container">
+                <div>
                     {PrettyPrintGarmentWear(wear)}
-                </SplitterItem>
-                <SplitterItem>
+                </div>
+                <div>
                     <button onClick={props.onDelete(wear)}>
                         Remove
                     </button>
-                </SplitterItem>
-            </Splitter>
-        </StackItem>
+                </div>
+            </div>
+        </div>
         ));
-    return <Stack>{items}</Stack>;
+    return <div className="stack-container">{items}</div>;
 }
 
 class WornToday extends Component {

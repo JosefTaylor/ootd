@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import FilterBar from "./FilterBar";
 import API from "../axiosApi";
-//import { Stack, StackItem } from "./layouts/Stack";
-import "./layouts/Stack.css";
-import { Splitter, SplitterItem } from "./layouts/Splitter";
-//import { Grid } from "./layouts/Grid"
 
 class WardrobeGarment extends Component {
     constructor(props) {
@@ -94,7 +90,7 @@ class WardrobeGarment extends Component {
 
     displayRow() {
         return (
-            <Splitter>
+            <div className="splitter-container">
                 <div className="garment-name">
                 {this.props.garment.name}
                 </div>
@@ -105,7 +101,7 @@ class WardrobeGarment extends Component {
                 }).format(this.props.garment.cost_per_wear)}
                 /wear
                 </div>
-                <SplitterItem>
+                <div>
                 <button
                     onClick={this.props.onWear}
                     value={this.props.garment.url}
@@ -118,8 +114,8 @@ class WardrobeGarment extends Component {
                 >
                     edit
                 </button>
-                </SplitterItem>
-            </Splitter>
+                </div>
+            </div>
         );
     }
 
