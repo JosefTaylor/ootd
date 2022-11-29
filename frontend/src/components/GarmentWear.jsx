@@ -3,9 +3,7 @@ import API from "../axiosApi";
 
 function PrettyPrintGarmentWear(wear) {
     const wear_date = new Date(wear.scan_date).toDateString();
-    console.log("pretty printing "+ wear.garment_name)
     if (wear.wearer_name === wear.owner_name) {
-        console.log("pretty printing "+ wear.garment_name)
         return `You wore ${wear.garment_name} on ${wear_date}`;
     } else {
         return `You wore ${wear.owner_name}'s ${wear.garment_name} on ${wear_date}`;
@@ -26,7 +24,7 @@ function GarmentWear(props) {
                 </div>
             </div>
         ));
-    return <div className="stack-container">{items}</div>;
+    return <div className="stack">{items}</div>;
 }
 
 class WornToday extends Component {

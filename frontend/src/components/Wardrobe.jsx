@@ -121,7 +121,7 @@ class WardrobeGarment extends Component {
 
     editRow() {
         return (
-            <div className="stack-container">
+            <div className="stack">
                 <div>
                     <label htmlFor="garment_name" hidden>
                         garment name
@@ -205,7 +205,7 @@ function WardrobeTable(props) {
         </div>
     ));
 
-    return <div className="stack-container">{listItems}</div>;
+    return <div className="stack">{listItems}</div>;
 }
 
 class Wardrobe extends Component {
@@ -232,30 +232,24 @@ class Wardrobe extends Component {
 
     render() {
         return (
-            <div className="stack-container">
+            <div className="stack">
                 <div>
                     <h2>Your Wardrobe</h2>
-                    </div>
-                <div>
-                    <FilterBar
-                        value={this.state.filterText}
-                        onChange={this.handleChange}
-                    />
                 </div>
-                <div>
-                    <WardrobeTable
-                        garments={this.filterGarments(this.props.garmentList)}
-                        onWear={this.props.onWear}
-                        onChange={this.props.onChange}
-                    />
-                </div>
-                <div>
-                    <WardrobeGarment
-                        mode={"new"}
-                        newName={this.state.filterText}
-                        onChange={this.props.onChange}
-                    />
-                </div>
+                <FilterBar
+                    value={this.state.filterText}
+                    onChange={this.handleChange}
+                />
+                <WardrobeTable
+                    garments={this.filterGarments(this.props.garmentList)}
+                    onWear={this.props.onWear}
+                    onChange={this.props.onChange}
+                />
+                <WardrobeGarment
+                    mode={"new"}
+                    newName={this.state.filterText}
+                    onChange={this.props.onChange}
+                />
             </div>
         );
     }

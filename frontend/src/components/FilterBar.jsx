@@ -1,6 +1,6 @@
 function FilterBar(props) {
     return (
-        <input
+        <input 
             value={props.value}
             onChange={props.onChange}
             />

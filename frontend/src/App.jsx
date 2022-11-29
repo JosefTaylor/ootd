@@ -10,6 +10,7 @@ import Login from "./components/Login";
 import UserHeader from "./components/Header";
 import LoginHeader from "./components/Header";
 import DateSelector from "./components/DateSelector";
+import Graph from "./components/Graph"
 
 class App extends Component {
   constructor(props) {
@@ -21,10 +22,25 @@ class App extends Component {
       userUrl: "",
       userName: "",
       daySelected: new Date(),
+      page: "home",
     };
     this.refreshList = this.refreshList.bind(this);
     this.handleDateClick = this.handleDateClick.bind(this);
     this.handleWear = this.handleWear.bind(this);
+    this.handleNav = this.handleNav.bind(this);
+  }
+
+  handleNav(newMode) {
+    return (event) => {
+      switch(newMode) {
+        case "home":
+        case "graphs":
+          this.setState({page: newMode});
+          break;
+        default:
+          this.setState({page: "home"})
+      }
+    };
   }
 
   refreshList() {
@@ -62,35 +78,60 @@ class App extends Component {
     this.refreshList();
   }
 
+  dashboard() {
+    return (
+      <div className="stack-container">
+        <div>
+          <DateSelector
+          date={this.state.daySelected}
+          onClick={this.handleDateClick}
+          onChange={this.handleDatePick}
+          />
+        </div>
+        <div>
+          <WornToday
+          garmentWearList={this.state.garmentWearList}
+          daySelected={this.state.daySelected}
+          onChange={this.refreshList}
+          />
+        </div>
+        <div>
+          <Wardrobe
+          garmentList={this.state.garmentList}
+          onWear={this.handleWear}
+          onChange={this.refreshList}
+          />
+        </div>
+      </div>
+    )
+  }
+
+  graphs() {
+    return (
+      <Graph/>
+    )
+  }
+
   render() {
+    let content = []
+    switch(this.state.page) {      
+      case "home":
+        content = this.dashboard()
+        break;
+      case "graphs":
+        content = this.graphs()
+        break;
+      default:
+        console.log("I couldn't find a page called " + this.state.page)
+        content = []
+
+    }
     if (this.state.authenticated) {
       return (
         <div>
-          <UserHeader userName={this.state.userName} />
+          <UserHeader userName={this.state.userName} onNav={this.handleNav}/>
           <div className="wrapper pad-16">
-            <div className="stack-container">
-              <div>
-                <DateSelector
-                date={this.state.daySelected}
-                onClick={this.handleDateClick}
-                onChange={this.handleDatePick}
-                />
-              </div>
-              <div>
-                <WornToday
-                garmentWearList={this.state.garmentWearList}
-                daySelected={this.state.daySelected}
-                onChange={this.refreshList}
-                />
-              </div>
-              <div>
-                <Wardrobe
-                garmentList={this.state.garmentList}
-                onWear={this.handleWear}
-                onChange={this.refreshList}
-                />
-              </div>
-            </div>
+            {content}
           </div>
         </div>
       );

@@ -7,9 +7,9 @@
     gap: 10px;
 }
 
-.splitter-container > .item {
+/* .splitter-container > .item {
     border: 1px solid orange;
-}
+} */
 
 .splitter-container > .garment-name {
     text-align: start;
@@ -21,11 +21,13 @@
     width: 130px;
 }
 
-.splitter-container > .header {
-    background-color: aquamarine;
-}
-
 .splitter-container > .header-end {
     width: 100px;
     align-self: center;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.header {
+    background-color: aquamarine;
 }

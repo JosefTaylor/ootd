@@ -2,20 +2,15 @@
 @import "./components/layouts/Splitter.css";
 @import "./components/layouts/Stack.css";
 @import "./components/layouts/Wrapper.css";
+@import "./components/utilities/Padding.css";
 
-.App {
+/* .App {
   text-align: center;
-}
+} */
 
 body {
   background-color: white;
   color: black;
   font-family: Arial;
   text-align: center;
-}
-
-.pad-16 {
-  padding-top: 16px !important;
-  padding-left: 16px !important;
-  padding-right: 16px !important;
 }

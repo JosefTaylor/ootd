@@ -1,4 +1,4 @@
-.stack-container {
+.stack {
     display: flex;
     box-sizing: border-box;
     flex-direction: column;
@@ -7,10 +7,10 @@
     /* gap: 10px; */
 }
 
-.stack-container > .item {
+/* .stack > * {
     border: 1px solid red;
-}
+} */
 
-.stack-container > * + * {
+.stack > * + * {
     margin-top: 10px;
 }
