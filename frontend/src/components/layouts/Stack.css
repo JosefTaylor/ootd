@@ -4,5 +4,13 @@
     flex-direction: column;
     justify-content: center;
     align-items: stretch;
-    gap: 10px;
+    /* gap: 10px; */
+}
+
+.stack-container > .item {
+    border: 1px solid red;
+}
+
+.stack-container > * + * {
+    margin-top: 10px;
 }

@@ -15,18 +15,16 @@ function PrettyPrintGarmentWear(wear) {
 function GarmentWear(props) {
     const garmentWearList = props.garmentWearList;
     const items = garmentWearList.map((wear) => (
-        <div className="stack-item" key={wear.id}>
-            <div className="splitter-container">
-                <div>
+            <div className="item splitter-container" key={wear.id}>
+                <div className="item">
                     {PrettyPrintGarmentWear(wear)}
                 </div>
-                <div>
+                <div className="item">
                     <button onClick={props.onDelete(wear)}>
                         Remove
                     </button>
                 </div>
             </div>
-        </div>
         ));
     return <div className="stack-container">{items}</div>;
 }
