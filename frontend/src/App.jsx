@@ -8,6 +8,8 @@ import Dashboard from "./pages/Dashboard";
 import Loading from "./pages/Loading";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Logout from "./pages/Logout";
+import Register from "./pages/Register";
 
 class App extends Component {
   constructor(props) {
@@ -26,14 +28,24 @@ class App extends Component {
 
   handleNav(newMode) {
     return (event) => {
-      switch(newMode) {
+      switch (newMode) {
         case "home":
         case "graphs":
         case "selfie":
-          this.setState({page: newMode});
+        case "register":
+          this.setState({ page: newMode });
+          break;
+        case "logout":
+          this.setState({
+            garmentList: [],
+            garmentWearList: [],
+            userUrl: "",
+            userName: "",
+            page: "logout"
+          })
           break;
         default:
-          this.setState({page: "home"})
+          this.setState({ page: "home" })
       }
     };
   }
@@ -53,7 +65,7 @@ class App extends Component {
         if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx    
-          console.log('The request was made and the server responded with a status code that falls out of the range of 2xx')               
+          console.log('The request was made and the server responded with a status code that falls out of the range of 2xx')
           console.log(error.response.data);
           console.log(error.response.status);
           console.log(error.response.headers);
@@ -66,7 +78,7 @@ class App extends Component {
           // Something happened in setting up the request that triggered an Error
           console.log('Error', error.message);
         }
-        this.setState({page:"login"})
+        this.setState({ page: "login" })
       });
   }
 
@@ -76,38 +88,45 @@ class App extends Component {
 
   render() {
     let content = []
-    switch(this.state.page) {      
+    switch (this.state.page) {
       case "home":
-        content = <Dashboard 
-          garmentList={this.state.garmentList} 
-          garmentWearList={this.state.garmentWearList} 
-          refreshList={this.refreshList} 
+        content = <Dashboard
+          garmentList={this.state.garmentList}
+          garmentWearList={this.state.garmentWearList}
+          refreshList={this.refreshList}
           userName={this.state.userName}
           onNav={this.handleNav}
-          />
+        />
         break;
       case "graphs":
         content = <Graph
-          garmentList={this.state.garmentList} 
-          garmentWearList={this.state.garmentWearList} 
-          refreshList={this.refreshList} 
+          garmentList={this.state.garmentList}
+          garmentWearList={this.state.garmentWearList}
+          refreshList={this.refreshList}
           userName={this.state.userName}
           onNav={this.handleNav}
         />
         break;
       case "login":
-        content = <Login/>
+        content = <Login
+        onNav={this.handleNav} />
+        break;
+      case "register":
+          content = <Register />
+          break;
+      case "logout":
+        content = <Logout />
         break;
       case "loading":
-        content = <Loading/>
+        content = <Loading />
         this.refreshList()
     }
 
     return (
       <div className="global-stack">
-        <Header userName={this.state.userName} onNav={this.handleNav}/>
-        <div className="field">{content}</div>
-        <Footer/>
+        <Header userName={this.state.userName} onNav={this.handleNav} />
+        <main className="field">{content}</main>
+        <Footer />
       </div>
     )
   }

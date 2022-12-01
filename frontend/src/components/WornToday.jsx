@@ -32,7 +32,7 @@ function WearTable(props) {
                 <WearLine wear={wear} onDelete={props.onDelete}/>
             </div>
         ));
-    return <div className="stack data-table ht-two-thirds">{items}</div>;
+    return <div className="stack data-table ht-full">{items}</div>;
 }
 
 class WornToday extends Component {

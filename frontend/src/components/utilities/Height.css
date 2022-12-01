@@ -9,3 +9,19 @@
 .ht-two-thirds {
     max-height: 66.7%;
 }
+
+.ht-150-min {
+    min-height: 150px;
+}
+
+.ht-225-min {
+    min-height: 225px;
+}
+
+/* .stack > .ht-one-third {
+    flex: 1 0 150px;
+}
+
+.stack > .ht-two-thirds {
+    flex: 2 0 225px;
+} */

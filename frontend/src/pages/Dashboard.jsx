@@ -53,15 +53,15 @@ class Dashboard extends Component {
 
   render() {
     return (
-      <div className="wrapper stack pad-1 wd-max">
-        <div className="ht-one-third">
+      <div className="wrapper stack pad-1 wd-max ht-full">
+        <div className="ht-one-third ht-150-min">
           <WornToday 
             garmentWearList={this.props.garmentWearList}
             date={this.state.daySelected}
             onClick={this.handleDateClick}
             onChange={this.handleDatePick}/>
         </div>
-        <div className="ht-two-thirds">
+        <div className="ht-two-thirds ht-225-min">
           <Wardrobe
           garmentList={this.filterGarments(this.props.garmentList)}
           onWear={this.handleWear}

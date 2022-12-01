@@ -7,7 +7,7 @@ export default class Header extends Component {
 			return (				
 				<div className="header-end">
 				{this.props.userName}
-				<button onClick={this.props.onNav("log out")}>log out</button>
+				<button onClick={this.props.onNav("logout")}>log out</button>
 				</div>
 			)
 		} else {

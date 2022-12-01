@@ -3,8 +3,6 @@
 /* Layouts */
 @import "./components/layouts/Center.css";
 @import "./components/layouts/GlobalStack.css";
-@import "./components/layouts/Grid.css";
-@import "./components/layouts/Scrollbox.css";
 @import "./components/layouts/Sidebar.css";
 @import "./components/layouts/Splitter.css";
 @import "./components/layouts/Stack.css";
@@ -38,7 +36,7 @@ body {
 
 .field {
   height: 100%;
-  overflow: clip;
+  overflow: scroll;
   background-color: white;
 }
 
@@ -57,6 +55,14 @@ button {
   color: inherit;
   margin-top: 0.25rem;
   margin-bottom: 0.25rem;
+  text-align: center;
+}
+
+input {
+  cursor: text;
+}
+
+button {
   cursor: pointer;
 }
 
@@ -98,12 +104,12 @@ button {
   background: rgb(255, 194, 255);
 }
 
-.splitter > .garment-name {
+.garment-name {
   text-align: start;
   width: 250px;
-}
+} /* ellipses????*/
 
-.splitter > .cost-per-wear {
+.cost-per-wear {
   text-align: end;
   width: 130px;
 }

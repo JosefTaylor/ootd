@@ -205,7 +205,7 @@ function WardrobeTable(props) {
         </div>
     ));
 
-    return <div className="stack data-table ht-two-thirds">{listItems}</div>;
+    return <div className="stack data-table ht-full">{listItems}</div>;
 }
 
 class Wardrobe extends Component {
