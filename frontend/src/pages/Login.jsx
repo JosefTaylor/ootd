@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from 'axios';
+import API from "../axiosApi";
 
 import Header from "../components/Header";
 
@@ -26,18 +26,19 @@ class Login extends Component {
 		// 	+ this.state.username
 		// 	+ " "
 		// 	+ this.state.password)
-		axios   //Axios to send and receive HTTP requests
-            .post("http://localhost:8000/api-auth/login/", {
-                withCredentials: true, 
-                username: this.state.username,
-                password: this.state.password,
+		API   //Axios to send and receive HTTP requests
+            .post("/api-auth/login/", {
+				headers: {
+					username: this.state.username,
+					password: this.state.password,
+				}
             })
             .catch(err => console.log(err));
 	}
 
 	render() {
 		return (
-			<div className="grid pad-1">
+			<div className="wrapper pad-1 wd-small">
 				<div className="center card">
 					<form onSubmit={this.handleSubmit}>
 						<div className="stack">

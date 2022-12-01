@@ -56,9 +56,13 @@ function Violin(props) {
             name: garment.name,
             showlegend: false,
             type: "violin",
-            points: 'none',
+            points: 'all',
             line: { visible: false },
             fillcolor: garment.id,
+            quartilemethod: 'linear',
+            jitter: 0.5,
+            pointpos: 0,
+            spanmode: "hard",
 
         };
     })

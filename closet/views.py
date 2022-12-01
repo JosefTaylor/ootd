@@ -23,6 +23,7 @@ from .models import (
     GarmentWear,
     Fashionista
     )
+    
 
 ## Users and Fashionistas ##
 class UserViewSet(viewsets.ModelViewSet):

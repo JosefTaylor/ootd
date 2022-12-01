@@ -9,3 +9,7 @@
 .wd-max {
     max-width: 600px;
 }
+
+.wd-small {
+    max-width: 400px;
+}
