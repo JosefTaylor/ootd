@@ -90,7 +90,7 @@ class WardrobeGarment extends Component {
 
     displayRow() {
         return (
-            <div className="splitter-container">
+            <div className="splitter">
                 <div className="garment-name">
                 {this.props.garment.name}
                 </div>
@@ -121,10 +121,10 @@ class WardrobeGarment extends Component {
 
     editRow() {
         return (
-            <div className="stack">
+            <div className="flow">
                 <div>
-                    <label htmlFor="garment_name" hidden>
-                        garment name
+                    <label htmlFor="garment_name" >
+                        garment name: 
                     </label>
                     <input
                         type="text"
@@ -136,8 +136,8 @@ class WardrobeGarment extends Component {
                     />
                 </div>
                 <div>
-                    <label htmlFor="purchase_date" hidden>
-                        purchase date
+                    <label htmlFor="purchase_date" >
+                        purchase date: 
                     </label>
                     <input
                         type="date"
@@ -149,8 +149,8 @@ class WardrobeGarment extends Component {
                     />
                 </div>
                 <div>
-                    <label htmlFor="purchase_price" hidden>
-                        purchase price
+                    <label htmlFor="purchase_price" >
+                        purchase price: 
                     </label>
                     <input
                         type="number"
@@ -196,7 +196,7 @@ class WardrobeGarment extends Component {
 
 function WardrobeTable(props) {
     const listItems = props.garments.map((garment) => (
-        <div key={garment.id}>
+        <div key={garment.id} className="data-item">
             <WardrobeGarment
                 garment={garment}
                 onWear={props.onWear}
@@ -205,7 +205,7 @@ function WardrobeTable(props) {
         </div>
     ));
 
-    return <div className="stack">{listItems}</div>;
+    return <div className="stack data-table ht-two-thirds">{listItems}</div>;
 }
 
 class Wardrobe extends Component {
@@ -221,7 +221,7 @@ class Wardrobe extends Component {
         const filterGarments = garments.filter((garment) => {
             const name = garment.name.toLowerCase();
             const filterText = this.state.filterText.toLowerCase();
-            return name.includes(filterText) && garment.is_active;
+            return name.includes(filterText);
         });
         return filterGarments;
     }
@@ -232,7 +232,7 @@ class Wardrobe extends Component {
 
     render() {
         return (
-            <div className="stack">
+            <div className="stack card ht-full">
                 <div>
                     <h2>Your Wardrobe</h2>
                 </div>

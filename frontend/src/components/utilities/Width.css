@@ -1,0 +1,11 @@
+.wd-full {
+    width: 100%;
+}
+
+.wd-one-sixth {
+    width: 16.7%;
+}
+
+.wd-max {
+    max-width: 600px;
+}

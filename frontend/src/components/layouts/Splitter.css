@@ -1,33 +1,10 @@
-.splitter-container {
+.splitter {
+    height: 100%;
     display: flex;
     box-sizing: border-box;
     flex-direction: row;
-    align-items: stretch;
+    align-items: center;
+    align-content: stretch;
     justify-content: space-between;
     gap: 10px;
-}
-
-/* .splitter-container > .item {
-    border: 1px solid orange;
-} */
-
-.splitter-container > .garment-name {
-    text-align: start;
-    width: 250px;
-}
-
-.splitter-container > .cost-per-wear {
-    text-align: end;
-    width: 130px;
-}
-
-.splitter-container > .header-end {
-    width: 100px;
-    align-self: center;
-    padding-left: 16px;
-    padding-right: 16px;
-}
-
-.header {
-    background-color: aquamarine;
 }

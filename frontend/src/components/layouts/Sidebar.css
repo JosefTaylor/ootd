@@ -1,0 +1,16 @@
+.sidebar {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.sidebar > .side {
+    flex: 1 0 100px
+}
+
+.sidebar > .content {
+    flex: 3 3 600px;
+    overflow: scroll;
+    display: inline-block;
+}

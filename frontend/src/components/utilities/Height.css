@@ -1,0 +1,11 @@
+.ht-full {
+    height: 100%;
+}
+
+.ht-one-third {
+    max-height: 33.3%;
+}
+
+.ht-two-thirds {
+    max-height: 66.7%;
+}

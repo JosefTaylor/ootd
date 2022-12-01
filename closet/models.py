@@ -88,6 +88,9 @@ class GarmentWear(models.Model):
 
     def garment_name(self):
         return self.garment.name
+    
+    def garment_id(self):
+        return self.garment.id
 
 
 class Outfit(models.Model):

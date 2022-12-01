@@ -1,22 +1,42 @@
 import React, { Component } from "react";
 
-export default class UserHeader extends Component {
-	constructor(props) {
-		super(props)
+export default class Header extends Component {
+
+	profile() {
+		if (this.props.userName) {
+			return (				
+				<div className="header-end">
+				{this.props.userName}
+				<button onClick={this.props.onNav("log out")}>log out</button>
+				</div>
+			)
+		} else {
+			return (<div></div>)
+		}
+	}
+
+	nav() {
+		if (this.props.userName) {
+			return (				
+				<div className="header-end stack">
+					<button onClick={this.props.onNav("home")}>home</button>
+					<button onClick={this.props.onNav("graphs")}>graphs</button>
+					<button onClick={this.props.onNav("selfie")}>selfie</button>
+				</div>
+			)
+		} else {
+			return (<div></div>)
+		}
 	}
 
 	render() {
 		return (
-			<div className="splitter-container header">
-				<div className="item header-end">{this.props.userName}</div>
-				<div className="item">
+			<div className="splitter header">
+				{this.profile()}
+				<div >
 					<h1>OOTD</h1>
-					<p>Track your outfits every day</p>
 				</div>
-				<div className="item header-end stack">
-					<button onClick={this.props.onNav("home")}>home</button>
-					<button onClick={this.props.onNav("graphs")}>graphs</button>
-				</div>
+				{this.nav()}
 			</div>
 			)
 	}

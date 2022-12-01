@@ -1,15 +1,109 @@
+@import "./reset.css";
 
-/*.wardrobe-title {
-	cursor: pointer;
+/* Layouts */
+@import "./components/layouts/Center.css";
+@import "./components/layouts/GlobalStack.css";
+@import "./components/layouts/Grid.css";
+@import "./components/layouts/Scrollbox.css";
+@import "./components/layouts/Sidebar.css";
+@import "./components/layouts/Splitter.css";
+@import "./components/layouts/Stack.css";
+@import "./components/layouts/Wrapper.css";
+@import "./components/layouts/Flow.css";
+
+/* Utilities */
+@import "./components/utilities/Padding.css";
+@import "./components/utilities/Height.css";
+@import "./components/utilities/Width.css";
+
+/* .App {
+  text-align: center;
+} */
+
+body {
+  background-color: rgb(255, 164, 164);
+  color: darkred;
+  font-family: Arial;
+  text-align: center;
 }
-.tab-list > span {
-	padding: 5px 8px;
-	border: 1px solid rgb(7, 167, 68);
-	border-radius: 10px;
-	margin-right: 5px;
-	cursor: pointer;
+
+.splitter > .header-end {
+  width: 100px;
+  padding: 16px;
 }
-.tab-list > span.active {
-	background-color: rgb(6, 139, 12);
-	color: #fff;
-}*/
+
+.header {
+  align-items: center;
+}
+
+.field {
+  height: 100%;
+  overflow: clip;
+  background-color: white;
+}
+
+.card {
+  border-radius: 10px;
+  background-color: lightgrey;
+  padding: 15px;
+}
+
+input,
+button {
+  border: 1px solid rgba(0, 0, 0, 0.062);
+  background-color: rgba(255, 255, 255, 0.151);
+  border-radius: 1rem;
+  font-size: 1rem;
+  color: inherit;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  cursor: pointer;
+}
+
+.data-table {
+  overflow: scroll;
+  display: inline-block;
+}
+
+.data-table > div {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.data-table > div:nth-child(7n - 6) {
+  background: rgb(255, 220, 220);
+}
+
+.data-table > div:nth-child(7n - 5) {
+  background: rgb(255, 234, 195);
+}
+
+.data-table > div:nth-child(7n - 4) {
+  background: rgb(255, 255, 193);
+}
+
+.data-table > div:nth-child(7n - 3) {
+  background: rgb(193, 255, 193);
+}
+
+.data-table > div:nth-child(7n - 2) {
+  background: rgb(193, 193, 255);
+}
+
+.data-table > div:nth-child(7n - 1) {
+  background: rgb(229, 192, 255);
+}
+
+.data-table > div:nth-child(7n - 0) {
+  background: rgb(255, 194, 255);
+}
+
+.splitter > .garment-name {
+  text-align: start;
+  width: 250px;
+}
+
+.splitter > .cost-per-wear {
+  text-align: end;
+  width: 130px;
+}
