@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import API from "../axiosApi";
+import axios from "axios";
 import Card from "../components/Card";
 
 export default class Login extends Component {
@@ -20,14 +21,25 @@ export default class Login extends Component {
 
 	handleSubmit(event) {
 		event.preventDefault();
-		API   //Axios to send and receive HTTP requests
-			.post("/api-auth/login/", {
+		axios({
+			method: 'post',
+			url: "http://localhost:8000/dj-rest-auth/login/",
+			withCredentials: false,
+			data: {
 				next: "/",
 				username: this.state.username,
 				password: this.state.password,
-				submit: "Log+in",
+				//submit: "Log+in",
+			}
+		})
+			.then((response) => {
+				console.log(response.data);
+				console.log(response.status);
+				console.log(response.statusText);
+				console.log(response.headers);
+				console.log(response.config);
 			})
-			.catch(err => console.log(err));
+			.catch(err => console.log(err))
 	}
 
 	render() {

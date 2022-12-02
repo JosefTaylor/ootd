@@ -19,6 +19,7 @@ from django.contrib.auth.models import User
 from django.views.generic import RedirectView
 
 from rest_framework import routers, serializers, viewsets
+from dj_rest_auth import urls
 
 from closet import views
 
@@ -30,9 +31,13 @@ router.register(r'garmentwears', views.GarmentWearView, 'garmentwear')
 router.register(r'dashboard', views.DashboardViewSet, 'dashboard')
 
 urlpatterns = [
-	path('', include(router.urls)),
+    path('', include(router.urls)),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('garments/<int:pk>/', views.GarmentDetailView.as_view(), name='garment-detail'),
-    path('garmentweardelete/<int:pk>/', views.GarmentWearDeleteView.as_view(), name='garmentweardelete'),
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),
+    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
+    path('garments/<int:pk>/', views.GarmentDetailView.as_view(),
+         name='garment-detail'),
+    path('garmentweardelete/<int:pk>/',
+         views.GarmentWearDeleteView.as_view(), name='garmentweardelete'),
 ]

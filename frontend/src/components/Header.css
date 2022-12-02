@@ -1,0 +1,8 @@
+.splitter>.header-end {
+    width: 100px;
+    padding: 16px;
+}
+
+.header {
+    align-items: center;
+}

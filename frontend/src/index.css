@@ -14,6 +14,12 @@
 @import "./components/utilities/Height.css";
 @import "./components/utilities/Width.css";
 
+/* Components */
+@import "./components/Card.css";
+@import "./components/DataTable.css";
+@import "./components/Header.css";
+@import "./components/Field.css";
+
 /* .App {
   text-align: center;
 } */
@@ -23,27 +29,6 @@ body {
   color: darkred;
   font-family: Arial;
   text-align: center;
-}
-
-.splitter > .header-end {
-  width: 100px;
-  padding: 16px;
-}
-
-.header {
-  align-items: center;
-}
-
-.field {
-  height: 100%;
-  overflow: scroll;
-  background-color: white;
-}
-
-.card {
-  border-radius: 10px;
-  background-color: lightgrey;
-  padding: 15px;
 }
 
 input,
@@ -64,52 +49,4 @@ input {
 
 button {
   cursor: pointer;
-}
-
-.data-table {
-  overflow: scroll;
-  display: inline-block;
-}
-
-.data-table > div {
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-.data-table > div:nth-child(7n - 6) {
-  background: rgb(255, 220, 220);
-}
-
-.data-table > div:nth-child(7n - 5) {
-  background: rgb(255, 234, 195);
-}
-
-.data-table > div:nth-child(7n - 4) {
-  background: rgb(255, 255, 193);
-}
-
-.data-table > div:nth-child(7n - 3) {
-  background: rgb(193, 255, 193);
-}
-
-.data-table > div:nth-child(7n - 2) {
-  background: rgb(193, 193, 255);
-}
-
-.data-table > div:nth-child(7n - 1) {
-  background: rgb(229, 192, 255);
-}
-
-.data-table > div:nth-child(7n - 0) {
-  background: rgb(255, 194, 255);
-}
-
-.garment-name {
-  text-align: start;
-  width: 250px;
-} /* ellipses????*/
-
-.cost-per-wear {
-  text-align: end;
-  width: 130px;
 }
