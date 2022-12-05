@@ -1,29 +1,5 @@
 @import "./reset.css";
 
-/* Layouts */
-@import "./components/layouts/Center.css";
-@import "./components/layouts/GlobalStack.css";
-@import "./components/layouts/Sidebar.css";
-@import "./components/layouts/Splitter.css";
-@import "./components/layouts/Stack.css";
-@import "./components/layouts/Wrapper.css";
-@import "./components/layouts/Flow.css";
-
-/* Utilities */
-@import "./components/utilities/Padding.css";
-@import "./components/utilities/Height.css";
-@import "./components/utilities/Width.css";
-
-/* Components */
-@import "./components/Card.css";
-@import "./components/DataTable.css";
-@import "./components/Header.css";
-@import "./components/Field.css";
-
-/* .App {
-  text-align: center;
-} */
-
 body {
   background-color: rgb(255, 164, 164);
   color: darkred;
@@ -50,3 +26,23 @@ input {
 button {
   cursor: pointer;
 }
+
+/* Layouts */
+@import "./components/layouts/Center.css";
+@import "./components/layouts/GlobalStack.css";
+@import "./components/layouts/Sidebar.css";
+@import "./components/layouts/Splitter.css";
+@import "./components/layouts/Stack.css";
+@import "./components/layouts/Wrapper.css";
+@import "./components/layouts/Flow.css";
+
+/* Utilities */
+@import "./components/utilities/Padding.css";
+@import "./components/utilities/Height.css";
+@import "./components/utilities/Width.css";
+
+/* Components */
+@import "./components/Card.css";
+@import "./components/DataTable.css";
+@import "./components/Header.css";
+@import "./components/Field.css";

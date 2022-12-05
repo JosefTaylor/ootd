@@ -5,7 +5,7 @@ import API from "../axiosApi";
 class Logout extends Component {
 
 	logout() {
-		API.get("/api-auth/logout/")
+		API.post("/dj-rest-auth/logout/")
 			.catch((error) => {
 				console.log(error)
 			})

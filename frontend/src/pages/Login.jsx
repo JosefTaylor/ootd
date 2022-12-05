@@ -24,20 +24,19 @@ export default class Login extends Component {
 		axios({
 			method: 'post',
 			url: "http://localhost:8000/dj-rest-auth/login/",
-			withCredentials: false,
+			withCredentials: true,
 			data: {
-				next: "/",
 				username: this.state.username,
 				password: this.state.password,
-				//submit: "Log+in",
 			}
 		})
 			.then((response) => {
-				console.log(response.data);
-				console.log(response.status);
-				console.log(response.statusText);
-				console.log(response.headers);
-				console.log(response.config);
+				this.props.onLogin()
+				// console.log(response.data);
+				// console.log(response.status);
+				// console.log(response.statusText);
+				// console.log(response.headers);
+				// console.log(response.config);
 			})
 			.catch(err => console.log(err))
 	}

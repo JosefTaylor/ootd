@@ -87,49 +87,48 @@ class App extends Component {
   }
 
   render() {
-    let content = []
-    switch (this.state.page) {
-      case "home":
-        content = <Dashboard
-          garmentList={this.state.garmentList}
-          garmentWearList={this.state.garmentWearList}
-          refreshList={this.refreshList}
-          userName={this.state.userName}
-          onNav={this.handleNav}
-        />
-        break;
-      case "graphs":
-        content = <Graph
-          garmentList={this.state.garmentList}
-          garmentWearList={this.state.garmentWearList}
-          refreshList={this.refreshList}
-          userName={this.state.userName}
-          onNav={this.handleNav}
-        />
-        break;
-      case "login":
-        content = <Login
-        onNav={this.handleNav} />
-        break;
-      case "register":
-          content = <Register />
-          break;
-      case "logout":
-        content = <Logout />
-        break;
-      case "loading":
-        content = <Loading />
-        this.refreshList()
-    }
 
     return (
       <div className="global-stack">
         <Header userName={this.state.userName} onNav={this.handleNav} />
-        <main className="field">{content}</main>
+        <main className="field">
+          {this.state.page === 'home' &&
+            <Dashboard
+              garmentList={this.state.garmentList}
+              garmentWearList={this.state.garmentWearList}
+              refreshList={this.refreshList}
+              userName={this.state.userName}
+              onNav={this.handleNav}
+            />
+          }
+          {this.state.page === 'graphs' &&
+            <Graph
+              garmentList={this.state.garmentList}
+              garmentWearList={this.state.garmentWearList}
+              refreshList={this.refreshList}
+              userName={this.state.userName}
+              onNav={this.handleNav}
+            />
+          }
+          {this.state.page === 'login' &&
+            <Login onNav={this.handleNav} onLogin={this.refreshList} />
+          }
+          {this.state.page === "register" &&
+            <Register />
+          }
+          {this.state.page === "logout" &&
+            <Logout />
+          }
+          {this.state.page === "loading" &&
+            <Loading />
+          }
+        </main>
         <Footer />
-      </div>
+      </div >
     )
   }
 }
+
+//<main className="field">{content}
 
 export default App;
