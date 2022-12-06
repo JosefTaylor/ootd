@@ -6,7 +6,6 @@ authors = ["Josef Taylor <josef.taylor@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ""
 django = "^4.1.3"
 djangorestframework = "^3.14.0"
 django-cors-headers = "^3.13.0"
