@@ -14,6 +14,10 @@ markdown = "^3.4.1"
 django-filter = "^22.1"
 dj-rest-auth = {extras = ["with-social"], version = "^2.2.5"}
 djangorestframework-simplejwt = "^5.2.2"
+psycopg2 = "^2.9.5"
+dj-database-url = "^1.0.0"
+psycopg2-binary = "^2.9.5"
+gunicorn = "^20.1.0"
 
 
 [build-system]

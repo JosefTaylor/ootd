@@ -11,10 +11,7 @@ export default class Header extends Component {
 				</div>
 			)
 		} else {
-			return (
-				<div className="header-end stack">
-				</div>
-				)
+			return (<div></div>)
 		}
 	}
 

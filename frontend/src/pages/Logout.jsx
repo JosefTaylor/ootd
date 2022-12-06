@@ -6,6 +6,11 @@ class Logout extends Component {
 
 	logout() {
 		API.post("/dj-rest-auth/logout/")
+			.then(response => {
+				localStorage.removeItem('access_token');
+				localStorage.removeItem('refresh_token');
+				// axiosInstance.defaults.headers['Authorization'] = null;
+			})
 			.catch((error) => {
 				console.log(error)
 			})

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,9 +26,13 @@ SECRET_KEY = SECRET_KEY = os.environ.get(
     'SECRET_KEY', default='your secret key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = []
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
@@ -50,7 +55,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'dj_rest_auth',
     'dj_rest_auth.registration',
-    # 'rest_framework_simplejwt',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -91,10 +96,14 @@ WSGI_APPLICATION = 'ootd.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # },
+    'default': dj_database_url.config(
+        default='postgres://ootd_db_4owr_user:fYq32Z2uPfmFUOWcxLKzjY4YZSyADcFP@dpg-ce7paup4rebbibj1r1lg-a.ohio-postgres.render.com/ootd_db_4owr',
+        conn_max_age=600
+    )
 }
 
 
@@ -157,10 +166,10 @@ REST_FRAMEWORK = {
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     # 'PAGE_SIZE': 10
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-        # 'rest_framework.authentication.TokenAuthentication',
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
-        # 'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ]
 }
 
@@ -169,12 +178,12 @@ CSRF_TRUSTED_ORIGINS = (
 )
 
 # dj_rest_auth tutorial settings
-REST_SESSION_LOGIN = True
+REST_SESSION_LOGIN = False
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SITE_ID = 1
 # ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 # ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
-# REST_USE_JWT = True
-# JWT_AUTH_COOKIE = 'my-cool-auth'
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'my-cool-auth'

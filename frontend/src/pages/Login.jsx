@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import API from "../axiosApi";
-import axios from "axios";
+// import axios from "axios";
 import Card from "../components/Card";
 
 export default class Login extends Component {
@@ -9,6 +9,7 @@ export default class Login extends Component {
 		this.state = {
 			username: "",
 			password: "",
+			loginError: false,
 		}
 		this.handleChange = this.handleChange.bind(this)
 		this.handleSubmit = this.handleSubmit.bind(this)
@@ -16,29 +17,28 @@ export default class Login extends Component {
 
 
 	handleChange(event) {
-		this.setState({ [event.target.name]: event.target.value });
+		this.setState({
+			[event.target.name]: event.target.value,
+			loginError: false,
+		});
 	}
 
 	handleSubmit(event) {
 		event.preventDefault();
-		axios({
-			method: 'post',
-			url: "http://localhost:8000/dj-rest-auth/login/",
-			withCredentials: true,
-			data: {
+		API.post("/dj-rest-auth/login/",
+			{
 				username: this.state.username,
 				password: this.state.password,
-			}
-		})
-			.then((response) => {
-				this.props.onLogin()
-				// console.log(response.data);
-				// console.log(response.status);
-				// console.log(response.statusText);
-				// console.log(response.headers);
-				// console.log(response.config);
 			})
-			.catch(err => console.log(err))
+			.then((response) => {
+				localStorage.setItem('access_token', response.data.access_token);
+				localStorage.setItem('refresh_token', response.data.refresh_token);
+				this.props.onLogin()
+			})
+			.catch(err => {
+				console.log(err)
+				this.setState({ loginError: true })
+			})
 	}
 
 	render() {
@@ -69,6 +69,7 @@ export default class Login extends Component {
 					<button onClick={this.handleSubmit}>
 						Log in
 					</button>
+					<div warning hidden={!this.state.loginError}>That didn't work, please try again.</div>
 					<button onClick={this.props.onNav("register")}>
 						Register
 					</button>
