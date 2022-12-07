@@ -1,13 +1,34 @@
 import React, { Component } from "react";
 import Plot from 'react-plotly.js';
 
+import FilterCheckBox from "../components/FilterCheckBox"
+
 function Sidebar(props) {
     return (
         <div className="stack ht-full">
             <button onClick={props.onNav("violin")} >Violin</button>
             <button onClick={props.onNav("histogram")} >Histogram</button>
+            <GarmentFilterTable
+                garments={props.garments}
+                onChange={props.onChange}
+                garmentFilter={props.garmentFilter}
+            />
         </div>
     )
+}
+
+function GarmentFilterTable(props) {
+    const listItems = props.garments.map((garment) => (
+        <div key={garment.id} className="data-item">
+            <FilterCheckBox
+                item={garment}
+                onChange={props.onChange}
+                show={props.garmentFilter[garment.id]}
+            />
+        </div>
+    ));
+
+    return <div className="stack data-table ht-full">{listItems}</div>;
 }
 
 function Violin(props) {
@@ -19,7 +40,11 @@ function Violin(props) {
             new Date(a.purchase_date) - new Date(b.purchase_date))
     })
 
-    const data = garmentList.map((garment, index) => {
+    const filteredGarments = garmentList.filter((garment) => {
+        return (props.garmentFilter[garment.id])
+    })
+
+    const data = filteredGarments.map((garment, index) => {
 
         const wears = props.wearList.filter((wear) => {
             return wear.garment_id === garment.id
@@ -34,7 +59,7 @@ function Violin(props) {
             points: 'all',
             name: garment.name,
             showlegend: true,
-            line: { width: 1 },
+            line: { width: 0.1 },
             quartilemethod: 'linear',
             jitter: 0.5,
             pointpos: 0,
@@ -48,16 +73,16 @@ function Violin(props) {
     })
 
     const layout = {
-        paper_bgcolor: "rgba(0, 0, 0, 0)", 
+        paper_bgcolor: "rgba(0, 0, 0, 0)",
         plot_bgcolor: "rgba(0, 0, 0, 0)",
         colorway: [
-            'rgb(255, 220, 220)',
-            'rgb(255, 234, 195)',
-            'rgb(255, 255, 193)',
-            'rgb(193, 255, 193)',
-            'rgb(193, 193, 255)',
-            'rgb(229, 192, 255)',
-            'rgb(255, 194, 255)',
+            'red',
+            'orange',
+            'yellow',
+            'green',
+            'blue',
+            'indigo',
+            'violet',
         ],
         xaxis: {
             gridcolor: "rgb(255,255,255)",
@@ -154,8 +179,17 @@ export default class Graph extends Component {
         super(props);
         this.state = {
             page: "violin",
+            garmentFilter: props.garmentList.map((garment) => true)
         };
         this.handleNav = this.handleNav.bind(this);
+        this.handleGarmentFilterChange = this.handleGarmentFilterChange.bind(this);
+    }
+
+    handleGarmentFilterChange(garment_id) {
+        return ((event) => {
+            this.state.garmentFilter[garment_id] = !this.state.garmentFilter[garment_id]
+            this.setState({ garmentFilter: this.state.garmentFilter })
+        })
     }
 
     handleNav(newMode) {
@@ -178,12 +212,14 @@ export default class Graph extends Component {
                 content = <Violin
                     garmentList={this.props.garmentList}
                     wearList={this.props.garmentWearList}
+                    garmentFilter={this.state.garmentFilter}
                 />
                 break;
             case "histogram":
                 content = <Histogram
                     garmentList={this.props.garmentList}
                     wearList={this.props.garmentWearList}
+                    garmentFilter={this.state.garmentFilter}
                 />
                 break;
             default:
@@ -193,7 +229,14 @@ export default class Graph extends Component {
         }
         return (
             <div className="sidebar pad-1">
-                <div className="card side"><Sidebar onNav={this.handleNav} /></div>
+                <div className="card side">
+                    <Sidebar
+                        onNav={this.handleNav}
+                        garments={this.props.garmentList}
+                        onChange={this.handleGarmentFilterChange}
+                        garmentFilter={this.state.garmentFilter}
+                    />
+                </div>
                 <div className="card content">{content}</div>
             </div>
         );
