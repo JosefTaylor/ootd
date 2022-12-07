@@ -101,7 +101,7 @@ DATABASES = {
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # },
     'default': dj_database_url.config(
-        default='postgres://ootd_db_4owr_user:fYq32Z2uPfmFUOWcxLKzjY4YZSyADcFP@dpg-ce7paup4rebbibj1r1lg-a.ohio-postgres.render.com/ootd_db_4owr',
+        default=os.environ.get('DATABASE_URL', default='your database url'),
         conn_max_age=600
     )
 }
