@@ -7,7 +7,7 @@ function Sidebar(props) {
     return (
         <div className="stack ht-full">
             <button onClick={props.onNav("violin")} >Violin</button>
-            <button onClick={props.onNav("histogram")} >Histogram</button>
+            <button onClick={props.onNav("histogram")} >Histogram</button>           
             <GarmentFilterTable
                 garments={props.garments}
                 onChange={props.onChange}
@@ -117,7 +117,15 @@ function Violin(props) {
 
 function Histogram(props) {
 
-    const garmentList = props.garmentList.filter(garment => new Date(garment.deaq_date) >= Date() || !garment.deaq_date)
+    const garmentList = props.garmentList.filter(garment => {
+        return (
+            (
+                new Date(garment.deaq_date) >= Date()
+                || !garment.deaq_date
+            )
+            && props.garmentFilter[garment.id]
+        )
+    })
 
     const purchaseDateList = garmentList.map(garment => new Date(garment.purchase_date))
 
