@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Plot from 'react-plotly.js';
 
-import FilterCheckBox from "../components/FilterCheckBox"
+import FilterCheckBox from "../components/FilterCheckBox.jsx"
 
 function Sidebar(props) {
     return (

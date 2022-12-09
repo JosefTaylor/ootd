@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import API from "../axiosApi";
+import API from "../axiosApi.jsx";
 
 
 class Logout extends Component {

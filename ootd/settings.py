@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = SECRET_KEY = os.environ.get(
-    'SECRET_KEY', default='your secret key')
+    'POETRY_SECRET_KEY', default='your secret key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'RENDER' not in os.environ
@@ -32,6 +32,7 @@ DEBUG = 'RENDER' not in os.environ
 ALLOWED_HOSTS = []
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
@@ -103,7 +104,7 @@ DATABASES = {
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # },
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL', default='your database url'),
+        default=os.environ.get('POETRY_DATABASE_URL', default='your database url'),
         conn_max_age=600
     )
 }
@@ -152,15 +153,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 
-
+# Authentication
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=14),
@@ -176,17 +177,23 @@ SIMPLE_JWT = {
     'TOKEN_TYPE_CLAIM': 'token_type',
 }
 
+# CSRF
 CSRF_TRUSTED_ORIGINS = (
-    'http://localhost:3000',
+    'http://localhost',
+    'http://127.0.0.1',
 )
 
+
+# CORS
 CORS_ALLOWED_ORIGINS = (
-    'http://localhost:3000',
-)
-# White listing the localhost:3000 port
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000',
+    'http://localhost',
+    'http://127.0.0.1',
 )
 
-# adds Access-Control-Allow-Credentials: true to responses
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost',
+    'http://127.0.0.1',
+)
+
+# Adds Access-Control-Allow-Credentials: true to responses
 CORS_ALLOW_CREDENTIALS = True

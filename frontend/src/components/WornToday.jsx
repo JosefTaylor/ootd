@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import API from "../axiosApi";
-import DateSelector from "./DateSelector";
+import API from "../axiosApi.jsx";
+import DateSelector from "./DateSelector.jsx";
 
 function PrettyPrintGarmentWear(wear) {
     const wear_date = new Date(wear.scan_date).toDateString();

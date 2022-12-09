@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import API from "../axiosApi";
+import API from "../axiosApi.jsx";
 // import axios from "axios";
-import Card from "../components/Card";
+import Card from "../components/Card.jsx";
 
 export default class Login extends Component {
 	constructor(props) {
@@ -23,22 +23,21 @@ export default class Login extends Component {
 		});
 	}
 
-	handleSubmit(event) {
+	async handleSubmit(event) {
 		event.preventDefault();
-		API.post("/dj-rest-auth/login/",
-			{
-				username: this.state.username,
-				password: this.state.password,
-			})
-			.then((response) => {
-				localStorage.setItem('access_token', response.data.access_token);
-				localStorage.setItem('refresh_token', response.data.refresh_token);
-				this.props.onLogin()
-			})
-			.catch(err => {
-				console.log(err)
-				this.setState({ loginError: true })
-			})
+		try {
+			const response = await API.post("/token/obtain/",
+				{
+					username: this.state.username,
+					password: this.state.password,
+				})
+			API.defaults.headers['Authorization'] = "JWT " + response.data.access;
+			localStorage.setItem('access_token', response.data.access);
+			localStorage.setItem('refresh_token', response.data.refresh);
+			this.props.onLogin();
+		} catch (error) {
+			throw error;
+		}
 	}
 
 	render() {

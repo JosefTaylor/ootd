@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 
-import API from "../axiosApi";
+import API from "../axiosApi.jsx";
 
-import Wardrobe from "../components/Wardrobe";
-import WornToday from "../components/WornToday";
+import Wardrobe from "../components/Wardrobe.jsx";
+import WornToday from "../components/WornToday.jsx";
 
 class Dashboard extends Component {
   constructor(props) {
