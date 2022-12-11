@@ -152,3 +152,4 @@ GitHub.sublime-settings
 
 # database migrations #
 **/migrations/**
+frontend/static/frontend/public/main.js
