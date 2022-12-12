@@ -1,6 +1,5 @@
 
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     mode: "development",
@@ -33,21 +32,12 @@ module.exports = {
                             "@babel/react",
                             "@babel/env"
                         ],
-                        plugins: [
-                            // "@babel/proposal-class-properties",
-                            // "@babel/plugin-transform-runtime",
-                            "@babel/plugin-transform-react-jsx",
-                            "@babel/plugin-proposal-optional-chaining",
-                            "@babel/plugin-proposal-nullish-coalescing-operator",
-                        ]
                     },
                 }
             },
             {
                 test: /\.css$/,
-                use: {
-                    loader: "css-loader"
-                },
+                use: ["style-loader", "css-loader"],
             }
         ],
     },
