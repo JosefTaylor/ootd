@@ -101,6 +101,9 @@ coverage.xml
 # pyenv 
 .python-version 
 
+# poetry
+poetry.lock
+
 # celery 
 celerybeat-schedule.* 
 
