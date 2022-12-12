@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 
-import API from "./axiosApi";
+import API from "./axiosApi.jsx";
+import Login from "./pages/Login.jsx";
+import Graph from "./pages/Graph.jsx"
+import Dashboard from "./pages/Dashboard.jsx";
+import Loading from "./pages/Loading.jsx";
+import Header from "./components/Header.jsx";
+import Footer from "./components/Footer.jsx";
+import Logout from "./pages/Logout.jsx";
+import Register from "./pages/Register.jsx";
 
-import Login from "./pages/Login";
-import Graph from "./pages/Graph"
-import Dashboard from "./pages/Dashboard";
-import Loading from "./pages/Loading";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Logout from "./pages/Logout";
-import Register from "./pages/Register";
+import './index.css';
 
 class App extends Component {
   constructor(props) {
@@ -50,36 +51,21 @@ class App extends Component {
     };
   }
 
-  refreshList() {
-    API.get("/dashboard/") //Axios to send and receive HTTP requests
-      .then((response) => {
-        this.setState({
-          page: "home",
-          userUrl: response.data[0].user,
-          userName: response.data[0].username,
-          garmentList: response.data[0].garments,
-          garmentWearList: response.data[0].garment_wears,
-        });
-      })
-      .catch((error) => {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx    
-          console.log('The request was made and the server responded with a status code that falls out of the range of 2xx')
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log('The request was made but no response was received', error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log('Error', error.message);
-        }
-        this.setState({ page: "login" })
+  async refreshList() {
+    try {
+      let response = await API.get("/dashboard/")
+      this.setState({
+        page: "home",
+        userUrl: response.data[0].user,
+        userName: response.data[0].username,
+        garmentList: response.data[0].garments,
+        garmentWearList: response.data[0].garment_wears,
       });
+    } catch (error) {
+      this.setState({page: "login"})
+      console.log("Error: ", JSON.stringify(error, null, 4));
+      throw error;
+    }
   }
 
   componentDidMount() {

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = SECRET_KEY = os.environ.get(
-    'SECRET_KEY', default='your secret key')
+    'POETRY_SECRET_KEY', default='your secret key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'RENDER' not in os.environ
@@ -31,6 +32,7 @@ DEBUG = 'RENDER' not in os.environ
 ALLOWED_HOSTS = []
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
@@ -56,6 +58,7 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'rest_framework_simplejwt',
+    'frontend',
 ]
 
 MIDDLEWARE = [
@@ -101,7 +104,7 @@ DATABASES = {
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # },
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL', default='your database url'),
+        default=os.environ.get('POETRY_DATABASE_URL', default='your database url'),
         conn_max_age=600
     )
 }
@@ -149,41 +152,48 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-CORS_ALLOWED_ORIGINS = (
-    'http://localhost:3000',
-)
-# White listing the localhost:3000 port
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000',
-)
-
-# adds Access-Control-Allow-Credentials: true to responses
-CORS_ALLOW_CREDENTIALS = True
-
-
-# TODO: pagination???
 REST_FRAMEWORK = {
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    # 'PAGE_SIZE': 10
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
-    ]
+    ),
 }
 
+# Authentication
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=14),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUTH_HEADER_TYPES': ('JWT',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+}
+
+# CSRF
 CSRF_TRUSTED_ORIGINS = (
-    'http://localhost:3000',
+    'http://localhost',
+    'http://127.0.0.1',
 )
 
-# dj_rest_auth tutorial settings
-REST_SESSION_LOGIN = False
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-SITE_ID = 1
-# ACCOUNT_EMAIL_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
-# ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
-REST_USE_JWT = True
-JWT_AUTH_COOKIE = 'my-cool-auth'
+# CORS
+CORS_ALLOWED_ORIGINS = (
+    'http://localhost',
+    'http://127.0.0.1',
+)
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost',
+    'http://127.0.0.1',
+)
+
+# Adds Access-Control-Allow-Credentials: true to responses
+CORS_ALLOW_CREDENTIALS = True

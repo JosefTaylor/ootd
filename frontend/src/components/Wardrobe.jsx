@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import FilterBar from "./FilterBar";
-import API from "../axiosApi";
+import FilterBar from "./FilterBar.jsx";
+import API from "../axiosApi.jsx";
 
 class WardrobeGarment extends Component {
     constructor(props) {
