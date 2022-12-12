@@ -181,6 +181,7 @@ SIMPLE_JWT = {
 CSRF_TRUSTED_ORIGINS = (
     'http://localhost',
     'http://127.0.0.1',
+    'http://192.168.0.175',
 )
 
 
@@ -188,11 +189,13 @@ CSRF_TRUSTED_ORIGINS = (
 CORS_ALLOWED_ORIGINS = (
     'http://localhost',
     'http://127.0.0.1',
+    'http://192.168.0.175',
 )
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost',
     'http://127.0.0.1',
+    'http://192.168.0.175',
 )
 
 # Adds Access-Control-Allow-Credentials: true to responses
