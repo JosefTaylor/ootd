@@ -18,9 +18,11 @@ poetry install
 python manage.py collectstatic --no-input
 python manage.py migrate
 
-echo "listing root"
+echo "==== listing root ===="
 ls
-echo "listing ./staticfiles"
+echo "==== listing ./staticfiles ===="
 ls ./staticfiles/
-echo "listing ./staticfiles/frontend/public"
+echo "==== listing ./staticfiles/frontend/public ===="
 ls ./staticfiles/frontend/public
+echo "==== listing ../ ===="
+ls ../
