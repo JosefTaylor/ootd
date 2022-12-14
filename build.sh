@@ -4,10 +4,6 @@ set -o errexit
 
 poetry install
 
-ls
-ls ./staticfiles/
-ls ./staticfiles/frontend/public
-
 # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
 
 # export NVM_DIR="$HOME/.nvm"
@@ -21,3 +17,10 @@ ls ./staticfiles/frontend/public
 
 python manage.py collectstatic --no-input
 python manage.py migrate
+
+echo "listing root"
+ls
+echo "listing ./staticfiles"
+ls ./staticfiles/
+echo "listing ./staticfiles/frontend/public"
+ls ./staticfiles/frontend/public
