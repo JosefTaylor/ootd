@@ -175,13 +175,12 @@ SIMPLE_JWT = {
 }
 
 # # CSRF
-# CSRF_TRUSTED_ORIGINS = (
-#     # 'http://localhost',
-#     # 'http://127.0.0.1',
-#     # 'http://192.168.0.175',
-# )
+CSRF_TRUSTED_ORIGINS = []
 
-# CSRF_COOKIE_SECURE = not DEBUG
+if RENDER_EXTERNAL_HOSTNAME:
+    CSRF_TRUSTED_ORIGINS.append(RENDER_EXTERNAL_HOSTNAME)
+
+CSRF_COOKIE_SECURE = not DEBUG
 
 # # CORS
 # CORS_ALLOWED_ORIGINS = (
@@ -197,4 +196,4 @@ SIMPLE_JWT = {
 # )
 
 # Adds Access-Control-Allow-Credentials: true to responses
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_CREDENTIALS = True
