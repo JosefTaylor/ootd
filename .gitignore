@@ -157,4 +157,4 @@ GitHub.sublime-settings
 **/migrations/**
 
 # Webpack generated file:
-**/static/**/main.js
+**/static/**/main.js*
