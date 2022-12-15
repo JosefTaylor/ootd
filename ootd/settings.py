@@ -177,7 +177,6 @@ SIMPLE_JWT = {
 # CSRF
 CSRF_TRUSTED_ORIGINS = []
 
-
 if RENDER_EXTERNAL_HOSTNAME:
     CSRF_TRUSTED_ORIGINS.append('https://' + RENDER_EXTERNAL_HOSTNAME)
 
@@ -185,11 +184,10 @@ if RENDER_EXTERNAL_HOSTNAME:
 CSRF_COOKIE_SECURE = not DEBUG
 
 # # CORS
-# CORS_ALLOWED_ORIGINS = (
-#     # 'http://localhost',
-#     # 'http://127.0.0.1',
-#     # 'http://192.168.0.175',
-# )
+CORS_ALLOWED_ORIGINS = []
+
+if RENDER_EXTERNAL_HOSTNAME:
+    CORS_ALLOWED_ORIGINS.append('https://' + RENDER_EXTERNAL_HOSTNAME)
 
 # CORS_ORIGIN_WHITELIST = (
 #     # 'http://localhost',
