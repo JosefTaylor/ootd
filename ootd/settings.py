@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = SECRET_KEY = os.environ.get(
     'SECRET_KEY', default='your secret key')
 
-DEBUG = 'TRUE' # 'RENDER' not in os.environ
+DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = [] 
 
@@ -150,9 +150,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 REST_FRAMEWORK = {
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
@@ -174,7 +174,7 @@ SIMPLE_JWT = {
     'TOKEN_TYPE_CLAIM': 'token_type',
 }
 
-# # CSRF
+# CSRF
 CSRF_TRUSTED_ORIGINS = []
 
 

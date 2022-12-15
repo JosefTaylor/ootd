@@ -31,16 +31,14 @@ router.register(r'garmentwears', views.GarmentWearView, 'garmentwear')
 router.register(r'dashboard', views.DashboardViewSet, 'dashboard')
 
 urlpatterns = [
-    path('token/obtain/', jwt_views.TokenObtainPairView.as_view(), name='token_create'),  # override sjwt stock token
-    path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('', include(router.urls)),
-    # path('auth/', include('dj_rest_auth.urls')),
-    # path('api-auth/', include('rest_framework.urls')),
-    # path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
-    # path('garments/<int:pk>/',
-    #      views.GarmentDetailView.as_view(),
-    #      name='garment-detail'),
-    # path('garmentweardelete/<int:pk>/',
-    #      views.GarmentWearDeleteView.as_view(),
-    #      name='garmentweardelete'),
+    path('token/obtain/', jwt_views.TokenObtainPairView.as_view(), name='token_create'),
+    path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    path('garments/<int:pk>/',
+         views.GarmentDetailView.as_view(),
+         name='garment-detail'),
+    path('garmentweardelete/<int:pk>/',
+         views.GarmentWearDeleteView.as_view(),
+         name='garmentweardelete'),
+    # TODO: token delete, register, etc.
 ]
