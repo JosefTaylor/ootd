@@ -18,22 +18,17 @@ from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = SECRET_KEY = os.environ.get(
     'SECRET_KEY', default='your secret key')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'TRUE' # 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = [] 
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 
-# if RENDER_EXTERNAL_HOSTNAME:
-#     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
@@ -145,7 +140,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -180,27 +174,27 @@ SIMPLE_JWT = {
     'TOKEN_TYPE_CLAIM': 'token_type',
 }
 
-# CSRF
-CSRF_TRUSTED_ORIGINS = (
-    'http://localhost',
-    'http://127.0.0.1',
-    'http://192.168.0.175',
-)
+# # CSRF
+# CSRF_TRUSTED_ORIGINS = (
+#     # 'http://localhost',
+#     # 'http://127.0.0.1',
+#     # 'http://192.168.0.175',
+# )
 
-CSRF_COOKIE_SECURE = not DEBUG
+# CSRF_COOKIE_SECURE = not DEBUG
 
-# CORS
-CORS_ALLOWED_ORIGINS = (
-    'http://localhost',
-    'http://127.0.0.1',
-    'http://192.168.0.175',
-)
+# # CORS
+# CORS_ALLOWED_ORIGINS = (
+#     # 'http://localhost',
+#     # 'http://127.0.0.1',
+#     # 'http://192.168.0.175',
+# )
 
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost',
-    'http://127.0.0.1',
-    'http://192.168.0.175',
-)
+# CORS_ORIGIN_WHITELIST = (
+#     # 'http://localhost',
+#     # 'http://127.0.0.1',
+#     # 'http://192.168.0.175',
+# )
 
 # Adds Access-Control-Allow-Credentials: true to responses
 CORS_ALLOW_CREDENTIALS = True
