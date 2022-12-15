@@ -28,7 +28,11 @@ SECRET_KEY = SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [] if DEBUG else [
+    'http://localhost',
+    'http://127.0.0.1',
+    'https://ootd-api.onrender.com/',
+]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 
@@ -106,7 +110,7 @@ WSGI_APPLICATION = 'ootd.wsgi.application'
 #     'default': dj_database_url.config(
 #         default=os.environ.get('DATABASE_URL', default='your database url'),
 #         conn_max_age=600
-#     )    
+#     )
 # }
 DATABASES = {'default': dj_database_url.config(conn_max_age=600)}
 
@@ -145,11 +149,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
-print(STATIC_URL)
 
 if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -189,6 +192,7 @@ CSRF_TRUSTED_ORIGINS = (
     'http://192.168.0.175',
 )
 
+CSRF_COOKIE_SECURE = not DEBUG
 
 # CORS
 CORS_ALLOWED_ORIGINS = (
