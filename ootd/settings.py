@@ -196,4 +196,4 @@ if RENDER_EXTERNAL_HOSTNAME:
 # )
 
 # Adds Access-Control-Allow-Credentials: true to responses
-# CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = True
