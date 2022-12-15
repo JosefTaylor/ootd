@@ -8,7 +8,10 @@ import axios from "axios";
 //     ?.split("=")[1];
 
 const API = axios.create({
-    baseURL: "http://localhost:8000/api/",
+    baseURL: 
+        process.env.RENDER_EXTERNAL_HOSTNAME != ""
+            ? process.env.RENDER_EXTERNAL_HOSTNAME
+            : 'http://localhost:8000/',
     timeout: 50000,
     headers: {
         'Authorization': 'JWT ' + localStorage.getItem('access_token'),
