@@ -68,7 +68,7 @@ export default class Login extends Component {
 					<button onClick={this.handleSubmit}>
 						Log in
 					</button>
-					<div warning hidden={!this.state.loginError}>That didn't work, please try again.</div>
+					<div className='warning' hidden={!this.state.loginError}>That didn't work, please try again.</div>
 					<button onClick={this.props.onNav("register")}>
 						Register
 					</button>

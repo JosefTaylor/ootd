@@ -37,13 +37,7 @@ class App extends Component {
           this.setState({ page: newMode });
           break;
         case "logout":
-          this.setState({
-            garmentList: [],
-            garmentWearList: [],
-            userUrl: "",
-            userName: "",
-            page: "logout"
-          })
+          this.handleLogout()
           break;
         default:
           this.setState({ page: "home" })
@@ -62,10 +56,33 @@ class App extends Component {
         garmentWearList: response.data[0].garment_wears,
       });
     } catch (error) {
-      this.setState({page: "login"})
+      this.setState({ page: "login" })
       console.log("Error: ", JSON.stringify(error, null, 4));
       throw error;
     }
+  }
+
+
+
+  handleLogout() {
+    API.post("/blacklist/", {
+      "refresh_token": localStorage.getItem("refresh_token")
+    })
+      .then((response) => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        API.defaults.headers['Authorization'] = null;
+        this.setState({
+          garmentList: [],
+          garmentWearList: [],
+          userUrl: "",
+          userName: "",
+          page: "logout"
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   componentDidMount() {
@@ -100,7 +117,7 @@ class App extends Component {
             <Login onNav={this.handleNav} onLogin={this.refreshList} />
           }
           {this.state.page === "register" &&
-            <Register />
+            <Register onNav={this.handleNav} onLogin={this.refreshList}/>
           }
           {this.state.page === "logout" &&
             <Logout />

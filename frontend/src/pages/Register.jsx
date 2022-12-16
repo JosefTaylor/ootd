@@ -8,8 +8,8 @@ export default class Register extends Component {
 		this.state = {
 			username: "",
 			email: "",
-			password1: "",
-			password2: "",
+			password: "",
+			errors: {}
 		}
 
 		this.handleChange = this.handleChange.bind(this)
@@ -18,22 +18,24 @@ export default class Register extends Component {
 
 
 	handleChange(event) {
-		console.log("name: " + event.target.name + " value: " + event.target.value)
 		this.setState({ [event.target.name]: event.target.value });
 	}
 
-	handleSubmit(event) {
-		//event.preventDefault();
-		API   //Axios to send and receive HTTP requests
-			.post("/api-auth/register/", {
-				next: "/",
+	async handleSubmit(event) {
+		event.preventDefault();
+		try {
+			const response = await API.post("/user/create/", {
 				username: this.state.username,
 				email: this.state.email,
-				password1: this.state.password1,
-				password2: this.state.password2,
-				submit: "register",
+				password: this.state.password,
+			});
+			return response
+		} catch (error) {
+			console.log(error.stack);
+			this.setState({
+				errors: error.response.data
 			})
-			.catch(err => console.log(err));
+		}
 	}
 
 	render() {
@@ -50,6 +52,7 @@ export default class Register extends Component {
 						placeholder="username"
 						required
 					/>
+					{this.state.errors.username ? this.state.errors.username : null}
 					<label htmlFor="email" hidden>Email</label>
 					<input
 						type="text"
@@ -60,28 +63,19 @@ export default class Register extends Component {
 						placeholder="email"
 						required
 					/>
-					<label htmlFor="password1" hidden>Password</label>
+					{this.state.errors.email ? this.state.errors.email : null}
+					<label htmlFor="password" hidden>Password</label>
 					<input
-						type="password1"
-						id="password1"
-						name="password1"
+						type="password"
+						id="password"
+						name="password"
 						placeholder="password"
 						value={this.state.password1}
 						onChange={this.handleChange}
 						minLength="8"
 						required
 					/>
-					<label htmlFor="password2" hidden>Confirm Password</label>
-					<input
-						type="password2"
-						id="password2"
-						name="password2"
-						placeholder="confirm password"
-						value={this.state.password2}
-						onChange={this.handleChange}
-						minLength="8"
-						required
-					/>
+					{this.state.errors.password ? this.state.errors.password : null}
 					<button onClick={this.handleSubmit}>
 						Register
 					</button>

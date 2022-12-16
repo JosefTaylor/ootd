@@ -4,25 +4,19 @@ import API from "../axiosApi.jsx";
 
 class Logout extends Component {
 
-	logout() {
-		API.post("/dj-rest-auth/logout/")
-			.then(response => {
-				localStorage.removeItem('access_token');
-				localStorage.removeItem('refresh_token');
-				// axiosInstance.defaults.headers['Authorization'] = null;
-			})
-			.catch((error) => {
-				console.log(error)
-			})
-	}
-
 	render() {
-		this.logout();
 		return (
 			<div className="grid pad-1">
 				<div className="center card">
-					<h2>Logged Out!</h2>
-					<p>Refresh the page to log in again.</p>
+					{true &&
+						<div>
+							<h2>Logged Out!</h2>
+							<p>Refresh the page to log in again.</p>
+						</div>
+					}
+					{false &&
+						<h2>Logging Out...</h2>
+					}
 				</div>
 			</div>
 		)
