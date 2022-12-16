@@ -3,12 +3,11 @@ import {API, GetCookie} from "../axiosApi.jsx";
 // import axios from "axios";
 import Card from "../components/Card.jsx";
 
-export default class Login extends Component {
+export default class PasswordReset extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			username: "",
-			password: "",
+			email: "",
 			loginError: false,
 		}
 		this.handleChange = this.handleChange.bind(this)
@@ -23,15 +22,13 @@ export default class Login extends Component {
 		});
 	}
 
-	async handleSubmit(event) {
+	handleSubmit(event) {
 		event.preventDefault();
-		API.post("/dj-rest-auth/login/",
+		API.post("/dj-rest-auth/reset/",
 			{
-				username: this.state.username,
-				password: this.state.password,
+				email: this.state.email,
 			})
 			.then((response) => {
-				API.defaults.headers = {"X-CSRFToken": GetCookie('csrftoken')}
 				this.props.onLogin();
 			})
 				.catch((error) => {
@@ -42,38 +39,21 @@ export default class Login extends Component {
 	render() {
 		return (
 			<div className="wrapper pad-1 wd-small center">
-				<Card title="Log in">
-					<label htmlFor="username" hidden>Username</label>
+				<Card title="Reset my password">
+					<label htmlFor="email" hidden>Username</label>
 					<input
-						type="text"
-						id="username"
-						name="username"
+						type="email"
+						id="email"
+						name="email"
 						value={this.state.username}
 						onChange={this.handleChange}
-						placeholder="username"
+						placeholder="email"
 						required
-					/>
-					<label htmlFor="password" hidden>Password</label>
-					<input
-						type="password"
-						id="password"
-						name="password"
-						placeholder="password"
-						value={this.state.password}
-						onChange={this.handleChange}
-						minLength="8"
-						required
-					/>
+					/>					
 					<button onClick={this.handleSubmit}>
-						Log in
+						Submit
 					</button>
 					<div className='warning' hidden={!this.state.loginError}>That didn't work, please try again.</div>
-					<button onClick={this.props.onNav("register")}>
-						Register
-					</button>
-					<button onClick={this.props.onNav("password_reset")}>
-						Forgot Password?
-					</button>
 				</Card >
 			</div >
 		)

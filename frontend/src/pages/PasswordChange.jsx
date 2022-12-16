@@ -3,12 +3,13 @@ import {API, GetCookie} from "../axiosApi.jsx";
 // import axios from "axios";
 import Card from "../components/Card.jsx";
 
-export default class Login extends Component {
+export default class PasswordChange extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			username: "",
-			password: "",
+			old_password: "",
+			new_password1: "",
+			new_password2: "",
 			loginError: false,
 		}
 		this.handleChange = this.handleChange.bind(this)
@@ -25,13 +26,13 @@ export default class Login extends Component {
 
 	async handleSubmit(event) {
 		event.preventDefault();
-		API.post("/dj-rest-auth/login/",
+		API.post("/dj-rest-auth/password/change/",
 			{
-				username: this.state.username,
-				password: this.state.password,
+				old_password: this.state.old_password,
+				new_password1: this.state.new_password1,
+				new_password2: this.state.new_password2,
 			})
 			.then((response) => {
-				API.defaults.headers = {"X-CSRFToken": GetCookie('csrftoken')}
 				this.props.onLogin();
 			})
 				.catch((error) => {
@@ -42,38 +43,41 @@ export default class Login extends Component {
 	render() {
 		return (
 			<div className="wrapper pad-1 wd-small center">
-				<Card title="Log in">
-					<label htmlFor="username" hidden>Username</label>
-					<input
-						type="text"
-						id="username"
-						name="username"
-						value={this.state.username}
-						onChange={this.handleChange}
-						placeholder="username"
-						required
-					/>
-					<label htmlFor="password" hidden>Password</label>
+				<Card title="Change Password">
+					<label htmlFor="old_password">Current Password</label>
 					<input
 						type="password"
-						id="password"
-						name="password"
-						placeholder="password"
-						value={this.state.password}
+						id="old_password"
+						name="old_password"
+						value={this.state.username}
 						onChange={this.handleChange}
-						minLength="8"
+						placeholder="current password"
+						required
+					/>
+					<label htmlFor="new_password1">New Password</label>
+					<input
+						type="password"
+						id="new_password1"
+						name="new_password1"
+						value={this.state.username}
+						onChange={this.handleChange}
+						placeholder="new password"
+						required
+					/>
+					<label htmlFor="new_password2">Confirm Password</label>
+					<input
+						type="password"
+						id="new_password2"
+						name="new_password2"
+						value={this.state.username}
+						onChange={this.handleChange}
+						placeholder="confirm password"
 						required
 					/>
 					<button onClick={this.handleSubmit}>
-						Log in
+						Change Password
 					</button>
 					<div className='warning' hidden={!this.state.loginError}>That didn't work, please try again.</div>
-					<button onClick={this.props.onNav("register")}>
-						Register
-					</button>
-					<button onClick={this.props.onNav("password_reset")}>
-						Forgot Password?
-					</button>
 				</Card >
 			</div >
 		)

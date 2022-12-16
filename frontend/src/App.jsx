@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import {API} from "./axiosApi.jsx";
+import { API } from "./axiosApi.jsx";
 import Login from "./pages/Login.jsx";
 import Graph from "./pages/Graph.jsx"
 import Dashboard from "./pages/Dashboard.jsx";
@@ -8,6 +8,8 @@ import Loading from "./pages/Loading.jsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import Register from "./pages/Register.jsx";
+import PasswordReset from "./pages/PasswordReset.jsx";
+import PasswordChange from "./pages/PasswordChange.jsx";
 
 import './index.css';
 
@@ -34,6 +36,8 @@ class App extends Component {
         case "graphs":
         case "selfie":
         case "register":
+        case "password_reset":
+        case "password_change":
           this.setState({ page: newMode });
           break;
         case "logout":
@@ -113,6 +117,12 @@ class App extends Component {
           }
           {this.state.page === "register" &&
             <Register onNav={this.handleNav} onLogin={this.refreshList} />
+          }
+          {this.state.page === "password_reset" &&
+            <PasswordReset onNav={this.handleNav} onLogin={this.refreshList} />
+          }
+          {this.state.page === "password_change" &&
+            <PasswordChange onNav={this.handleNav} onLogin={this.refreshList} />
           }
           {this.state.page === "logout" &&
             <Logout />
