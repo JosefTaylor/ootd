@@ -22,6 +22,7 @@ SECRET_KEY = SECRET_KEY = os.environ.get(
     'SECRET_KEY', default='your secret key')
 
 DEBUG = 'RENDER' not in os.environ
+print(f'=== Building with Debug = {DEBUG} ===')
 
 ALLOWED_HOSTS = [] 
 
@@ -141,7 +142,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-if DEBUG == 'False':
+if not DEBUG:
+    print('we do be in here')
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
