@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import API from "../axiosApi.jsx";
+import {API} from "../axiosApi.jsx";
 import DateSelector from "./DateSelector.jsx";
+import Card from "./Card.jsx";
 
 function PrettyPrintGarmentWear(wear) {
     const wear_date = new Date(wear.scan_date).toDateString();
@@ -49,7 +50,7 @@ class WornToday extends Component {
         return (event) => {
             API.delete(wear.url)
             .then((response) => {
-                this.props.onChange();
+                this.props.onDelete();
             })
             .catch((err) => console.log(err));
         }

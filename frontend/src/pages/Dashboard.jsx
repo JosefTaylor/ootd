@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import API from "../axiosApi.jsx";
+import {API} from "../axiosApi.jsx";
 
 import Wardrobe from "../components/Wardrobe.jsx";
 import WornToday from "../components/WornToday.jsx";
@@ -26,8 +26,6 @@ class Dashboard extends Component {
   }
 
   handleDatePick(event) {
-    console.log(event.target.value)
-    console.log(new Date(event.target.value))
     this.setState({ daySelected: new Date(event.target.value)})
   }
 
@@ -59,7 +57,8 @@ class Dashboard extends Component {
             garmentWearList={this.props.garmentWearList}
             date={this.state.daySelected}
             onClick={this.handleDateClick}
-            onChange={this.handleDatePick}/>
+            onChange={this.handleDatePick}
+            onDelete={this.props.refreshList}/>
         </div>
         <div className="ht-two-thirds ht-225-min">
           <Wardrobe

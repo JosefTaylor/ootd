@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import API from "../axiosApi.jsx";
+import {API} from "../axiosApi.jsx";
 import Card from "../components/Card.jsx";
 
 export default class Register extends Component {

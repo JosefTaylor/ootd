@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import API from "../axiosApi.jsx";
+import {API, GetCookie} from "../axiosApi.jsx";
 // import axios from "axios";
 import Card from "../components/Card.jsx";
 
@@ -25,19 +25,18 @@ export default class Login extends Component {
 
 	async handleSubmit(event) {
 		event.preventDefault();
-		try {
-			const response = await API.post("/token/obtain/",
-				{
-					username: this.state.username,
-					password: this.state.password,
-				})
-			API.defaults.headers['Authorization'] = "JWT " + response.data.access;
-			localStorage.setItem('access_token', response.data.access);
-			localStorage.setItem('refresh_token', response.data.refresh);
-			this.props.onLogin();
-		} catch (error) {
-			throw error;
-		}
+		API.post("/dj-rest-auth/login/",
+			{
+				username: this.state.username,
+				password: this.state.password,
+			})
+			.then((response) => {
+				API.defaults.headers = {"X-CSRFToken": GetCookie('csrftoken')}
+				this.props.onLogin();
+			})
+				.catch((error) => {
+				throw error;
+			});
 	}
 
 	render() {
