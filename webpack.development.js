@@ -42,6 +42,11 @@ module.exports = {
             }
         ],
     },
+    devServer: {
+        devMiddleware: {
+            writeToDisk: true,
+        }
+    },
     plugins: [
         new Dotenv({
             prefix: 'environment.'

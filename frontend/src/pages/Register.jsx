@@ -29,6 +29,7 @@ export default class Register extends Component {
 				email: this.state.email,
 				password: this.state.password,
 			});
+			this.props.onLogin();
 			return response
 		} catch (error) {
 			console.log(error.stack);
