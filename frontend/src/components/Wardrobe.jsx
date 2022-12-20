@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import FilterBar from "./FilterBar.jsx";
-import API from "../axiosApi.jsx";
+import {API} from "../axiosApi.jsx";
+import Card from "./Card.jsx"
 
 class WardrobeGarment extends Component {
     constructor(props) {

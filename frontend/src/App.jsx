@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 
-import API from "./axiosApi.jsx";
+import { API } from "./axiosApi.jsx";
 import Login from "./pages/Login.jsx";
 import Graph from "./pages/Graph.jsx"
 import Dashboard from "./pages/Dashboard.jsx";
 import Loading from "./pages/Loading.jsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
-import Logout from "./pages/Logout.jsx";
 import Register from "./pages/Register.jsx";
+import PasswordReset from "./pages/PasswordReset.jsx";
+import PasswordChange from "./pages/PasswordChange.jsx";
 
 import './index.css';
 
@@ -21,6 +22,7 @@ class App extends Component {
       userUrl: "",
       userName: "",
       daySelected: new Date(),
+      // page: 'home',
       page: "loading",
     };
     this.refreshList = this.refreshList.bind(this);
@@ -34,6 +36,8 @@ class App extends Component {
         case "graphs":
         case "selfie":
         case "register":
+        case "password_reset":
+        case "password_change":
           this.setState({ page: newMode });
           break;
         case "logout":
@@ -47,6 +51,7 @@ class App extends Component {
 
   async refreshList() {
     try {
+      console.log(API.BaseUrl);
       let response = await API.get("/dashboard/")
       this.setState({
         page: "home",
@@ -56,28 +61,27 @@ class App extends Component {
         garmentWearList: response.data[0].garment_wears,
       });
     } catch (error) {
-      this.setState({ page: "login" })
-      console.log("Error: ", JSON.stringify(error, null, 4));
-      throw error;
+      if (error.response.status === 403) {
+        this.setState({ page: "login" })
+      }
+      else {
+        console.log("Error: ", JSON.stringify(error, null, 4));
+        throw error;
+      }
     }
   }
 
 
 
   handleLogout() {
-    API.post("/blacklist/", {
-      "refresh_token": localStorage.getItem("refresh_token")
-    })
+    API.post("/dj-rest-auth/logout/")
       .then((response) => {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        API.defaults.headers['Authorization'] = null;
         this.setState({
           garmentList: [],
           garmentWearList: [],
           userUrl: "",
           userName: "",
-          page: "logout"
+          page: "login"
         });
       })
       .catch((error) => {
@@ -117,7 +121,13 @@ class App extends Component {
             <Login onNav={this.handleNav} onLogin={this.refreshList} />
           }
           {this.state.page === "register" &&
-            <Register onNav={this.handleNav} onLogin={this.refreshList}/>
+            <Register onNav={this.handleNav} onLogin={this.refreshList} />
+          }
+          {this.state.page === "password_reset" &&
+            <PasswordReset onNav={this.handleNav} onLogin={this.refreshList} />
+          }
+          {this.state.page === "password_change" &&
+            <PasswordChange onNav={this.handleNav} onLogin={this.refreshList} />
           }
           {this.state.page === "logout" &&
             <Logout />

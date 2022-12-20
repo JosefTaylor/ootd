@@ -8,6 +8,7 @@ export default class Header extends Component {
 				<div className="header-end">
 					{this.props.userName}
 					<button onClick={this.props.onNav("logout")}>log out</button>
+					<button onClick={this.props.onNav("password_change")}>change password</button>
 				</div>
 			)
 		} else {
