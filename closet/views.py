@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
+from django.views.decorators.debug import sensitive_post_parameters
+from django.utils.decorators import method_decorator
 import datetime
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
 
 from rest_framework import (
     status,
@@ -21,7 +22,7 @@ from .serializers import (
     GarmentSerializer,
     GarmentWearSerializer,
     DashboardSerializer,
-    CreateUserSerializer,
+    FashionistaSerializer,
 )
 
 from .models import (
@@ -58,19 +59,17 @@ class DashboardViewSet(viewsets.ModelViewSet):
 ## Authentication and Registration ##
 
 
-class UserCreate(APIView):
+class UserCreate(generics.CreateAPIView):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
+    serializer_class = UserSerializer
 
-    def post(self, request, format='json'):
-        serializer = CreateUserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            if user:
-                json = serializer.data
-                return Response(json, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    def post(self, request, *args, **kwargs):
+        print('from post method in UserCreate View:')
+        print(f'request: {request}')
+        print(f'args: {args}')
+        print(f'kwargs: {kwargs}')
+        return self.create(request, *args, **kwargs)
 
 ## Garments ##
 

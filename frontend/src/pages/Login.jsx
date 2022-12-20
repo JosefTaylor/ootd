@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {API, GetCookie} from "../axiosApi.jsx";
+import { API, GetCookie } from "../axiosApi.jsx";
 // import axios from "axios";
 import Card from "../components/Card.jsx";
 
@@ -31,11 +31,11 @@ export default class Login extends Component {
 				password: this.state.password,
 			})
 			.then((response) => {
-				API.defaults.headers = {"X-CSRFToken": GetCookie('csrftoken')}
+				API.defaults.headers = { "X-CSRFToken": GetCookie('csrftoken') }
 				this.props.onLogin();
 			})
-				.catch((error) => {
-				throw error;
+			.catch((error) => {
+				this.setState({ loginError: true, })
 			});
 	}
 
@@ -64,10 +64,10 @@ export default class Login extends Component {
 						minLength="8"
 						required
 					/>
+					<div className='warning' hidden={!this.state.loginError}>That didn't work, please try again.</div>
 					<button onClick={this.handleSubmit}>
 						Log in
 					</button>
-					<div className='warning' hidden={!this.state.loginError}>That didn't work, please try again.</div>
 					<button onClick={this.props.onNav("register")}>
 						Register
 					</button>

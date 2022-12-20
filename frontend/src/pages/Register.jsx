@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {API} from "../axiosApi.jsx";
+import { API, GetCookie } from "../axiosApi.jsx";
 import Card from "../components/Card.jsx";
 
 export default class Register extends Component {
@@ -8,7 +8,8 @@ export default class Register extends Component {
 		this.state = {
 			username: "",
 			email: "",
-			password: "",
+			password1: "",
+			password2: "",
 			errors: {}
 		}
 
@@ -21,22 +22,33 @@ export default class Register extends Component {
 		this.setState({ [event.target.name]: event.target.value });
 	}
 
-	async handleSubmit(event) {
+	handleSubmit(event) {
 		event.preventDefault();
-		try {
-			const response = await API.post("/user/create/", {
+		// check if passwords are the same before posting?
+		API.post("/dj-rest-auth/registration/",
+			{
 				username: this.state.username,
+				password: this.state.password1,
+				// password1: this.state.password1,
+				// password2: this.state.password2,
 				email: this.state.email,
-				password: this.state.password,
-			});
-			this.props.onLogin();
-			return response
-		} catch (error) {
-			console.log(error.stack);
-			this.setState({
-				errors: error.response.data
 			})
-		}
+			.then((response) => {
+				API.defaults.headers = { "X-CSRFToken": GetCookie('csrftoken') }
+				API.post("/dj-rest-auth/login/",
+				{
+					username: this.state.username,
+					password: this.state.password1,
+				})
+				.then((response) => {
+					API.defaults.headers = { "X-CSRFToken": GetCookie('csrftoken') }
+					this.props.onLogin();
+				})
+			})
+			.catch((error) => {
+				console.log(error.stack);
+				this.setState({ errors: error.response.data })
+			});
 	}
 
 	render() {
@@ -65,13 +77,25 @@ export default class Register extends Component {
 						required
 					/>
 					{this.state.errors.email ? this.state.errors.email : null}
-					<label htmlFor="password" hidden>Password</label>
+					<label htmlFor="password1" hidden>New Password</label>
 					<input
 						type="password"
-						id="password"
-						name="password"
+						id="password1"
+						name="password1"
 						placeholder="password"
 						value={this.state.password1}
+						onChange={this.handleChange}
+						minLength="8"
+						required
+					/>
+					{this.state.errors.password ? this.state.errors.password : null}
+					<label htmlFor="password2" hidden>Confirm Password</label>
+					<input
+						type="password"
+						id="password2"
+						name="password2"
+						placeholder="confirm password"
+						value={this.state.password2}
 						onChange={this.handleChange}
 						minLength="8"
 						required

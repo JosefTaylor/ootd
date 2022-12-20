@@ -16,17 +16,16 @@ function GetCookie(name) {
             }
         }
     }
-    console.log("I just grabbed the cookie. it's: " + cookieValue);
     return cookieValue;
 }
 
 const API = axios.create({
     baseURL:
-        environment.API_ROOT != ""
-            ? environment.API_ROOT
-            : 'http://localhost:8000/',
+        environment.RENDER_EXTERNAL_HOSTNAME
+            ? 'https://' + environment.RENDER_EXTERNAL_HOSTNAME + '/api/'
+            : 'http://localhost:8000/api/',
     timeout: 50000,
-    headers: {"X-CSRFToken": GetCookie('csrftoken')},
+    headers: { "X-CSRFToken": GetCookie('csrftoken') },
     withCredentials: true,
 });
 

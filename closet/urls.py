@@ -33,6 +33,8 @@ router.register(r'dashboard', views.DashboardViewSet, 'dashboard')
 urlpatterns = [
     path('', include(router.urls)),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
+    # path('dj-rest-auth/registration', include('dj_rest_auth.registration.urls')),
+    path('dj-rest-auth/registration/', views.UserCreate.as_view(), name='user-create'),
     path('api-auth/', include(
         'rest_framework.urls',
         namespace='rest_framework')),

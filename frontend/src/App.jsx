@@ -51,6 +51,7 @@ class App extends Component {
 
   async refreshList() {
     try {
+      console.log(API.BaseUrl);
       let response = await API.get("/dashboard/")
       this.setState({
         page: "home",
@@ -60,9 +61,13 @@ class App extends Component {
         garmentWearList: response.data[0].garment_wears,
       });
     } catch (error) {
-      this.setState({ page: "login" })
-      console.log("Error: ", JSON.stringify(error, null, 4));
-      throw error;
+      if (error.response.status === 403) {
+        this.setState({ page: "login" })
+      }
+      else {
+        console.log("Error: ", JSON.stringify(error, null, 4));
+        throw error;
+      }
     }
   }
 

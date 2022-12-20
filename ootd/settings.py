@@ -42,11 +42,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
+    # 'dj_rest_auth.registration',
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.instagram'
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware', 
@@ -153,8 +161,17 @@ REST_FRAMEWORK = {
     ),
 }
 
+# DJ Rest Auth Settings
+
 REST_AUTH_TOKEN_MODEL = None
 
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'closet.serializers.UserSerializer'
+}
+
+# AllAuth Settings
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 # CSRF
 CSRF_TRUSTED_ORIGINS = [
