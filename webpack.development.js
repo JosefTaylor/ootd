@@ -49,7 +49,8 @@ module.exports = {
     },
     plugins: [
         new Dotenv({
-            prefix: 'environment.'
+            prefix: 'environment.',
+            systemvars: true,
         }),
     ]
 };
