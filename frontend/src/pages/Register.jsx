@@ -25,30 +25,34 @@ export default class Register extends Component {
 	handleSubmit(event) {
 		event.preventDefault();
 		// check if passwords are the same before posting?
-		API.post("/dj-rest-auth/registration/",
-			{
-				username: this.state.username,
-				password: this.state.password1,
-				// password1: this.state.password1,
-				// password2: this.state.password2,
-				email: this.state.email,
-			})
-			.then((response) => {
-				API.defaults.headers = { "X-CSRFToken": GetCookie('csrftoken') }
-				API.post("/dj-rest-auth/login/",
+		if (this.state.password1 != this.state.password2) {
+			this.setState({ errors: { password2: "The passwords do not match" } })
+		} else {
+			API.post("/dj-rest-auth/registration/",
 				{
 					username: this.state.username,
 					password: this.state.password1,
+					// password1: this.state.password1,
+					// password2: this.state.password2,
+					email: this.state.email,
 				})
 				.then((response) => {
 					API.defaults.headers = { "X-CSRFToken": GetCookie('csrftoken') }
-					this.props.onLogin();
+					API.post("/dj-rest-auth/login/",
+						{
+							username: this.state.username,
+							password: this.state.password1,
+						})
+						.then((response) => {
+							API.defaults.headers = { "X-CSRFToken": GetCookie('csrftoken') }
+							this.props.onLogin();
+						})
 				})
-			})
-			.catch((error) => {
-				console.log(error.stack);
-				this.setState({ errors: error.response.data })
-			});
+				.catch((error) => {
+					console.log(error.stack);
+					this.setState({ errors: error.response.data })
+				});
+		}
 	}
 
 	render() {
@@ -100,7 +104,7 @@ export default class Register extends Component {
 						minLength="8"
 						required
 					/>
-					{this.state.errors.password ? this.state.errors.password : null}
+					{this.state.errors.password2 ? this.state.errors.password2 : null}
 					<button onClick={this.handleSubmit}>
 						Register
 					</button>
