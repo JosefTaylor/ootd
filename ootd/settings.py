@@ -167,12 +167,14 @@ if DEBUG:
         'http://127.0.0.1:8000',
     ]
     CSRF_COOKIE_SECURE = False
+    CSRF_COOKIE_SAMESITE = 'Lax'
 else:
     CSRF_TRUSTED_ORIGINS = [
         os.environ.get('RENDER_EXTERNAL_URL'),
         os.environ.get('EXTERNAL_URL'),
     ]
     CSRF_COOKIE_SECURE = True
+    CSRF_COOKIE_SAMESITE = 'None'
 
 # # CORS
 if DEBUG:
