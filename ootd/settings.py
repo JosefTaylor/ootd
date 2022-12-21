@@ -30,10 +30,8 @@ else:
         os.environ.get('RENDER_EXTERNAL_HOSTNAME'),
         os.environ.get('EXTERNAL_HOSTNAME'),
     ]
-# RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-
-# if RENDER_EXTERNAL_HOSTNAME:
-#     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    
+print(f'allowed hosts: {ALLOWED_HOSTS}')
 
 
 # Application definition
@@ -47,19 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
-    # 'dj_rest_auth.registration',
-    # 'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
-    # 'allauth.socialaccount.instagram'
 ]
-
-SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware', 
