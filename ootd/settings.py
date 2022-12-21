@@ -23,12 +23,17 @@ SECRET_KEY = SECRET_KEY = os.environ.get(
 
 DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = [] 
+if DEBUG:
+    ALLOWED_HOSTS = [] 
+else:
+    ALLOWED_HOSTS = [
+        os.environ.get('RENDER_EXTERNAL_HOSTNAME'),
+        os.environ.get('EXTERNAL_HOSTNAME'),
+    ]
+# RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-
-if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+# if RENDER_EXTERNAL_HOSTNAME:
+#     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
@@ -165,39 +170,40 @@ REST_FRAMEWORK = {
 
 REST_AUTH_TOKEN_MODEL = None
 
-REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'closet.serializers.UserSerializer'
-}
-
-# AllAuth Settings
-
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-
 # CSRF
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8000',
-    'http://127.0.0.1:8000',
-]
-
-if RENDER_EXTERNAL_HOSTNAME:
-    CSRF_TRUSTED_ORIGINS.append('https://' + RENDER_EXTERNAL_HOSTNAME)
-
-
-CSRF_COOKIE_SECURE = not DEBUG
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS = [
+        'http://localhost:8000',
+        'http://127.0.0.1:8000',
+    ]
+    CSRF_COOKIE_SECURE = False
+else:
+    CSRF_TRUSTED_ORIGINS = [
+        os.environ.get('RENDER_EXTERNAL_URL'),
+        os.environ.get('EXTERNAL_URL'),
+    ]
+    CSRF_COOKIE_SECURE = True
 
 # # CORS
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8000',
-    'http://127.0.0.1:8000',
-]
+if DEBUG:
+    CORS_ALLOWED_ORIGINS = [
+        'http://localhost:8000',
+        'http://127.0.0.1:8000',
+    ]
+    CORS_ORIGIN_WHITELIST = [
+        'http://localhost:8000',
+        'http://127.0.0.1:8000',
+    ]
+else:
+    CORS_ALLOWED_ORIGINS = [
+        os.environ.get('RENDER_EXTERNAL_URL'),
+        os.environ.get('EXTERNAL_URL')
+    ]
+    CORS_ORIGIN_WHITELIST = [
+        os.environ.get('RENDER_EXTERNAL_URL'),
+        os.environ.get('EXTERNAL_URL')
+    ]
 
-if RENDER_EXTERNAL_HOSTNAME:
-    CORS_ALLOWED_ORIGINS.append('https://' + RENDER_EXTERNAL_HOSTNAME)
-
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:8000',
-    'http://127.0.0.1:8000',
-]
 
 # Adds Access-Control-Allow-Credentials: true to responses
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_CREDENTIALS = True

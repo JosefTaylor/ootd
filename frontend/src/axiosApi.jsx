@@ -21,8 +21,8 @@ function GetCookie(name) {
 
 const API = axios.create({
     baseURL:
-        environment.RENDER_EXTERNAL_HOSTNAME
-            ? 'https://' + environment.RENDER_EXTERNAL_HOSTNAME + '/api/'
+        environment.RENDER
+            ? environment.RENDER_EXTERNAL_URL + '/api/'
             : 'http://localhost:8000/api/',
     timeout: 50000,
     headers: { "X-CSRFToken": GetCookie('csrftoken') },
