@@ -27,6 +27,18 @@ button {
   cursor: pointer;
 }
 
+.button {
+  border: 1px solid rgba(0, 0, 0, 0.062);
+  background-color: rgba(255, 255, 255, 0.151);
+  border-radius: 1rem;
+  font-size: 1rem;
+  color: inherit;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  text-align: center;
+  cursor: pointer;
+}
+
 /* Layouts */
 @import "./components/layouts/Center.css";
 @import "./components/layouts/GlobalStack.css";

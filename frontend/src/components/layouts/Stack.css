@@ -1,5 +1,4 @@
 .stack {
-    /* height: 100%; */
     display: flex;
     box-sizing: border-box;
     flex-direction: column;

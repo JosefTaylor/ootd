@@ -1,14 +1,15 @@
 import React, { Component } from "react";
+import { Outlet, Link } from "react-router-dom";
 
 export default class Header extends Component {
 
 	profile() {
-		if (this.props.userName) {
+		if (this.props.user) {
 			return (
-				<div className="header-end">
-					{this.props.userName}
-					<button onClick={this.props.onNav("logout")}>log out</button>
-					<button onClick={this.props.onNav("password_change")}>change password</button>
+				<div className="header-end stack">
+					{this.props.user.username}
+					<Link className='button' to={'logout/'}>log out</Link>
+					<Link className='button' to={'password_change/'}>change password</Link>	
 				</div>
 			)
 		} else {
@@ -17,12 +18,12 @@ export default class Header extends Component {
 	}
 
 	nav() {
-		if (this.props.userName) {
+		if (this.props.user) {
 			return (
 				<div className="header-end stack">
-					<button onClick={this.props.onNav("home")}>home</button>
-					<button onClick={this.props.onNav("graphs")}>graphs</button>
-					<button onClick={this.props.onNav("selfie")}>selfie</button>
+					<Link className='button' to={'home/'}>home</Link>
+					<Link className='button' to={'graphs/'}>graphs</Link>
+					<Link className='button' to={'selfie/'}>selfie</Link>
 				</div>
 			)
 		} else {

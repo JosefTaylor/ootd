@@ -1,7 +1,4 @@
-import React, { Component } from "react";
-import {API} from "../axiosApi.jsx";
-import DateSelector from "./DateSelector.jsx";
-import Card from "./Card.jsx";
+import React from "react";
 
 function PrettyPrintGarmentWear(wear) {
     const wear_date = new Date(wear.scan_date).toDateString();
@@ -12,76 +9,17 @@ function PrettyPrintGarmentWear(wear) {
     }
 }
 
-function WearLine(props) {
+export function WearLine(props) {
     return (
         <div className="splitter">
             <div>
                 {PrettyPrintGarmentWear(props.wear)}
             </div>
             <div>
-                <button onClick={props.onDelete(props.wear)}>
+                <button onClick={props.onDelete}>
                     Remove
                 </button>
             </div>
         </div>
     )
 }
-
-function WearTable(props) {
-    const items = props.garmentWearList.map((wear) => (
-            <div key={wear.id} className="data-item">
-                <WearLine wear={wear} onDelete={props.onDelete}/>
-            </div>
-        ));
-    return <div className="stack data-table ht-full">{items}</div>;
-}
-
-class WornToday extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            filterText: "",
-        };
-
-        this.handleDelete = this.handleDelete.bind(this);
-    }
-
-    handleDelete(wear) {
-        return (event) => {
-            API.delete(wear.url)
-            .then((response) => {
-                this.props.onDelete();
-            })
-            .catch((err) => console.log(err));
-        }
-    }
-
-    filterByDate(wears) {
-        return wears.filter((wear) => {
-            const date = new Date(wear.scan_date).toDateString();
-            const today = this.props.date.toDateString();
-            return date === today;
-        });
-    }
-
-    render() {
-        return (
-            <div className="stack card ht-full">
-                <div>
-                    <DateSelector
-                        date={this.props.date}
-                        onClick={this.props.onClick}
-                        onChange={this.props.onChange}
-                        name="Outfit on:  "
-                    />
-                </div>
-                <WearTable
-                        garmentWearList={this.filterByDate(this.props.garmentWearList)}
-                        onDelete={this.handleDelete}
-                    />
-            </div>
-        );
-    }
-}
-
-export default WornToday;

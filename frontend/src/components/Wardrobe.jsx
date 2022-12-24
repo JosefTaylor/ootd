@@ -1,259 +1,131 @@
-import React, { Component } from "react";
-import FilterBar from "./FilterBar.jsx";
-import {API} from "../axiosApi.jsx";
-import Card from "./Card.jsx"
+import React, { useState } from "react";
+import { Form } from "react-router-dom";
 
-class WardrobeGarment extends Component {
-    constructor(props) {
-        super(props);
-        const mode = props.mode ?? "display";
-        const garment = props.garment ?? {};
-        this.state = {
-            mode: mode,
-            garment_name: garment.name ?? "",
-            purchase_date: garment.purchase_date ?? new Date(),
-            purchase_price: garment.purchase_price ?? 0,
-        };
+export function WardrobeGarment(props) {
 
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleEdit = this.handleEdit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-        this.handleCancel = this.handleCancel.bind(this);
-        this.handleNew = this.handleNew.bind(this);
-        this.refreshState = this.refreshState.bind(this);
+    const [mode, setMode] = useState(props.mode)
+
+    switch (mode) {
+        case "declutter":
+            return <DeclutterRow
+                garment={props.garment}
+                onSave={props.onSave}
+                onExit={(event) => { setMode(props.mode) }}
+                onCancel={(event) => { setMode("display") }}
+            />;
+        case "edit":
+            return <EditRow
+                garment={props.garment}
+                onSave={props.onSave}
+                onExit={(event) => { setMode(props.mode) }}
+                onDeclutter={(event) => setMode("declutter")}
+            />;
+        case "new":
+            return <button
+                onClick={(event) => { setMode("edit") }}>
+                New Garment
+            </button>;
+        default:
+            return <DisplayRow
+                garment={props.garment}
+                onEdit={(event) => { setMode("edit") }}
+                onWear={props.onWear}
+            />;
     }
+}
 
-    handleEdit(event) {
-        this.setState({ mode: "edit" });
-    }
-
-    handleChange(event) {
-        this.setState({ [event.target.name]: event.target.value });
-    }
-
-    handleSubmit(event) {
-        if (this.props.garment?.url) {
-            API.patch(this.props.garment.url, {
-                //Axios to send and receive HTTP requests
-                name: this.state.garment_name,
-                purchase_date: this.state.purchase_date,
-                purchase_price: this.state.purchase_price,
-            })
-                .then((response) => {
-                    this.props.onChange();
-                    this.refreshState();
-                })
-                .catch((err) => console.log(err));
-        } else {
-            API.post("/garments/", {
-                //Axios to send and receive HTTP requests
-                name: this.state.garment_name,
-                purchase_date: this.state.purchase_date,
-                purchase_price: this.state.purchase_price,
-            })
-                .then((response) => {
-                    this.props.onChange();
-                    this.refreshState();
-                })
-                .catch((err) => console.log(err));
-        }
-        this.refreshState();
-    }
-
-    handleCancel(event) {
-        this.refreshState();
-    }
-
-    handleDelete(event) {
-        API.patch(this.props.garment.url, {
-            deaq_date: new Date().toISOString().split("T")[0],
-        })
-            .then((response) => {
-                this.props.onChange();
-            })
-            .catch((err) => console.log(err));
-        this.refreshState();
-    }
-
-    handleNew(event) {
-        this.setState({
-            mode: "edit",
-            garment_name: this.props.newName,
-            purchase_date: "",
-            purchase_price: "",
-        });
-    }
-
-    refreshState() {
-        this.setState({ mode: this.props.mode ?? "display" });
-    }
-
-    displayRow() {
-        return (
-            <div className="splitter">
-                <div className="garment-name">
-                {this.props.garment.name}
-                </div>
-                <div className="cost-per-wear">
+function DisplayRow(props) {
+    return (
+        <div className="splitter">
+            <div className="garment-name">
+                {props.garment.name}
+            </div>
+            <div className="cost-per-wear">
                 {new Intl.NumberFormat("en-US", {
                     currency: "USD",
                     style: "currency",
-                }).format(this.props.garment.cost_per_wear)}
-                /wear
-                </div>
-                <div>
-                <button
-                    onClick={this.props.onWear}
-                    value={this.props.garment.url}
-                >
-                    wear
-                </button>
-                <button
-                    onClick={this.handleEdit}
-                    data-url={this.props.garment.url}
-                >
-                    edit
-                </button>
-                </div>
+                }).format(props.garment.cost_per_wear)}/wear
             </div>
-        );
-    }
-
-    editRow() {
-        return (
-            <div className="flow">
-                <div>
-                    <label htmlFor="garment_name" >
-                        garment name: 
-                    </label>
-                    <input
-                        type="text"
-                        id="garment_name"
-                        name="garment_name"
-                        value={this.state.garment_name}
-                        onChange={this.handleChange}
-                        placeholder="name"
-                    />
-                </div>
-                <div>
-                    <label htmlFor="purchase_date" >
-                        purchase date: 
-                    </label>
-                    <input
-                        type="date"
-                        id="purchase_date"
-                        name="purchase_date"
-                        placeholder="purchase_date"
-                        value={this.state.purchase_date}
-                        onChange={this.handleChange}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="purchase_price" >
-                        purchase price: 
-                    </label>
-                    <input
-                        type="number"
-                        id="purchase_price"
-                        name="purchase_price"
-                        placeholder="purchase_price"
-                        value={this.state.purchase_price}
-                        onChange={this.handleChange}
-                    />
-                </div>
-                <div>
-                    <input
-                        type="button"
-                        value="Save"
-                        onClick={this.handleSubmit}
-                    />
-                    <input
-                        type="button"
-                        value="Cancel"
-                        onClick={this.handleCancel}
-                    />
-                    <input
-                        type="button"
-                        value="Delete"
-                        onClick={this.handleDelete}
-                    />
-                </div>
+            <div>
+                <Form method="post" action={"/garmentwears"}>
+                    <button type="submit">wear</button>
+                    <button
+                        onClick={props.onEdit}
+                    >edit</button>
+                </Form>
             </div>
-        );
-    }
-
-    render() {
-        switch (this.state.mode) {
-            case "edit":
-                return this.editRow();
-            case "new":
-                return <button onClick={this.handleNew}>New Garment</button>;
-            default:
-                return this.displayRow();
-        }
-    }
-}
-
-function WardrobeTable(props) {
-    const listItems = props.garments.map((garment) => (
-        <div key={garment.id} className="data-item">
-            <WardrobeGarment
-                garment={garment}
-                onWear={props.onWear}
-                onChange={props.onChange}
-            />
         </div>
-    ));
-
-    return <div className="stack data-table ht-full">{listItems}</div>;
+    );
 }
 
-class Wardrobe extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            filterText: "",
-        };
-        this.handleChange = this.handleChange.bind(this);
-    }
+function EditRow(props) {
 
-    filterGarments(garments) {
-        const filterGarments = garments.filter((garment) => {
-            const name = garment.name.toLowerCase();
-            const filterText = this.state.filterText.toLowerCase();
-            return name.includes(filterText);
-        });
-        return filterGarments;
-    }
+    return (
 
-    handleChange(event) {
-        this.setState({ filterText: event.target.value });
-    }
-
-    render() {
-        return (
-            <div className="stack card ht-full">
-                <div>
-                    <h2>Your Wardrobe</h2>
-                </div>
-                <FilterBar
-                    value={this.state.filterText}
-                    onChange={this.handleChange}
+        <Form
+            method={props.garment.id ? "patch" : "post"}
+            action={props.garment.id ? "/garments/" + props.garment.id + "/update" : "/garments/create"}
+        >
+            <label>
+                garment name:
+                <input
+                    type="text"
+                    name="name"
+                    defaultValue={props.garment.name}
                 />
-                <WardrobeTable
-                    garments={this.filterGarments(this.props.garmentList)}
-                    onWear={this.props.onWear}
-                    onChange={this.props.onChange}
+            </label>
+            <label>
+                purchase date:
+                <input
+                    type="date"
+                    name="purchase_date"
+                    defaultValue={props.garment.purchase_date}
                 />
-                <WardrobeGarment
-                    mode={"new"}
-                    newName={this.state.filterText}
-                    onChange={this.props.onChange}
+            </label>
+            <label>
+                purchase price:
+                <input
+                    type="number"
+                    name="purchase_price"
+                    defaultValue={props.garment.purchase_price}
                 />
-            </div>
-        );
-    }
+            </label>
+            <button type="submit">Save</button>
+            <button type="cancel" onClick={props.onExit}>Cancel</button>
+            <button type="cancel" onClick={props.onDeclutter}>Declutter</button>
+        </Form>
+    );
 }
 
-export default Wardrobe;
+function DeclutterRow(props) {
+
+    return (
+        <Form method="patch"
+            action={"/garments/" + props.garment.id + "/update"}
+            onSubmit={(event) => {
+                if (!confirm("Please confirm you are removing this garment from your wardrobe.")) {
+                    event.preventDefault();
+                }
+            }}>
+            <h3>Declutter {props.garment.name}?</h3>
+            <label>
+                De-acquisition date
+                <input
+                    type="date"
+                    name="deaq_date"
+                    defaultValue={props.garment.deaq_date}
+                />
+            </label>
+            <label>
+                Sale price
+                <input
+                    type="number"
+                    name="deaq_price"
+                    defaultValue={props.garment.deaq_price}
+                />
+            </label>
+            <button type="cancel" onClick={props.onExit}>Cancel</button>
+            <button type="submit">Declutter</button>
+        </Form>
+    );
+}
