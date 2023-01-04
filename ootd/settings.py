@@ -30,9 +30,6 @@ else:
         os.environ.get('RENDER_EXTERNAL_HOSTNAME'),
         os.environ.get('EXTERNAL_HOSTNAME'),
     ]
-    
-print(f'allowed hosts: {ALLOWED_HOSTS}')
-
 
 # Application definition
 
