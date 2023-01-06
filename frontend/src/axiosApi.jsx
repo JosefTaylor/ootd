@@ -61,53 +61,61 @@ export async function getUser() {
 }
 
 export async function login(username, password) {
-  return API.post("/dj-rest-auth/login/", {
-    username: username,
-    password: password,
-  })
-    .then((response) => {
-      API.defaults.headers = { "X-CSRFToken": GetCookie("csrftoken") };
-      const user = response.data[0];
-      console.dir(response.data[0]);
-      console.log("I think we're logged in!");
-      return user;
-    })
-    .catch((error) => {
-      console.log(error);
-      return {};
+  try {
+    await API.post("/dj-rest-auth/login/", {
+      username: username,
+      password: password,
     });
+    API.defaults.headers = { "X-CSRFToken": GetCookie("csrftoken") };
+    return true;
+  } catch {
+    console.log("I could not log you in.");
+    return false;
+  }
 }
 
 export async function logout() {
-  return API.post("/dj-rest-auth/logout/")
-    .then((response) => {
-      console.log("I think we're logged out");
-      return true;
-    })
-    .catch((error) => {
-      console.log(error);
-      return false;
-    });
+  try {
+    await API.post("/dj-rest-auth/logout/");
+    console.log("I think we're logged out");
+    return true;
+  } catch {
+    console.log("Could not log out.");
+    return false;
+  }
 }
 
 export async function createWear(garment, date) {
-  return API.post("/garmentwears/", {
-    //Axios to send and receive HTTP requests
-    garment: garment,
-    scan_date: date,
-  }).catch((err) => console.log(err));
+  try {
+    await API.post("/garmentwears/", {
+      garment: garment.url,
+      scan_date: date,
+    });
+  } catch {
+    console.log("Could not create the garment wear");
+  }
 }
 
 export async function deleteWear(wear) {
-  return API.delete(wear.url).catch((err) => console.log(err));
+  try {
+    await API.delete(wear.url);
+  } catch {
+    console.log("Could not delete the garment.");
+  }
 }
 
 export async function updateGarment(garmentId, newGarment) {
-  return API.patch("/garments/" + garmentId + "/", { ...newGarment }).catch(
-    (err) => console.log(err)
-  );
+  try {
+    await API.patch("/garments/" + garmentId + "/", { ...newGarment });
+  } catch {
+    console.log("Could not update the garment.");
+  }
 }
 
 export async function createGarment(garment) {
-  return API.post("/garments", { ...garment }).catch((err) => console.log(err));
+  try {
+    await API.post("/garments", { ...garment });
+  } catch {
+    console.log("Could not create the garment.");
+  }
 }

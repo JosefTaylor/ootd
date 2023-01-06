@@ -1,25 +1,29 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "./index.css";
-import Root, { loader as rootLoader } from "./routes/Root.jsx";
+import Root from "./routes/Root.jsx";
 import ErrorPage from "./routes/ErrorPage.jsx";
 import Graph, { loader as graphLoader } from "./routes/Graph.jsx";
-import Dashboard, { loader as dashboardLoader } from "./routes/Dashboard.jsx";
+import Dashboard from "./routes/Dashboard.jsx";
 import {
   updateGarmentAction,
   createGarmentAction,
 } from "./routes/garmentActions.jsx";
-import { LoginPage, RequireAuth, LogoutPage } from "./routes/Login.jsx";
+import { LoginPage, LogoutPage } from "./routes/Login.jsx";
+import { RequireAuth, AuthProvider } from "./components/Auth.jsx";
 import Public from "./routes/Public.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    element: (
+      <AuthProvider>
+        <Root />
+      </AuthProvider>
+    ),
     errorElement: <ErrorPage />,
-    // loader: rootLoader,
     children: [
       {
         path: "/",
@@ -30,35 +34,33 @@ const router = createBrowserRouter([
         element: <LoginPage />,
       },
       {
-        path: "user",
-        element: <RequireAuth><Outlet/></RequireAuth>,
-        children: [
-            {
-              path: "home",
-              element: <Dashboard />,
-              loader: dashboardLoader,
-            },
-            {
-              path: "graphs",
-              element: <Graph />,
-              loader: graphLoader,
-            },
-            {
-              path: "selfie",
-            },
-            {
-              path: "garments/:garmentId/update",
-              action: updateGarmentAction,
-            },
-            {
-              path: "garments/create",
-              action: createGarmentAction,
-            },
-            {
-                path: "logout",
-                element: <LogoutPage />,
-            }
-        ]
+        path: "logout",
+        element: <LogoutPage />,
+      },
+      {
+        path: "home",
+        element: (
+          <RequireAuth>
+            <Dashboard />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "graphs",
+        element: (
+          <RequireAuth>
+            <Graph />
+          </RequireAuth>
+        ),
+        loader: graphLoader,
+      },
+      {
+        path: "garments/:garmentId/update",
+        action: updateGarmentAction,
+      },
+      {
+        path: "garments/create",
+        action: createGarmentAction,
       },
     ],
   },

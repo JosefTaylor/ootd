@@ -1,16 +1,7 @@
-import react from "react";
 import React, { useState } from "react";
-import {
-  Routes,
-  Route,
-  Link,
-  useNavigate,
-  useLocation,
-  Navigate,
-  Outlet,
-} from "react-router-dom";
-import { API, GetCookie, login, logout, getUser } from "../axiosApi.jsx";
+import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import Card from "../components/Card.jsx";
+import { useAuth } from "../components/Auth.jsx";
 
 export function LogoutPage() {
   const auth = useAuth();
@@ -68,9 +59,7 @@ export function LoginPage() {
               required
             />
           </label>
-          {/* <div className="warning" hidden={!this.state.loginError}>
-              That didn't work, please try again.
-            </div> */}
+          {/* can we show an error here? */}
           <button type="submit">Log in</button>
           <button type="cancel">Register</button>
           <button type="cancel">Forgot Password?</button>
@@ -78,72 +67,4 @@ export function LoginPage() {
       </form>
     </div>
   );
-}
-
-export function AuthProvider({ children }) {
-  let [user, setUser] = React.useState(null);
-
-  React.useEffect(() => {
-    async function trylogin() {
-      const loggedInUser = await getUser();
-      if (loggedInUser) {
-        setUser(loggedInUser);
-      }
-    }
-    trylogin();
-  }, []);
-
-  let signin = async (newUser, password) => {
-    await login(newUser, password);
-    const currentUser = await getUser();
-    console.log("in AuthProvider, the user is: ", currentUser);
-    setUser(currentUser);
-  };
-
-  let signout = async () => {
-    if (await logout()) {
-      setUser(null);
-    } else {
-      console.log("I could not log out!");
-    }
-  };
-
-  let value = { user, signin, signout };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function RequireAuth({ children }) {
-  let auth = useAuth();
-  let location = useLocation();
-
-  console.log("in RequireAuth, the user is ", auth.user);
-
-  if (!auth.user) {
-    // Redirect them to the /login page, but save the current location they were
-    // trying to go to when they were redirected. This allows us to send them
-    // along to that page after they login, which is a nicer user experience
-    // than dropping them off on the home page.
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  return children;
-}
-
-let AuthContext = React.createContext(null);
-
-export function useAuth() {
-  return React.useContext(AuthContext);
-}
-
-export function AuthStatus() {
-  let auth = useAuth();
-  let navigate = useNavigate();
-
-  if (!auth.user) {
-    return <p>You are not logged in.</p>;
-  }
-
-  return <p>welcome {auth.user}</p>;
-  // navigation and shit
 }

@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { Outlet, Link } from "react-router-dom";
-import { useAuth } from "../routes/Login.jsx";
+import React from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "./Auth.jsx";
 
-export default function Header(props) {
+export default function Header() {
   const { user } = useAuth();
 
   const profile = (user) => {
@@ -10,7 +10,7 @@ export default function Header(props) {
       return (
         <div className="header-end stack">
           {user.username}
-          <Link className="button" to={"user/logout/"}>
+          <Link className="button" to={"logout/"}>
             log out
           </Link>
           <Link className="button" to={"password_change/"}>
@@ -32,9 +32,6 @@ export default function Header(props) {
           </Link>
           <Link className="button" to={"graphs/"}>
             graphs
-          </Link>
-          <Link className="button" to={"selfie/"}>
-            selfie
           </Link>
         </div>
       );
