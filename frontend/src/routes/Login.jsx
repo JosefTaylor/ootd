@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate, useLocation, Navigate } from "react-router-dom";
+import { useNavigate, useLocation, Navigate, Link } from "react-router-dom";
 import Card from "../components/Card.jsx";
 import { useAuth } from "../components/Auth.jsx";
+import { login } from "../axiosApi.jsx";
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -9,48 +10,63 @@ export function LoginPage() {
   const auth = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState(null);
 
   const from = location.state?.from?.pathname || "/";
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    await auth.signin(username, password);
+    const errors = await auth.signin(username, password);
 
-    navigate(from, { replace: true, state: { loggedIn: true } });
+    if (errors) {
+      setLoginError(errors);
+    } else {
+      navigate(from, { replace: true, state: { loggedIn: true } });
+    }
   }
 
   return (
     <div className="wrapper pad-1 wd-small center">
-      <form onSubmit={handleSubmit}>
-        <Card title="Log in">
-          <label>
-            Username
-            <input
-              type="text"
-              name="username"
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Password
-            <input
-              type="password"
-              name="password"
-              minLength="8"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-            />
-          </label>
-          {/* can we show an error here? */}
-          <button type="submit">Log in</button>
-          <button type="cancel">Register</button>
-          <button type="cancel">Forgot Password?</button>
-        </Card>
-      </form>
+      <Card title="Log in">
+        <label>
+          Username
+          <input
+            type="text"
+            name="username"
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
+            required
+          />
+        </label>
+        <div className="warning" hidden={!loginError?.username}>
+          {loginError?.username}
+        </div>
+        <label>
+          Password
+          <input
+            type="password"
+            name="password"
+            minLength="8"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+          />
+        </label>
+        <div className="warning" hidden={!loginError?.password}>
+          {loginError?.password}
+        </div>
+        <button onClick={handleSubmit}>Log in</button>
+        <div className="warning" hidden={!loginError}>
+          That didn't work, please try again
+        </div>
+        <Link className="button" to={"/register"}>
+          Register
+        </Link>
+        <Link className="button" to={"/reset_password"}>
+          Forgot Password?
+        </Link>
+      </Card>
     </div>
   );
 }

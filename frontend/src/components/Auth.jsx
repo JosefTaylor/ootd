@@ -22,9 +22,14 @@ export function AuthProvider({ children }) {
   }, []);
 
   const signin = async (username, password) => {
-    await login(username, password);
-    const loggedInUser = await getUser();
-    setUser(loggedInUser);
+    const errors = await login(username, password);
+
+    if (!errors) {
+      const loggedInUser = await getUser();
+      setUser(loggedInUser);
+    }
+
+    return errors;
   };
 
   const signout = async () => {

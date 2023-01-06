@@ -61,10 +61,10 @@ export async function login(username, password) {
       password: password,
     });
     API.defaults.headers = { "X-CSRFToken": GetCookie("csrftoken") };
-    return true;
-  } catch {
+    return null;
+  } catch (error) {
     console.log("I could not log you in.");
-    return false;
+    return error.response.data;
   }
 }
 
@@ -72,10 +72,25 @@ export async function logout() {
   try {
     await API.post("/dj-rest-auth/logout/");
     console.log("I think we're logged out");
-    return true;
-  } catch {
+    return null;
+  } catch (error) {
     console.log("Could not log out.");
-    return false;
+    return error.response.data;
+  }
+}
+
+export async function register(username, password, email) {
+  try {
+    await API.post("/dj-rest-auth/registration/", {
+      username: username,
+      password: password,
+      email: email,
+    });
+    API.defaults.headers = { "X-CSRFToken": GetCookie("csrftoken") };
+    return null;
+  } catch (error) {
+    console.log("Could not register!");
+    return error.response.data;
   }
 }
 

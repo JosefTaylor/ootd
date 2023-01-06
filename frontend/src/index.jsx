@@ -12,8 +12,10 @@ import {
   createGarmentAction,
 } from "./routes/garmentActions.jsx";
 import { LoginPage, LogoutPage } from "./routes/Login.jsx";
+import { PasswordChange } from "./routes/PasswordChange.jsx";
 import { RequireAuth, AuthProvider } from "./components/Auth.jsx";
 import Public from "./routes/Public.jsx";
+import Register from "./routes/Register.jsx";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +40,10 @@ const router = createBrowserRouter([
         element: <LogoutPage />,
       },
       {
+        path: "register",
+        element: <Register />,
+      },
+      {
         path: "home",
         element: (
           <RequireAuth>
@@ -53,6 +59,14 @@ const router = createBrowserRouter([
           </RequireAuth>
         ),
         loader: graphLoader,
+      },
+      {
+        path: "password_change",
+        element: (
+          <RequireAuth>
+            <PasswordChange />
+          </RequireAuth>
+        ),
       },
       {
         path: "garments/:garmentId/update",

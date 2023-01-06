@@ -1,83 +1,86 @@
-import React, { Component } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import { API } from "../axiosApi.jsx";
-// import axios from "axios";
 import Card from "../components/Card.jsx";
 
-export default class PasswordChange extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      old_password: "",
-      new_password1: "",
-      new_password2: "",
-      loginError: false,
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+export function PasswordChange() {
+  const navigate = useNavigate();
+  const [old_password, setOld_password] = React.useState("");
+  const [new_password1, setNew_password1] = React.useState("");
+  const [new_password2, setNew_password2] = React.useState("");
+  const [loginError, setLoginError] = React.useState(null);
 
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-      loginError: false,
-    });
-  }
-
-  async handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    API.post("/dj-rest-auth/password/change/", {
-      old_password: this.state.old_password,
-      new_password1: this.state.new_password1,
-      new_password2: this.state.new_password2,
-    })
-      .then((response) => {
-        this.props.onLogin();
-      })
-      .catch((error) => {
-        throw error;
+    try {
+      await API.post("/dj-rest-auth/password/change/", {
+        old_password: old_password,
+        new_password1: new_password1,
+        new_password2: new_password2,
       });
+
+      //navigate("/home", { replace: true });
+    } catch (error) {
+      setLoginError(error.response.data);
+    }
   }
 
-  render() {
-    return (
-      <div className="wrapper pad-1 wd-small center">
-        <Card title="Change Password">
-          <label htmlFor="old_password">Current Password</label>
+  return (
+    <div className="wrapper pad-1 wd-small center">
+      <Card title="Change Password">
+        <label>
+          Current Password
           <input
             type="password"
-            id="old_password"
             name="old_password"
-            value={this.state.username}
-            onChange={this.handleChange}
-            placeholder="current password"
+            value={old_password}
+            onChange={(event) => {
+              setOld_password(event.target.value);
+              setLoginError(null);
+            }}
             required
           />
-          <label htmlFor="new_password1">New Password</label>
+        </label>
+        <div className="warning" hidden={!loginError?.old_password}>
+          {loginError?.old_password}
+        </div>
+        <label>
+          New Password
           <input
             type="password"
-            id="new_password1"
             name="new_password1"
-            value={this.state.username}
-            onChange={this.handleChange}
-            placeholder="new password"
+            value={new_password1}
+            onChange={(event) => {
+              setNew_password1(event.target.value);
+              setLoginError(null);
+            }}
             required
           />
-          <label htmlFor="new_password2">Confirm Password</label>
+        </label>
+        <div className="warning" hidden={!loginError?.new_password1}>
+          {loginError?.new_password1}
+        </div>
+        <label>
+          Confirm Password
           <input
             type="password"
-            id="new_password2"
             name="new_password2"
-            value={this.state.username}
-            onChange={this.handleChange}
-            placeholder="confirm password"
+            value={new_password2}
+            onChange={(event) => {
+              setNew_password2(event.target.value);
+              setLoginError(null);
+            }}
             required
           />
-          <button onClick={this.handleSubmit}>Change Password</button>
-          <div className="warning" hidden={!this.state.loginError}>
-            That didnt work, please try again.
-          </div>
-        </Card>
-      </div>
-    );
-  }
+        </label>
+        <div className="warning" hidden={!loginError?.new_password2}>
+          {loginError?.new_password2}
+        </div>
+        <button onClick={handleSubmit}>Change Password</button>
+        <div className="warning" hidden={!loginError}>
+          That didnt work, please try again.
+        </div>
+      </Card>
+    </div>
+  );
 }

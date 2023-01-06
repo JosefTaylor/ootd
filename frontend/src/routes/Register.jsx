@@ -1,115 +1,100 @@
 import React, { Component } from "react";
-import { API, GetCookie } from "../axiosApi.jsx";
+import { API, GetCookie, register } from "../axiosApi.jsx";
 import Card from "../components/Card.jsx";
+import { useAuth } from "../components/Auth.jsx";
+import { Navigate, useNavigate } from "react-router-dom";
 
-export default class Register extends Component {
-	constructor(props) {
-		super(props)
-		this.state = {
-			username: "",
-			email: "",
-			password1: "",
-			password2: "",
-			errors: {}
-		}
+export default function Register() {
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const [username, setUsername] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password1, setPassword1] = React.useState("");
+  const [password2, setPassword2] = React.useState("");
+  const [errors, setErrors] = React.useState(null);
 
-		this.handleChange = this.handleChange.bind(this)
-		this.handleSubmit = this.handleSubmit.bind(this)
-	}
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    // check if passwords are the same before posting?
+    if (password1 != password2) {
+      setErrors({ password2: "The passwords do not match" });
+    } else {
+      const registerErrors = await register(username, password1, email);
+      if (registerErrors) {
+        setErrors(registerErrors);
+      } else {
+        const loginErrors = await auth.signin(username, password1);
+        if (!loginErrors) {
+          navigate("/home", { replace: true, state: { loggedIn: true } });
+        }
+        console.log(loginErrors);
+      }
+    }
+  };
 
-
-	handleChange(event) {
-		this.setState({ [event.target.name]: event.target.value });
-	}
-
-	handleSubmit(event) {
-		event.preventDefault();
-		// check if passwords are the same before posting?
-		if (this.state.password1 != this.state.password2) {
-			this.setState({ errors: { password2: "The passwords do not match" } })
-		} else {
-			API.post("/dj-rest-auth/registration/",
-				{
-					username: this.state.username,
-					password: this.state.password1,
-					// password1: this.state.password1,
-					// password2: this.state.password2,
-					email: this.state.email,
-				})
-				.then((response) => {
-					API.defaults.headers = { "X-CSRFToken": GetCookie('csrftoken') }
-					API.post("/dj-rest-auth/login/",
-						{
-							username: this.state.username,
-							password: this.state.password1,
-						})
-						.then((response) => {
-							API.defaults.headers = { "X-CSRFToken": GetCookie('csrftoken') }
-							this.props.onLogin();
-						})
-				})
-				.catch((error) => {
-					console.log(error.stack);
-					this.setState({ errors: error.response.data })
-				});
-		}
-	}
-
-	render() {
-		return (
-			<div className="wrapper pad-1 wd-small">
-				<Card title="Register">
-					<label htmlFor="username" hidden>Username</label>
-					<input
-						type="text"
-						id="username"
-						name="username"
-						value={this.state.username}
-						onChange={this.handleChange}
-						placeholder="username"
-						required
-					/>
-					{this.state.errors.username ? this.state.errors.username : null}
-					<label htmlFor="email" hidden>Email</label>
-					<input
-						type="text"
-						id="email"
-						name="email"
-						value={this.state.email}
-						onChange={this.handleChange}
-						placeholder="email"
-						required
-					/>
-					{this.state.errors.email ? this.state.errors.email : null}
-					<label htmlFor="password1" hidden>New Password</label>
-					<input
-						type="password"
-						id="password1"
-						name="password1"
-						placeholder="password"
-						value={this.state.password1}
-						onChange={this.handleChange}
-						minLength="8"
-						required
-					/>
-					{this.state.errors.password ? this.state.errors.password : null}
-					<label htmlFor="password2" hidden>Confirm Password</label>
-					<input
-						type="password"
-						id="password2"
-						name="password2"
-						placeholder="confirm password"
-						value={this.state.password2}
-						onChange={this.handleChange}
-						minLength="8"
-						required
-					/>
-					{this.state.errors.password2 ? this.state.errors.password2 : null}
-					<button onClick={this.handleSubmit}>
-						Register
-					</button>
-				</Card>
-			</div>
-		)
-	}
+  return (
+    <div className="wrapper pad-1 wd-small">
+      <Card title="Register">
+        <label>
+          Username
+          <input
+            type="text"
+            name="username"
+            value={username}
+            onChange={(event) => {
+              setUsername(event.target.value);
+              setErrors(null);
+            }}
+            required
+          />
+        </label>
+        {errors?.username ? errors.username : null}
+        <label>
+          Email
+          <input
+            type="text"
+            name="email"
+            value={email}
+            onChange={(event) => {
+              setEmail(event.target.value);
+              setErrors(null);
+            }}
+            required
+          />
+        </label>
+        {errors?.email ? errors.email : null}
+        <label>
+          New Password
+          <input
+            type="password"
+            name="password1"
+            value={password1}
+            onChange={(event) => {
+              setPassword1(event.target.value);
+              setErrors(null);
+            }}
+            minLength="8"
+            required
+          />
+        </label>
+        {errors?.password ? errors.password : null}
+        <label>
+          Confirm Password
+          <input
+            type="password"
+            name="password2"
+            value={password2}
+            onChange={(event) => {
+              setPassword2(event.target.value);
+              setErrors(null);
+            }}
+            minLength="8"
+            required
+          />
+        </label>
+        {errors?.password2 ? errors.password2 : null}
+        <button onClick={handleSubmit}>Register</button>
+      </Card>
+    </div>
+  );
 }

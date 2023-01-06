@@ -11,6 +11,10 @@ h1, h2, h3, h4 {
   font-family: Bodoni MT,serif;
 }
 
+.warning {
+  color: darkred;
+}
+
 input,
 button {
   border: 1px solid rgba(0, 0, 0, 0.062);
