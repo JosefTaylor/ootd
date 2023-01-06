@@ -46,18 +46,12 @@ export async function getDashboardData() {
 }
 
 export async function getUser() {
-  return API.get("/users/")
-    .then((response) => {
-      return response.data[0];
-    })
-    .catch((error) => {
-      if (error.response.status === 403) {
-        return null;
-      } else {
-        console.log("Error: ", JSON.stringify(error, null, 4));
-        throw error;
-      }
-    });
+  try {
+    const response = await API.get("/users/");
+    return response.data[0];
+  } catch {
+    return null;
+  }
 }
 
 export async function login(username, password) {

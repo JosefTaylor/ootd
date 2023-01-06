@@ -3,35 +3,21 @@ import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import Card from "../components/Card.jsx";
 import { useAuth } from "../components/Auth.jsx";
 
-export function LogoutPage() {
-  const auth = useAuth();
-
-  React.useEffect(() => {
-    auth.signout();
-  }, []);
-
-  if (!auth.user) {
-    return <Navigate to="/" replace />;
-  } else {
-    return null;
-  }
-}
-
 export function LoginPage() {
-  let navigate = useNavigate();
-  let location = useLocation();
-  let auth = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const auth = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  let from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname || "/";
 
   async function handleSubmit(event) {
     event.preventDefault();
 
     await auth.signin(username, password);
 
-    navigate(from, { replace: true });
+    navigate(from, { replace: true, state: { loggedIn: true } });
   }
 
   return (
@@ -67,4 +53,18 @@ export function LoginPage() {
       </form>
     </div>
   );
+}
+
+export function LogoutPage() {
+  const auth = useAuth();
+
+  React.useEffect(() => {
+    auth.signout();
+  }, []);
+
+  if (!auth.user) {
+    return <Navigate to="/" replace />;
+  } else {
+    return null;
+  }
 }
