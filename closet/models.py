@@ -29,11 +29,7 @@ class Fashionista(models.Model):
     def garments(self):
         return Garment.objects.filter(owner=self.user)
 
-    def garments(self):
-        return Garment.objects.filter(owner=self.user)
-
     def garment_wears(self):
-        return GarmentWear.objects.filter(wearer=self.user)
         return GarmentWear.objects.filter(wearer=self.user)
 
 
@@ -54,7 +50,6 @@ class Garment(models.Model):
             # Make sure purchase_date is in the past
             now = timezone.now().date()
             if self.purchase_date > now:
-                raise ValidationError(_("Purchase Date must be in the past."))
                 raise ValidationError(_("Purchase Date must be in the past."))
             # Set the pub_date for published items if it hasn't been set already.
             if self.purchase_date == None:
@@ -84,13 +79,7 @@ class GarmentWear(models.Model):
     def __str__(self):
         if self.wearer == self.garment.owner:
             return f"{self.wearer.username} wore their " + f"{self.garment.name}"
-            return f"{self.wearer.username} wore their " + f"{self.garment.name}"
         else:
-            return (
-                f"{self.wearer.username} wore "
-                + f"{self.garment.owner.username}'s "
-                + f"{self.garment.name}"
-            )
             return (
                 f"{self.wearer.username} wore "
                 + f"{self.garment.owner.username}'s "
@@ -120,7 +109,6 @@ class Outfit(models.Model):
     # style
     # dress_code
     # season
-    # list of garments?
     # list of garments?
 
     def __str__(self):
