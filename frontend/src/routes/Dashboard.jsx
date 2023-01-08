@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 
 import { getDashboardData } from "../axiosApi.jsx";
 import DateSelector from "../components/DateSelector.jsx";
-import { WearLine } from "../components/WornToday.jsx";
 import Card from "../components/Card.jsx";
 import DataTable from "../components/DataTable.jsx";
 import GarmentSelector from "../components/GarmentSelector.jsx";
