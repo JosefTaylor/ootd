@@ -7,13 +7,9 @@ import Root from "./routes/Root.jsx";
 import ErrorPage from "./routes/ErrorPage.jsx";
 import Graph, { loader as graphLoader } from "./routes/Graph.jsx";
 import Dashboard from "./routes/Dashboard.jsx";
-import {
-  updateGarmentAction,
-  createGarmentAction,
-} from "./routes/garmentActions.jsx";
 import { LoginPage, LogoutPage } from "./routes/Login.jsx";
-import { PasswordChange } from "./routes/PasswordChange.jsx";
 import { RequireAuth, AuthProvider } from "./components/Auth.jsx";
+import PasswordChange from "./routes/PasswordChange.jsx";
 import Public from "./routes/Public.jsx";
 import Register from "./routes/Register.jsx";
 
@@ -27,10 +23,12 @@ const router = createBrowserRouter([
     ),
     errorElement: <ErrorPage />,
     children: [
+      // Index Page
       {
         path: "/",
         element: <Public />,
       },
+      // Login and Auth Pages
       {
         path: "login",
         element: <LoginPage />,
@@ -43,6 +41,15 @@ const router = createBrowserRouter([
         path: "register",
         element: <Register />,
       },
+      {
+        path: "password_change",
+        element: (
+          <RequireAuth>
+            <PasswordChange />
+          </RequireAuth>
+        ),
+      },
+      // Dashboard Pages
       {
         path: "home",
         element: (
@@ -59,22 +66,6 @@ const router = createBrowserRouter([
           </RequireAuth>
         ),
         loader: graphLoader,
-      },
-      {
-        path: "password_change",
-        element: (
-          <RequireAuth>
-            <PasswordChange />
-          </RequireAuth>
-        ),
-      },
-      {
-        path: "garments/:garmentId/update",
-        action: updateGarmentAction,
-      },
-      {
-        path: "garments/create",
-        action: createGarmentAction,
       },
     ],
   },

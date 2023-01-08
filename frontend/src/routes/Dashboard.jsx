@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 import { getDashboardData } from "../axiosApi.jsx";
-
 import { WardrobeGarment } from "../components/Wardrobe.jsx";
 import FilterBar from "../components/FilterBar.jsx";
 import DateSelector from "../components/DateSelector.jsx";
@@ -100,7 +99,7 @@ export default function Dashboard() {
             purchase_date: daySelected.toISOString().split("T")[0],
           }}
           mode={"new"}
-          newName={filterText}
+          // newName={filterText}
           onChange={() => {
             setRefreshData(true);
           }}
