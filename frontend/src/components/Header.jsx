@@ -1,44 +1,52 @@
-import React, { Component } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "./Auth.jsx";
 
-export default class Header extends Component {
+export default function Header() {
+  const { user } = useAuth();
 
-	profile() {
-		if (this.props.userName) {
-			return (
-				<div className="header-end">
-					{this.props.userName}
-					<button onClick={this.props.onNav("logout")}>log out</button>
-					<button onClick={this.props.onNav("password_change")}>change password</button>
-				</div>
-			)
-		} else {
-			return (<div></div>)
-		}
-	}
+  const profile = (user) => {
+    if (user) {
+      return (
+        <div className="header-end stack">
+          {user.username}
+          <Link className="button" to={"logout/"}>
+            log out
+          </Link>
+          <Link className="button" to={"password_change/"}>
+            change password
+          </Link>
+        </div>
+      );
+    } else {
+      return <div></div>;
+    }
+  };
 
-	nav() {
-		if (this.props.userName) {
-			return (
-				<div className="header-end stack">
-					<button onClick={this.props.onNav("home")}>home</button>
-					<button onClick={this.props.onNav("graphs")}>graphs</button>
-					<button onClick={this.props.onNav("selfie")}>selfie</button>
-				</div>
-			)
-		} else {
-			return (<div></div>)
-		}
-	}
+  const nav = (user) => {
+    if (user) {
+      return (
+        <div className="header-end stack">
+          <Link className="button" to={"home/"}>
+            home
+          </Link>
+          <Link className="button" to={"graphs/"}>
+            graphs
+          </Link>
+        </div>
+      );
+    } else {
+      return <div></div>;
+    }
+  };
 
-	render() {
-		return (
-			<div className="splitter header">
-				{this.nav()}
-				<div >
-					<h1>OOTD</h1>
-				</div>
-				{this.profile()}
-			</div>
-		)
-	}
+  return (
+    <div className="splitter header">
+      {nav(user)}
+      <div>
+        <h1>OOTD</h1>
+      </div>
+      {profile(user)}
+    </div>
+  );
 }

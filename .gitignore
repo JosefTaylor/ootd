@@ -153,9 +153,9 @@ GitHub.sublime-settings
 !.vscode/extensions.json 
 .history
 
-# database migrations #
-**/migrations/**
-
 # Webpack generated file:
 **/static/**/main.js*
 **/static/**/main*.js*
+
+# MacOS stuff:
+.DS_Store
