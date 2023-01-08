@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 import { getDashboardData } from "../axiosApi.jsx";
-import { WardrobeGarment } from "../components/Wardrobe.jsx";
-import FilterBar from "../components/FilterBar.jsx";
 import DateSelector from "../components/DateSelector.jsx";
 import { WearLine } from "../components/WornToday.jsx";
 import Card from "../components/Card.jsx";
@@ -12,7 +10,6 @@ import GarmentSelector from "../components/GarmentSelector.jsx";
 export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [daySelected, setDateSelected] = useState(new Date());
-  const [filterText, setFilterText] = useState("");
   const [refreshData, setRefreshData] = useState(true);
 
   useEffect(() => {
@@ -36,18 +33,13 @@ export default function Dashboard() {
 
   const filteredGarments = dashboardData.garments.filter((garment) => {
     const aq_date = new Date(garment.purchase_date);
-    const name = garment.name.toLowerCase();
     const deaq_date = garment.deaq_date ? new Date(garment.deaq_date) : null;
-    return (
-      (aq_date <= daySelected) &
-      (!deaq_date || daySelected <= deaq_date) &
-      name.includes(filterText.toLowerCase())
-    );
+    return (aq_date <= daySelected) & (!deaq_date || daySelected <= deaq_date);
   });
 
   return (
     <div className="wrapper stack pad-1 wd-max ht-full">
-      <Card className="ht-full ht-150-min" title="What are you wearing?">
+      <Card className="ht-150-min" title="What are you wearing?">
         <DateSelector
           date={daySelected}
           onClick={(n) => () => {
@@ -60,22 +52,19 @@ export default function Dashboard() {
           }}
           name="Outfit on:  "
         />
-        <GarmentSelector>
+        <GarmentSelector date={daySelected} onChange={setRefreshData}>
           {filteredGarments.map((garment) => ({
             value: garment,
-            label: garment.name,
+            label:
+              garment.name +
+              "  " +
+              Intl.NumberFormat("en-US", {
+                currency: "USD",
+                style: "currency",
+              }).format(garment.cost_per_wear) +
+              "/wear",
           }))}
         </GarmentSelector>
-        <WardrobeGarment
-          garment={{
-            name: filterText,
-            purchase_date: daySelected.toISOString().split("T")[0],
-          }}
-          mode={"new"}
-          onChange={() => {
-            setRefreshData(true);
-          }}
-        />
         <DataTable>
           {filteredWears.map((wear) => (
             <div key={wear.id} className="data-item">

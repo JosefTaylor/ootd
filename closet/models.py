@@ -37,7 +37,7 @@ class Garment(models.Model):
     name = models.CharField(max_length=200)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     purchase_date = models.DateField(null=True)
-    purchase_price = models.FloatField(null=True)
+    purchase_price = models.FloatField(null=True, default=0)
     deaq_date = models.DateField(blank=True, null=True)
     deaq_price = models.FloatField(blank=True, null=True, default=0)
     # TODO image = models.ImageField(upload_to='garments/%Y/%m/%d')
@@ -64,6 +64,9 @@ class Garment(models.Model):
         cost = purchase_price - deaq_price
         num_wears = max(1, len(GarmentWear.objects.filter(garment=self)))
         return cost / num_wears
+
+    def num_wears(self):
+        return len(GarmentWear.objects.filter(garment=self))
 
     def is_active(self):
         return not self.deaq_date or self.deaq_date > datetime.date.today()

@@ -30,6 +30,9 @@ export default function Header() {
           <Link className="button" to={"home/"}>
             home
           </Link>
+          <Link className="button" to={"wardrobe/"}>
+            wardrobe
+          </Link>
           <Link className="button" to={"graphs/"}>
             graphs
           </Link>

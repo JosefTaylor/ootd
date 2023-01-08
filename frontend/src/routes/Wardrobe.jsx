@@ -1,12 +1,95 @@
 import React from "react";
 
-import { createGarment, createWear, updateGarment } from "../axiosApi.jsx";
+import {
+  createGarment,
+  createWear,
+  getDashboardData,
+  ToPythonDate,
+  updateGarment,
+} from "../axiosApi.jsx";
+import Card from "../components/Card.jsx";
+import DataTable from "../components/DataTable.jsx";
+
+export default function Wardrobe() {
+  const [dashboardData, setDashboardData] = React.useState(null);
+  const [filterText, setFilterText] = React.useState("");
+  const [refreshData, setRefreshData] = React.useState(true);
+
+  const fields = [
+    { label: "Aquisition Date", field: "purchase_date" },
+    { label: "Price", field: "purchase_price" },
+    { label: "Cost/Wear", field: "cost_per_wear" },
+    { label: "Wears", field: "num_wears" },
+  ];
+
+  React.useEffect(() => {
+    async function func() {
+      console.log("Refreshing dashboard");
+      const newData = await getDashboardData();
+      setDashboardData(newData);
+      setRefreshData(false);
+    }
+    func();
+  }, [refreshData]);
+
+  if (!dashboardData) {
+    return <p>Loading...</p>;
+  }
+
+  const filteredGarments = dashboardData.garments.filter((garment) => {
+    const name = garment.name.toLowerCase();
+    return name.includes(filterText.toLowerCase());
+  });
+
+  return (
+    <div className="wrapper stack pad-1 ht-full">
+      <Card className="ht-150-min" title="Your Wardrobe">
+        <input
+          value={filterText}
+          onChange={(event) => setFilterText(event.target.value)}
+        />
+        <DataTable>
+          <div className="data-item">
+            <div className="splitter">
+              <div className="garment-name">Garment</div>
+              {fields.map((field, index) => (
+                <div key={index} className="cost-per-wear">
+                  {field.label}
+                </div>
+              ))}
+            </div>
+          </div>
+          {filteredGarments.map((garment) => (
+            <div key={garment.id} className="data-item">
+              <WardrobeGarment
+                mode={"display"}
+                isActive={garment.is_active}
+                fields={fields}
+                garment={garment}
+                onChange={() => setRefreshData(true)}
+              />
+            </div>
+          ))}
+        </DataTable>
+        <WardrobeGarment
+          mode={"new"}
+          garment={{
+            name: { filterText },
+            purchase_date: ToPythonDate(new Date()),
+          }}
+          onChange={() => setRefreshData(true)}
+        />
+      </Card>
+    </div>
+  );
+}
 
 export function WardrobeGarment(props) {
   // Props:
   // mode - string, see switch below for options.
   // garment - directly aligning with API call
   // onChange - call to refresh the wardrobe data in the parent
+  // fields - array of strings; which fields to display
 
   const [mode, setMode] = React.useState(props.mode);
 
@@ -55,8 +138,7 @@ export function WardrobeGarment(props) {
       return (
         <DisplayRow
           garment={props.garment}
-          date={props.date}
-          onChange={props.onChange}
+          fields={props.fields}
           onEdit={() => {
             setMode("edit");
           }}
@@ -66,34 +148,44 @@ export function WardrobeGarment(props) {
 }
 
 function DisplayRow(props) {
+  let displayGarment = { ...props.garment };
+  if (props.garment.cost_per_wear) {
+    displayGarment = {
+      ...displayGarment,
+      cost_per_wear: formatCost(props.garment.cost_per_wear) + "/wear",
+    };
+  }
+  if (props.garment.purchase_price) {
+    displayGarment = {
+      ...displayGarment,
+      purchase_price: formatCost(props.garment.purchase_price),
+    };
+  }
+  if (props.garment.deaq_price) {
+    displayGarment = {
+      ...displayGarment,
+      deaq_price: formatCost(props.garment.deaq_price),
+    };
+  }
+
+  function formatCost(cost) {
+    return new Intl.NumberFormat("en-US", {
+      currency: "USD",
+      style: "currency",
+    }).format(cost);
+  }
+
   return (
-    <div className="splitter">
-      <div className="garment-name">{props.garment.name}</div>
-      <div className="cost-per-wear">
-        {new Intl.NumberFormat("en-US", {
-          currency: "USD",
-          style: "currency",
-        }).format(props.garment.cost_per_wear)}
-        /wear
+    <button className="invisible" type="cancel" onClick={props.onEdit}>
+      <div className="splitter">
+        <div className="garment-name">{displayGarment.name}</div>
+        {props.fields.map((field, index) => (
+          <div key={index} className="cost-per-wear">
+            {displayGarment[field.field]}
+          </div>
+        ))}
       </div>
-      <div>
-        <button
-          type="submit"
-          onClick={() => {
-            async function func() {
-              await createWear(props.garment, props.date);
-              props.onChange();
-            }
-            func();
-          }}
-        >
-          wear
-        </button>
-        <button type="cancel" onClick={props.onEdit}>
-          edit
-        </button>
-      </div>
-    </div>
+    </button>
   );
 }
 
@@ -156,15 +248,15 @@ function EditRow(props) {
       </label>
       <button onClick={handleSubmit}>Save</button>
       <button onClick={props.onCancel}>Cancel</button>
-      <button onClick={props.onDeclutter}>Declutter</button>
+      <button onClick={props.onDeclutter} className="warning">
+        Declutter
+      </button>
     </div>
   );
 }
 
 function DeclutterRow(props) {
-  const [deaq_date, setDeaq_date] = React.useState(
-    props.date.toISOString().split("T")[0]
-  );
+  const [deaq_date, setDeaq_date] = React.useState(ToPythonDate(props.date));
   const [deaq_price, setDeaq_price] = React.useState(0);
 
   async function handleSubmit() {

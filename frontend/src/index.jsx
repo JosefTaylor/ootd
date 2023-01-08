@@ -12,6 +12,7 @@ import { RequireAuth, AuthProvider } from "./components/Auth.jsx";
 import PasswordChange from "./routes/PasswordChange.jsx";
 import Public from "./routes/Public.jsx";
 import Register from "./routes/Register.jsx";
+import Wardrobe from "./routes/Wardrobe.jsx";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,14 @@ const router = createBrowserRouter([
         element: (
           <RequireAuth>
             <Dashboard />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "wardrobe",
+        element: (
+          <RequireAuth>
+            <Wardrobe />
           </RequireAuth>
         ),
       },

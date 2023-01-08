@@ -19,6 +19,10 @@ export function GetCookie(name) {
   return cookieValue;
 }
 
+export function ToPythonDate(date) {
+  return new Date(date).toISOString().split("T")[0];
+}
+
 export const API = axios.create({
   baseURL: environment.RENDER_EXTERNAL_URL
     ? environment.RENDER_EXTERNAL_URL + "/api/"
@@ -123,7 +127,8 @@ export async function updateGarment(garmentId, newGarment) {
 
 export async function createGarment(garment) {
   try {
-    await API.post("/garments/", { ...garment });
+    const response = await API.post("/garments/", { ...garment });
+    return response.data;
   } catch {
     console.log("Could not create the garment.");
   }
