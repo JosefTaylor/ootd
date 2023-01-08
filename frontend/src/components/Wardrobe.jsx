@@ -1,6 +1,6 @@
 import React from "react";
 
-import { createWear, updateGarment } from "../axiosApi.jsx";
+import { createGarment, createWear, updateGarment } from "../axiosApi.jsx";
 
 export function WardrobeGarment(props) {
   // Props:
@@ -107,11 +107,15 @@ function EditRow(props) {
   );
 
   async function handleSubmit() {
-    await updateGarment(props.garment.id, {
-      name,
-      purchase_date,
-      purchase_price,
-    });
+    if (props.garment?.id) {
+      await updateGarment(props.garment.id, {
+        name,
+        purchase_date,
+        purchase_price,
+      });
+    } else {
+      await createGarment({ name, purchase_date, purchase_price });
+    }
     props.onChange();
   }
 

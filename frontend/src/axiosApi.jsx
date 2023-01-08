@@ -123,7 +123,7 @@ export async function updateGarment(garmentId, newGarment) {
 
 export async function createGarment(garment) {
   try {
-    await API.post("/garments", { ...garment });
+    await API.post("/garments/", { ...garment });
   } catch {
     console.log("Could not create the garment.");
   }
