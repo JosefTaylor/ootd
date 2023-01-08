@@ -7,6 +7,7 @@ import DateSelector from "../components/DateSelector.jsx";
 import { WearLine } from "../components/WornToday.jsx";
 import Card from "../components/Card.jsx";
 import DataTable from "../components/DataTable.jsx";
+import GarmentSelector from "../components/GarmentSelector.jsx";
 
 export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
@@ -46,7 +47,7 @@ export default function Dashboard() {
 
   return (
     <div className="wrapper stack pad-1 wd-max ht-full">
-      <Card className="ht-one-third ht-150-min" title="">
+      <Card className="ht-full ht-150-min" title="What are you wearing?">
         <DateSelector
           date={daySelected}
           onClick={(n) => () => {
@@ -58,6 +59,22 @@ export default function Dashboard() {
             setDateSelected(new Date(event.target.value));
           }}
           name="Outfit on:  "
+        />
+        <GarmentSelector>
+          {filteredGarments.map((garment) => ({
+            value: garment,
+            label: garment.name,
+          }))}
+        </GarmentSelector>
+        <WardrobeGarment
+          garment={{
+            name: filterText,
+            purchase_date: daySelected.toISOString().split("T")[0],
+          }}
+          mode={"new"}
+          onChange={() => {
+            setRefreshData(true);
+          }}
         />
         <DataTable>
           {filteredWears.map((wear) => (
@@ -71,39 +88,6 @@ export default function Dashboard() {
             </div>
           ))}
         </DataTable>
-      </Card>
-      <Card className="ht-two-thirds ht-225-min" title="Your Wardrobe">
-        <FilterBar
-          value={filterText}
-          onChange={(event) => {
-            setFilterText(event.target.value);
-          }}
-        />
-        <DataTable>
-          {filteredGarments.map((garment) => (
-            <div key={garment.id} className="data-item">
-              <WardrobeGarment
-                garment={garment}
-                mode="display"
-                date={daySelected}
-                onChange={() => {
-                  setRefreshData(true);
-                }}
-              />
-            </div>
-          ))}
-        </DataTable>
-        <WardrobeGarment
-          garment={{
-            name: filterText,
-            purchase_date: daySelected.toISOString().split("T")[0],
-          }}
-          mode={"new"}
-          // newName={filterText}
-          onChange={() => {
-            setRefreshData(true);
-          }}
-        />
       </Card>
     </div>
   );
