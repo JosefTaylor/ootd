@@ -100,6 +100,9 @@ class GarmentWear(models.Model):
     def garment_id(self):
         return self.garment.id
 
+    def cost(self):
+        return self.garment.cost_per_wear()
+
 
 class Outfit(models.Model):
     name = models.CharField(max_length=200)

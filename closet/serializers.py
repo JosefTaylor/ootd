@@ -36,6 +36,7 @@ class GarmentWearSerializer(serializers.HyperlinkedModelSerializer):
             "owner_name",
             "garment_name",
             "garment_id",
+            "cost",
         )
 
 

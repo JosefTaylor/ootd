@@ -6,6 +6,7 @@ import { WearLine } from "../components/WornToday.jsx";
 import Card from "../components/Card.jsx";
 import DataTable from "../components/DataTable.jsx";
 import GarmentSelector from "../components/GarmentSelector.jsx";
+import { formatCost } from "./Wardrobe.jsx";
 
 export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
@@ -36,6 +37,8 @@ export default function Dashboard() {
     const deaq_date = garment.deaq_date ? new Date(garment.deaq_date) : null;
     return (aq_date <= daySelected) & (!deaq_date || daySelected <= deaq_date);
   });
+
+  const outfitCost = filteredWears.reduce((sum, wear) => sum + wear.cost, 0);
 
   return (
     <div className="wrapper stack pad-1 wd-max ht-full">
@@ -77,7 +80,27 @@ export default function Dashboard() {
             </div>
           ))}
         </DataTable>
+        <p>Your outfit cost you {formatCost(outfitCost)} today</p>
       </Card>
+    </div>
+  );
+}
+
+export function WearLine(props) {
+  return (
+    <div className="splitter">
+      <div className="garment-name">{props.wear.garment_name}</div>
+      <div className="cost-per-wear">{formatCost(props.wear.cost)}/wear</div>
+      <div>
+        <button
+          onClick={async () => {
+            await deleteWear(props.wear);
+            props.onChange();
+          }}
+        >
+          Remove
+        </button>
+      </div>
     </div>
   );
 }

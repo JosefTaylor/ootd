@@ -2,7 +2,6 @@ import React from "react";
 
 import {
   createGarment,
-  createWear,
   getDashboardData,
   ToPythonDate,
   updateGarment,
@@ -168,13 +167,6 @@ function DisplayRow(props) {
     };
   }
 
-  function formatCost(cost) {
-    return new Intl.NumberFormat("en-US", {
-      currency: "USD",
-      style: "currency",
-    }).format(cost);
-  }
-
   return (
     <button className="invisible" type="cancel" onClick={props.onEdit}>
       <div className="splitter">
@@ -302,4 +294,11 @@ function DeclutterRow(props) {
       <button onClick={handleSubmit}>Declutter</button>
     </div>
   );
+}
+
+export function formatCost(cost) {
+  return new Intl.NumberFormat("en-US", {
+    currency: "USD",
+    style: "currency",
+  }).format(cost);
 }
