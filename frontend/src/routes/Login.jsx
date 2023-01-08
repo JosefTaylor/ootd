@@ -39,9 +39,6 @@ export function LoginPage() {
             required
           />
         </label>
-        <div className="warning" hidden={!loginError?.username}>
-          {loginError?.username}
-        </div>
         <label>
           Password
           <input
@@ -53,13 +50,10 @@ export function LoginPage() {
             required
           />
         </label>
-        <div className="warning" hidden={!loginError?.password}>
-          {loginError?.password}
-        </div>
         <button onClick={handleSubmit}>Log in</button>
-        <div className="warning" hidden={!loginError}>
-          That didn't work, please try again
-        </div>
+        {loginError ? (
+          <div className="warning">That didn't work, please try again</div>
+        ) : null}
         <Link className="button" to={"/register"}>
           Register
         </Link>

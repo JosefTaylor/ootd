@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { API } from "../axiosApi.jsx";
 import Card from "../components/Card.jsx";
 
-export function PasswordChange() {
+export default function PasswordChange() {
   const navigate = useNavigate();
   const [old_password, setOld_password] = React.useState("");
   const [new_password1, setNew_password1] = React.useState("");
@@ -19,7 +19,7 @@ export function PasswordChange() {
         new_password2: new_password2,
       });
 
-      //navigate("/home", { replace: true });
+      navigate("/home", { replace: true });
     } catch (error) {
       setLoginError(error.response.data);
     }
