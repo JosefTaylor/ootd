@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 User = get_user_model()
 # Create your models here.
 
+
 class Fashionista(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.CharField(max_length=500)
@@ -25,11 +26,11 @@ class Fashionista(models.Model):
     def email(self):
         return self.user.email
 
-    def garments(self):        
-        return Garment.objects.filter(owner= self.user)
+    def garments(self):
+        return Garment.objects.filter(owner=self.user)
 
     def garment_wears(self):
-        return GarmentWear.objects.filter(wearer= self.user)
+        return GarmentWear.objects.filter(wearer=self.user)
 
 
 class Garment(models.Model):
@@ -51,19 +52,22 @@ class Garment(models.Model):
             # Make sure purchase_date is in the past
             now = timezone.now().date()
             if self.purchase_date > now:
-                raise ValidationError(_('Purchase Date must be in the past.'))
+                raise ValidationError(_("Purchase Date must be in the past."))
             # Set the pub_date for published items if it hasn't been set already.
             if self.purchase_date == None:
                 self.purchase_date = datetime.date.today()
         # TODO: check other stuff as well
 
     def cost_per_wear(self):
-        cost = self.purchase_price - self.deaq_price
-        num_wears = max(1, len(GarmentWear.objects.filter(garment= self)))
-        return cost/num_wears
+        purchase_price = self.purchase_price if self.purchase_price else 0
+        deaq_price = self.deaq_price if self.deaq_price else 0
+        cost = purchase_price - deaq_price
+        num_wears = max(1, len(GarmentWear.objects.filter(garment=self)))
+        return cost / num_wears
 
     def is_active(self):
         return not self.deaq_date or self.deaq_date > datetime.date.today()
+
 
 class GarmentWear(models.Model):
     garment = models.ForeignKey(Garment, on_delete=models.CASCADE)
@@ -73,12 +77,13 @@ class GarmentWear(models.Model):
 
     def __str__(self):
         if self.wearer == self.garment.owner:
-            return (f"{self.wearer.username} wore their " + 
-            f"{self.garment.name}")
+            return f"{self.wearer.username} wore their " + f"{self.garment.name}"
         else:
-            return (f"{self.wearer.username} wore " + 
-            f"{self.garment.owner.username}'s " +
-            f"{self.garment.name}")
+            return (
+                f"{self.wearer.username} wore "
+                + f"{self.garment.owner.username}'s "
+                + f"{self.garment.name}"
+            )
 
     def wearer_name(self):
         return self.wearer.username
@@ -88,7 +93,7 @@ class GarmentWear(models.Model):
 
     def garment_name(self):
         return self.garment.name
-    
+
     def garment_id(self):
         return self.garment.id
 
@@ -100,7 +105,7 @@ class Outfit(models.Model):
     # style
     # dress_code
     # season
-    # list of garments? 
+    # list of garments?
 
     def __str__(self):
         return self.name
@@ -110,6 +115,7 @@ class OutfitWear(models.Model):
     outfit = models.ForeignKey(Outfit, on_delete=models.CASCADE)
     scan_date = models.DateTimeField()
     wearer = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
 
 # class OutfitGarment(models.Model):
 #    garment = models.ForeignKey(Garment, on_delete=models.CASCADE)
