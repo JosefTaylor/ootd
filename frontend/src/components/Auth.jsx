@@ -33,10 +33,11 @@ export function AuthProvider({ children }) {
   };
 
   const signout = async () => {
-    if (await logout()) {
-      setUser(null);
-    } else {
+    const errors = await logout();
+    if (errors) {
       console.log("I could not log out!");
+    } else {
+      setUser(null);
     }
   };
 
