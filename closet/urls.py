@@ -25,23 +25,24 @@ from closet import views
 
 router = routers.DefaultRouter()
 
-router.register(r'users', views.UserViewSet, 'user')
-router.register(r'garments', views.GarmentView, 'garment')
-router.register(r'garmentwears', views.GarmentWearView, 'garmentwear')
-router.register(r'dashboard', views.DashboardViewSet, 'dashboard')
+router.register(r"users", views.UserViewSet, "user")
+router.register(r"fashionistas", views.FashionistaViewSet, "fashionista")
+router.register(r"garments", views.GarmentView, "garment")
+router.register(r"garmentwears", views.GarmentWearView, "garmentwear")
+router.register(r"dashboard", views.DashboardViewSet, "dashboard")
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('dj-rest-auth/', include('dj_rest_auth.urls')),
+    path("", include(router.urls)),
+    path("dj-rest-auth/", include("dj_rest_auth.urls")),
     # path('dj-rest-auth/registration', include('dj_rest_auth.registration.urls')),
-    path('dj-rest-auth/registration/', views.UserCreate.as_view(), name='user-create'),
-    path('api-auth/', include(
-        'rest_framework.urls',
-        namespace='rest_framework')),
-    path('garments/<int:pk>/',
-         views.GarmentDetailView.as_view(),
-         name='garment-detail'),
-    path('garmentweardelete/<int:pk>/',
-         views.GarmentWearDeleteView.as_view(),
-         name='garmentweardelete'),
+    path("dj-rest-auth/registration/", views.UserCreate.as_view(), name="user-create"),
+    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path(
+        "garments/<int:pk>/", views.GarmentDetailView.as_view(), name="garment-detail"
+    ),
+    path(
+        "garmentweardelete/<int:pk>/",
+        views.GarmentWearDeleteView.as_view(),
+        name="garmentweardelete",
+    ),
 ]

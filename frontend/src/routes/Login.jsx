@@ -22,7 +22,7 @@ export function LoginPage() {
     if (errors) {
       setLoginError(errors);
     } else {
-      navigate(from, { replace: true, state: { loggedIn: true } });
+      navigate(from, { replace: true });
     }
   }
 

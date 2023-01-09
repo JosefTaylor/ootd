@@ -1,5 +1,5 @@
 .data-table {
-    overflow: scroll;
+    overflow: auto;
     display: inline-block;
 }
 
@@ -46,4 +46,15 @@
 .cost-per-wear {
     text-align: end;
     width: 130px;
+}
+
+.invisible {
+    border: 0;
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: inherit;
+    font-size: inherit;
+    color: inherit;
+    margin-top: inherit;
+    margin-bottom: inherit;
+    text-align: inherit;
 }

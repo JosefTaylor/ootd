@@ -9,48 +9,62 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = React.useState(null);
+  const [fashionista, setFashionista] = React.useState(null);
 
   React.useEffect(() => {
     async function func() {
       const loggedInUser = await getUser();
       if (loggedInUser) {
-        setUser(loggedInUser);
+        setFashionista(loggedInUser);
+      } else {
+        setFashionista(false);
       }
     }
     func();
   }, []);
 
   const signin = async (username, password) => {
+    setFashionista(null);
     const errors = await login(username, password);
 
     if (!errors) {
       const loggedInUser = await getUser();
-      setUser(loggedInUser);
+      setFashionista(loggedInUser);
+    } else {
+      setFashionista(false);
     }
 
     return errors;
   };
 
   const signout = async () => {
-    if (await logout()) {
-      setUser(null);
-    } else {
+    const errors = await logout();
+    if (errors) {
       console.log("I could not log out!");
+    } else {
+      setFashionista(false);
     }
   };
 
-  const value = { user, signin, signout };
+  const value = { fashionista: fashionista, signin, signout };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function RequireAuth({ children }) {
-  const { user } = useAuth();
+  const { fashionista } = useAuth();
   const location = useLocation();
 
-  if (!(user || location.state?.loggedIn)) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+  if (fashionista === null) {
+    return <p>Loading...</p>;
+  }
+
+  if (!fashionista) {
+    if (location.pathname === "/") {
+      return <Navigate to="/about" replace />;
+    } else {
+      return <Navigate to="/login" state={{ from: location }} replace />;
+    }
   }
 
   return children;

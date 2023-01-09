@@ -10,8 +10,10 @@ import Dashboard from "./routes/Dashboard.jsx";
 import { LoginPage, LogoutPage } from "./routes/Login.jsx";
 import { RequireAuth, AuthProvider } from "./components/Auth.jsx";
 import PasswordChange from "./routes/PasswordChange.jsx";
-import Public from "./routes/Public.jsx";
+import About from "./routes/About.jsx";
 import Register from "./routes/Register.jsx";
+import Wardrobe from "./routes/Wardrobe.jsx";
+import { Profile, Fashionista } from "./routes/Profile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -25,8 +27,8 @@ const router = createBrowserRouter([
     children: [
       // Index Page
       {
-        path: "/",
-        element: <Public />,
+        path: "about",
+        element: <About />,
       },
       // Login and Auth Pages
       {
@@ -41,20 +43,20 @@ const router = createBrowserRouter([
         path: "register",
         element: <Register />,
       },
-      {
-        path: "password_change",
-        element: (
-          <RequireAuth>
-            <PasswordChange />
-          </RequireAuth>
-        ),
-      },
       // Dashboard Pages
       {
-        path: "home",
+        path: "",
         element: (
           <RequireAuth>
             <Dashboard />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "wardrobe",
+        element: (
+          <RequireAuth>
+            <Wardrobe />
           </RequireAuth>
         ),
       },
@@ -66,6 +68,24 @@ const router = createBrowserRouter([
           </RequireAuth>
         ),
         loader: graphLoader,
+      },
+      {
+        path: "profile",
+        element: (
+          <RequireAuth>
+            <Profile />
+          </RequireAuth>
+        ),
+        children: [
+          {
+            path: "",
+            element: <Fashionista />,
+          },
+          {
+            path: "password_change",
+            element: <PasswordChange />,
+          },
+        ],
       },
     ],
   },

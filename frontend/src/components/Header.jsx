@@ -3,50 +3,61 @@ import { Link } from "react-router-dom";
 import { useAuth } from "./Auth.jsx";
 
 export default function Header() {
-  const { user } = useAuth();
+  const { fashionista } = useAuth();
 
-  const profile = (user) => {
-    if (user) {
+  const profile = (fashionista) => {
+    if (fashionista) {
       return (
         <div className="header-end stack">
-          {user.username}
+          <Link className="button" to={"profile/"}>
+            {fashionista.user.username}
+          </Link>
           <Link className="button" to={"logout/"}>
             log out
-          </Link>
-          <Link className="button" to={"password_change/"}>
-            change password
           </Link>
         </div>
       );
     } else {
-      return <div></div>;
+      return (
+        <div className="header-end stack">
+          <Link className="button" to={"login"}>
+            log in
+          </Link>
+        </div>
+      );
     }
   };
 
-  const nav = (user) => {
-    if (user) {
+  const nav = (fashionista) => {
+    if (fashionista) {
       return (
         <div className="header-end stack">
-          <Link className="button" to={"home/"}>
+          <Link className="button" to={"/"}>
             home
+          </Link>
+          <Link className="button" to={"wardrobe/"}>
+            wardrobe
           </Link>
           <Link className="button" to={"graphs/"}>
             graphs
           </Link>
+          <Link className="button" to={"about/"}>
+            about
+          </Link>
         </div>
       );
     } else {
-      return <div></div>;
+      return <div className="header-end stack"></div>;
     }
   };
 
   return (
     <div className="splitter header">
-      {nav(user)}
+      {nav(fashionista)}
       <div>
         <h1>OOTD</h1>
       </div>
-      {profile(user)}
+      {profile(fashionista)}
     </div>
   );
 }

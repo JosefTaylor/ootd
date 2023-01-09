@@ -9,7 +9,7 @@ export default function DateSelector(props) {
       </div>
       <div className="splitter">
         <label htmlFor="date">
-          <h2>{props.name}</h2>
+          <p>{props.name}</p>
         </label>
         <input
           type="date"
