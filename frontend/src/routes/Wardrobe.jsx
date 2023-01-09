@@ -49,18 +49,21 @@ export default function Wardrobe() {
         />
         <DataTable>
           <div className="data-item">
-            <div className="splitter">
-              <div className="garment-name">Garment</div>
-              {fields.map((field, index) => (
-                <div key={index} className="cost-per-wear">
-                  {field.label}
-                </div>
-              ))}
-            </div>
+            <button className="invisible">
+              <div className="splitter">
+                <div className="garment-name">Garment</div>
+                {fields.map((field, index) => (
+                  <div key={index} className="cost-per-wear">
+                    {field.label}
+                  </div>
+                ))}
+              </div>
+            </button>
           </div>
           {filteredGarments.map((garment) => (
             <div key={garment.id} className="data-item">
               <WardrobeGarment
+                key={garment.id}
                 mode={"display"}
                 isActive={garment.is_active}
                 fields={fields}
@@ -73,8 +76,7 @@ export default function Wardrobe() {
         <WardrobeGarment
           mode={"new"}
           garment={{
-            name: { filterText },
-            purchase_date: ToPythonDate(new Date()),
+            name: filterText,
           }}
           onChange={() => setRefreshData(true)}
         />
@@ -185,9 +187,11 @@ function EditRow(props) {
   const [name, setName] = React.useState(props.garment.name);
   const [purchase_date, setPurchase_date] = React.useState(
     props.garment.purchase_date
+      ? props.garment.purchase_date
+      : ToPythonDate(new Date())
   );
   const [purchase_price, setPurchase_price] = React.useState(
-    props.garment.purchase_price
+    props.garment.purchase_price ? props.garment.purchase_price : 0
   );
 
   async function handleSubmit() {

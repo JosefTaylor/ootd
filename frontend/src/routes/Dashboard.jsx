@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { getDashboardData } from "../axiosApi.jsx";
+import { getDashboardData, deleteWear } from "../axiosApi.jsx";
 import DateSelector from "../components/DateSelector.jsx";
 import Card from "../components/Card.jsx";
 import DataTable from "../components/DataTable.jsx";
@@ -27,8 +27,10 @@ export default function Dashboard() {
   }
 
   const filteredWears = dashboardData.garment_wears.filter((wear) => {
-    const date = new Date(wear.scan_date).toDateString();
-    return date === daySelected.toDateString();
+    const date = new Date(wear.scan_date);
+    let yesterday = new Date(daySelected);
+    yesterday.setDate(yesterday.getDate() - 1);
+    return (date > yesterday) & (date <= daySelected);
   });
 
   const filteredGarments = dashboardData.garments.filter((garment) => {

@@ -41,8 +41,6 @@ class Garment(models.Model):
     deaq_date = models.DateField(blank=True, null=True)
     deaq_price = models.FloatField(blank=True, null=True, default=0)
     # TODO image = models.ImageField(upload_to='garments/%Y/%m/%d')
-    # TODO nfc_id = models.IntField()???
-    # TODO qr_id = models.IntField()???
 
     def __str__(self):
         return self.name
