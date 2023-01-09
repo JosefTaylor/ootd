@@ -51,10 +51,18 @@ export async function getDashboardData() {
 
 export async function getUser() {
   try {
-    const response = await API.get("/users/");
+    const response = await API.get("/fashionistas/");
     return response.data[0];
   } catch {
     return null;
+  }
+}
+
+export async function updateUser(user, newUser) {
+  try {
+    await API.patch(user.url, { ...newUser });
+  } catch {
+    console.log("Could not update the user profile.");
   }
 }
 

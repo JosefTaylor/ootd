@@ -14,7 +14,7 @@ from rest_framework import (
     authentication,
     exceptions,
     permissions,
-    mixins
+    mixins,
 )
 
 from .serializers import (
@@ -23,13 +23,10 @@ from .serializers import (
     GarmentWearSerializer,
     DashboardSerializer,
     FashionistaSerializer,
+    FashionistaProfileSerializer,
 )
 
-from .models import (
-    Garment,
-    GarmentWear,
-    Fashionista
-)
+from .models import Garment, GarmentWear, Fashionista
 
 
 ## Users and Fashionistas ##
@@ -39,10 +36,16 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_superuser:
-            return Fashionista.objects.all()
-        else:
-            return Fashionista.objects.filter(user=user)
+        return Fashionista.objects.filter(user=user)
+
+
+class FashionistaViewSet(viewsets.ModelViewSet):
+    serializer_class = FashionistaProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Fashionista.objects.filter(user=user)
 
 
 class DashboardViewSet(viewsets.ModelViewSet):
@@ -56,6 +59,7 @@ class DashboardViewSet(viewsets.ModelViewSet):
         else:
             return Fashionista.objects.filter(user=user)
 
+
 ## Authentication and Registration ##
 
 
@@ -65,11 +69,12 @@ class UserCreate(generics.CreateAPIView):
     serializer_class = UserSerializer
 
     def post(self, request, *args, **kwargs):
-        print('from post method in UserCreate View:')
-        print(f'request: {request}')
-        print(f'args: {args}')
-        print(f'kwargs: {kwargs}')
+        print("from post method in UserCreate View:")
+        print(f"request: {request}")
+        print(f"args: {args}")
+        print(f"kwargs: {kwargs}")
         return self.create(request, *args, **kwargs)
+
 
 ## Garments ##
 
@@ -100,6 +105,7 @@ class GarmentDetailView(generics.RetrieveUpdateDestroyAPIView):
             return Garment.objects.all()
         else:
             return Garment.objects.filter(owner=user)
+
 
 ## Garment Wears ##
 

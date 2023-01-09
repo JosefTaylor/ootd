@@ -25,7 +25,7 @@ export default function Register() {
       } else {
         const loginErrors = await auth.signin(username, password1);
         if (!loginErrors) {
-          navigate("/home", { replace: true, state: { loggedIn: true } });
+          navigate("/", { replace: true, state: { loggedIn: true } });
         }
         console.log(loginErrors);
       }
