@@ -6,7 +6,7 @@
 }
 
 .sidebar > .side {
-    flex: 0 0 150px
+    width: fit-content;
 }
 
 .sidebar > .content {

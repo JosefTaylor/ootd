@@ -14,7 +14,8 @@ export function Profile() {
             Profile
           </NavLink>
           <NavLink className="button" to={"password_change/"}>
-            Change your password
+            <p>Change </p>
+            <p>password</p>
           </NavLink>
         </div>
       </Card>
