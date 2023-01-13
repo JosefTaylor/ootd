@@ -1,7 +1,7 @@
 import React from "react";
-import { useLoaderData, Link, Outlet, NavLink } from "react-router-dom";
+import { Outlet, NavLink } from "react-router-dom";
 
-import { getFashionista, updateUser } from "../axiosApi.jsx";
+import { updateUser } from "../axiosApi.jsx";
 import { useAuth } from "../components/Auth.jsx";
 import Card from "../components/Card.jsx";
 
@@ -31,13 +31,13 @@ export function Fashionista() {
   );
   const [newEmail, setEmail] = React.useState(auth.fashionista.user.email);
   const [newBio, setBio] = React.useState(auth.fashionista.bio);
-  const [errors, setErrors] = React.useState({});
+  const [errors, setErrors] = React.useState(null);
 
   async function handleSubmit() {
     const updateErrors = await updateUser(auth.fashionista, {
-      newUsername,
-      newEmail,
-      newBio,
+      username: newUsername,
+      email: newEmail,
+      bio: newBio,
     });
     if (updateErrors) {
       setErrors(updateErrors);
