@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from taggit.managers import TaggableManager
 
 User = get_user_model()
 # Create your models here.
@@ -40,6 +41,7 @@ class Garment(models.Model):
     purchase_price = models.FloatField(null=True, default=0)
     deaq_date = models.DateField(blank=True, null=True)
     deaq_price = models.FloatField(blank=True, null=True, default=0)
+    tags = TaggableManager()
     # TODO image = models.ImageField(upload_to='garments/%Y/%m/%d')
 
     def __str__(self):

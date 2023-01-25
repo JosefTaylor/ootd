@@ -4,8 +4,13 @@ from rest_framework import serializers
 
 from closet.models import Garment, GarmentWear, Outfit, OutfitWear, Fashionista
 
+from taggit.serializers import TagListSerializerField, TaggitSerializer
 
-class GarmentSerializer(serializers.HyperlinkedModelSerializer):
+
+class GarmentSerializer(TaggitSerializer, serializers.HyperlinkedModelSerializer):
+
+    tags = TagListSerializerField()
+
     class Meta:
         model = Garment
         fields = (
@@ -20,6 +25,7 @@ class GarmentSerializer(serializers.HyperlinkedModelSerializer):
             "cost_per_wear",
             "num_wears",
             "is_active",
+            "tags",
         )
 
 
