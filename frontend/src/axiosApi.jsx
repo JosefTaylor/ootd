@@ -60,9 +60,11 @@ export async function getUser() {
 
 export async function updateUser(user, newUser) {
   try {
-    await API.patch(user.url, { ...newUser });
-  } catch {
+    console.log(user.user.fashionista.user);
+    await API.patch(user.user.fashionista.user, { ...newUser });
+  } catch (error) {
     console.log("Could not update the user profile.");
+    return error;
   }
 }
 
