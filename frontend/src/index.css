@@ -8,6 +8,10 @@ body {
   text-align: center;
 }
 
+img {
+  align-self: center;
+}
+
 h1, h2, h3, h4 {
   font-family: Bodoni MT,serif;
 }
@@ -20,12 +24,7 @@ h2 {
   font-size: clamp(2rem, 5vw, 3.5rem);
 }
 
-.warning {
-  color: darkred;
-}
-
-input,
-button {
+input, button {
   border: 1px solid rgba(0, 0, 0, 0.062);
   background-color: rgba(255, 255, 255, 0.151);
   border-radius: 1rem;
@@ -39,6 +38,10 @@ button {
 .active {
   background-color: rgb(100, 72, 100);
   color: rgb(207, 175, 197);
+}
+
+.warning {
+  color: darkred;
 }
 
 input {

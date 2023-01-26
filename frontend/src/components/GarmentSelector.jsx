@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import CreatableSelect from "react-select/creatable";
 import { createGarment, createWear, ToPythonDate } from "../axiosApi.jsx";

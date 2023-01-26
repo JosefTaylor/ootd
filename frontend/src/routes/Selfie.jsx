@@ -2,18 +2,15 @@
 import React, { useEffect, useState } from "react";
 
 import { getDashboardData, deleteWear } from "../axiosApi.jsx";
-import DateSelector from "../components/DateSelector.jsx";
 import Card from "../components/Card.jsx";
 import DataTable from "../components/DataTable.jsx";
 import GarmentSelector from "../components/GarmentSelector.jsx";
 import { formatCost } from "./Wardrobe.jsx";
-import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
-  const [daySelected, setDateSelected] = useState(new Date());
   const [refreshData, setRefreshData] = useState(true);
-  const [tagFilter, setTagFilter] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     async function func() {
@@ -24,15 +21,6 @@ export default function Dashboard() {
     func();
   }, [refreshData]);
 
-  const handleTagSelect = (tag) => {
-    if (tagFilter.includes(tag)) {
-      const newTagFilter = tagFilter.filter((oldTag) => oldTag != tag);
-      setTagFilter(newTagFilter);
-    } else {
-      setTagFilter([...tagFilter, tag]);
-    }
-  };
-
   if (!dashboardData) {
     return <p>Loading...</p>;
   }
@@ -40,72 +28,47 @@ export default function Dashboard() {
   // show only those wears which occur today
   const filteredWears = dashboardData.garment_wears.filter((wear) => {
     const date = new Date(wear.scan_date);
-    let yesterday = new Date(daySelected);
+    let yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    return (date > yesterday) & (date <= daySelected);
+    return (date > yesterday) & (date <= new Date());
   });
 
-  // show only garments which are active today, and which have the selected tags
+  // show only garments which are active today
   const filteredGarments = dashboardData.garments.filter((garment) => {
     const aq_date = new Date(garment.purchase_date);
     const deaq_date = garment.deaq_date ? new Date(garment.deaq_date) : null;
-    return (
-      (aq_date <= daySelected) &
-      (!deaq_date || daySelected <= deaq_date) &
-      (tagFilter.length === 0 ||
-        tagFilter
-          .map((tag) => garment.tags.includes(tag))
-          .reduce((a, b) => a & b))
-    );
+    return (aq_date <= new Date()) & (!deaq_date || new Date() <= deaq_date);
   });
-
-  // Show only the tags of the garments filtered
-  const tagArray = filteredGarments.flatMap((garment) => garment.tags);
-  const starterTags = [
-    "top",
-    "sweater",
-    "t-shirt",
-    "jacket",
-    "trousers",
-    "jeans",
-  ];
-  const filteredTags = [...new Set([...starterTags, ...tagArray])];
 
   // Calculate the cost of the whole outfit
   const outfitCost = filteredWears.reduce((sum, wear) => sum + wear.cost, 0);
 
   return (
     <div className="wrapper stack pad-1 wd-max ht-full">
-      <Card className="ht-150-min" title="What are you wearing?">
-        <DateSelector
-          date={daySelected}
-          onClick={(n) => () => {
-            let newDay = new Date(daySelected);
-            newDay.setDate(daySelected.getDate() + n);
-            setDateSelected(newDay);
-          }}
-          onChange={(event) => {
-            setDateSelected(new Date(event.target.value));
-          }}
-          name="Outfit on:  "
-        />
-        <div className="flow">
-          {filteredTags.map((tag) => (
-            <button
-              className={tagFilter.includes(tag) ? "active" : ""}
-              key={tag}
-              value={tag}
-              onClick={(event) => handleTagSelect(event.target.value)}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
-        <GarmentSelector
-          date={daySelected}
-          onChange={setRefreshData}
-          tags={tagFilter}
-        >
+      <Card className="ht-150-min" title="Take a selfie">
+        {selectedImage ? (
+          <div className="center">
+            <img
+              alt="A picture of a beautiful human being in a STUNNING outfit."
+              width={"250px"}
+              src={URL.createObjectURL(selectedImage)}
+            />
+            {/* <br />  */}
+            <button onClick={() => setSelectedImage(null)}>Remove</button>
+          </div>
+        ) : (
+          <div className="center">
+            <input
+              type="file"
+              name="myImage"
+              onChange={(event) => {
+                console.log(event.target.files[0]);
+                setSelectedImage(event.target.files[0]);
+              }}
+            />
+          </div>
+        )}
+        <GarmentSelector date={new Date()} onChange={setRefreshData}>
           {filteredGarments.map((garment) => ({
             value: garment,
             label:
@@ -118,9 +81,6 @@ export default function Dashboard() {
               "/wear",
           }))}
         </GarmentSelector>
-        <Link className="button" to={"selfie/"}>
-          Or take a selfie
-        </Link>
         <DataTable>
           {filteredWears.map((wear) => (
             <div key={wear.id} className="data-item">
