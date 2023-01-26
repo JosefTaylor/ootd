@@ -36,8 +36,11 @@ export default function Wardrobe() {
   }
 
   const filteredGarments = dashboardData.garments.filter((garment) => {
-    const name = garment.name.toLowerCase();
-    return name.includes(filterText.toLowerCase());
+    const matchText = [garment.name, ...garment.tags].join(" ").toLowerCase();
+    const searchTexts = filterText.toLowerCase().split(" ");
+    return searchTexts
+      .map((searchText) => matchText.includes(searchText))
+      .reduce((a, b) => a & b);
   });
 
   return (
