@@ -57,12 +57,17 @@ export default function Dashboard() {
     );
   });
 
-  console.log("all garments:", dashboardData.garments);
-  console.log("filtered garments:", filteredGarments);
-
   // Show only the tags of the garments filtered
   const tagArray = filteredGarments.flatMap((garment) => garment.tags);
-  const filteredTags = [...new Set(tagArray)];
+  const starterTags = [
+    "top",
+    "sweater",
+    "t-shirt",
+    "jacket",
+    "trousers",
+    "jeans",
+  ];
+  const filteredTags = [...new Set([...starterTags, ...tagArray])];
 
   // Calculate the cost of the whole outfit
   const outfitCost = filteredWears.reduce((sum, wear) => sum + wear.cost, 0);
