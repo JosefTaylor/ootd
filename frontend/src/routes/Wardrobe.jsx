@@ -24,11 +24,9 @@ export default function Wardrobe() {
 
   React.useEffect(() => {
     async function func() {
-      console.log("Refreshing dashboard");
       const newData = await getDashboardData();
       setDashboardData(newData);
       setRefreshData(false);
-      console.log(newData.garments);
     }
     func();
   }, [refreshData]);

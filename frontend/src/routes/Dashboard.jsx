@@ -11,10 +11,10 @@ export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [daySelected, setDateSelected] = useState(new Date());
   const [refreshData, setRefreshData] = useState(true);
+  const [tagFilter, setTagFilter] = useState([]);
 
   useEffect(() => {
     async function func() {
-      console.log("Refreshing dashboard");
       const newData = await getDashboardData();
       setDashboardData(newData);
       setRefreshData(false);
@@ -22,10 +22,20 @@ export default function Dashboard() {
     func();
   }, [refreshData]);
 
+  const handleTagSelect = (tag) => {
+    if (tagFilter.includes(tag)) {
+      const newTagFilter = tagFilter.filter((oldTag) => oldTag != tag);
+      setTagFilter(newTagFilter);
+    } else {
+      setTagFilter([...tagFilter, tag]);
+    }
+  };
+
   if (!dashboardData) {
     return <p>Loading...</p>;
   }
 
+  // show only those wears which occur today
   const filteredWears = dashboardData.garment_wears.filter((wear) => {
     const date = new Date(wear.scan_date);
     let yesterday = new Date(daySelected);
@@ -33,12 +43,28 @@ export default function Dashboard() {
     return (date > yesterday) & (date <= daySelected);
   });
 
+  // show only garments which are active today, and which have the selected tags
   const filteredGarments = dashboardData.garments.filter((garment) => {
     const aq_date = new Date(garment.purchase_date);
     const deaq_date = garment.deaq_date ? new Date(garment.deaq_date) : null;
-    return (aq_date <= daySelected) & (!deaq_date || daySelected <= deaq_date);
+    return (
+      (aq_date <= daySelected) &
+      (!deaq_date || daySelected <= deaq_date) &
+      (tagFilter.length === 0 ||
+        tagFilter
+          .map((tag) => garment.tags.includes(tag))
+          .reduce((a, b) => a & b))
+    );
   });
 
+  console.log("all garments:", dashboardData.garments);
+  console.log("filtered garments:", filteredGarments);
+
+  // Show only the tags of the garments filtered
+  const tagArray = filteredGarments.flatMap((garment) => garment.tags);
+  const filteredTags = [...new Set(tagArray)];
+
+  // Calculate the cost of the whole outfit
   const outfitCost = filteredWears.reduce((sum, wear) => sum + wear.cost, 0);
 
   return (
@@ -56,6 +82,18 @@ export default function Dashboard() {
           }}
           name="Outfit on:  "
         />
+        <div className="flow">
+          {filteredTags.map((tag) => (
+            <button
+              className={tagFilter.includes(tag) ? "active" : ""}
+              key={tag}
+              value={tag}
+              onClick={(event) => handleTagSelect(event.target.value)}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
         <GarmentSelector date={daySelected} onChange={setRefreshData}>
           {filteredGarments.map((garment) => ({
             value: garment,

@@ -27,6 +27,11 @@ button {
   text-align: center;
 }
 
+.active {
+  background-color: rgb(100, 72, 100);
+  color: rgb(207, 175, 197);
+}
+
 input {
   cursor: text;
 }
