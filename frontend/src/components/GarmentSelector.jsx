@@ -11,6 +11,7 @@ export default function GarmentSelector(props) {
     const newGarment = await createGarment({
       name: name,
       purchase_date: props.date.toISOString().split("T")[0],
+      tags: props.tags,
     });
     console.log("in garmentSelector:handleCreate, newGarment:", newGarment);
     await createWear(newGarment, ToPythonDate(props.date));
@@ -24,6 +25,9 @@ export default function GarmentSelector(props) {
       className="basic-single"
       classNamePrefix="select"
       defaultValue={""}
+      placeholder={
+        props.children.length > 0 ? "Select..." : "Name your garment..."
+      }
       isLoading={isLoading}
       isClearable={true}
       isSearchable={true}

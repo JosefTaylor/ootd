@@ -19,11 +19,11 @@ export default function Wardrobe() {
     { label: "Price", field: "purchase_price" },
     { label: "Cost/Wear", field: "cost_per_wear" },
     { label: "Wears", field: "num_wears" },
+    { label: "Tags", field: "tags" },
   ];
 
   React.useEffect(() => {
     async function func() {
-      console.log("Refreshing dashboard");
       const newData = await getDashboardData();
       setDashboardData(newData);
       setRefreshData(false);
@@ -36,8 +36,11 @@ export default function Wardrobe() {
   }
 
   const filteredGarments = dashboardData.garments.filter((garment) => {
-    const name = garment.name.toLowerCase();
-    return name.includes(filterText.toLowerCase());
+    const matchText = [garment.name, ...garment.tags].join(" ").toLowerCase();
+    const searchTexts = filterText.toLowerCase().split(" ");
+    return searchTexts
+      .map((searchText) => matchText.includes(searchText))
+      .reduce((a, b) => a & b);
   });
 
   return (
@@ -156,6 +159,12 @@ function DisplayRow(props) {
       cost_per_wear: formatCost(props.garment.cost_per_wear) + "/wear",
     };
   }
+  if (props.garment.tags) {
+    displayGarment = {
+      ...displayGarment,
+      tags: props.garment.tags.join(", "),
+    };
+  }
   if (props.garment.purchase_price) {
     displayGarment = {
       ...displayGarment,
@@ -193,6 +202,9 @@ function EditRow(props) {
   const [purchase_price, setPurchase_price] = React.useState(
     props.garment.purchase_price ? props.garment.purchase_price : 0
   );
+  const [tags, setTags] = React.useState(
+    props.garment.tags ? props.garment.tags.join(", ") : ""
+  );
 
   async function handleSubmit() {
     if (props.garment?.id) {
@@ -200,9 +212,10 @@ function EditRow(props) {
         name,
         purchase_date,
         purchase_price,
+        tags: tags.split(",").map((tagString) => tagString.trim()),
       });
     } else {
-      await createGarment({ name, purchase_date, purchase_price });
+      await createGarment({ name, purchase_date, purchase_price, tags });
     }
     props.onChange();
   }
@@ -239,6 +252,17 @@ function EditRow(props) {
           value={purchase_price}
           onChange={(event) => {
             setPurchase_price(event.target.value);
+          }}
+        />
+      </label>
+      <label>
+        tags:
+        <input
+          type="text"
+          name="tags"
+          value={tags}
+          onChange={(event) => {
+            setTags(event.target.value);
           }}
         />
       </label>
