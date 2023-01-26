@@ -25,6 +25,9 @@ export default function GarmentSelector(props) {
       className="basic-single"
       classNamePrefix="select"
       defaultValue={""}
+      placeholder={
+        props.children.length > 0 ? "Select..." : "Name your garment..."
+      }
       isLoading={isLoading}
       isClearable={true}
       isSearchable={true}
