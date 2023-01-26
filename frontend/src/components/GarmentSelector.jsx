@@ -11,6 +11,7 @@ export default function GarmentSelector(props) {
     const newGarment = await createGarment({
       name: name,
       purchase_date: props.date.toISOString().split("T")[0],
+      tags: props.tags,
     });
     console.log("in garmentSelector:handleCreate, newGarment:", newGarment);
     await createWear(newGarment, ToPythonDate(props.date));

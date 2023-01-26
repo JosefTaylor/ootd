@@ -94,7 +94,11 @@ export default function Dashboard() {
             </button>
           ))}
         </div>
-        <GarmentSelector date={daySelected} onChange={setRefreshData}>
+        <GarmentSelector
+          date={daySelected}
+          onChange={setRefreshData}
+          tags={tagFilter}
+        >
           {filteredGarments.map((garment) => ({
             value: garment,
             label:
