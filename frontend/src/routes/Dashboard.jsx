@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 
-import { getDashboardData, deleteWear } from "../axiosApi.jsx";
+import { getDashboardData, deleteWear } from "../ootdApi.jsx";
 import DateSelector from "../components/DateSelector.jsx";
 import Card from "../components/Card.jsx";
 import DataTable from "../components/DataTable.jsx";

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import CreatableSelect from "react-select/creatable";
-import { createGarment, createWear, ToPythonDate } from "../axiosApi.jsx";
+import { createGarment, createWear, ToPythonDate } from "../ootdApi.jsx";
 
 export default function GarmentSelector(props) {
   const [isLoading, setIsLoading] = React.useState(false);

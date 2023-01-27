@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 
 import {
@@ -5,7 +6,7 @@ import {
   getDashboardData,
   ToPythonDate,
   updateGarment,
-} from "../axiosApi.jsx";
+} from "../ootdApi.jsx";
 import Card from "../components/Card.jsx";
 import DataTable from "../components/DataTable.jsx";
 

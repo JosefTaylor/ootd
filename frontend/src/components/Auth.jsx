@@ -1,6 +1,7 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import { useLocation, Navigate } from "react-router-dom";
-import { login, logout, getUser } from "../axiosApi.jsx";
+import { login, logout, getUser } from "../ootdApi.jsx";
 
 const AuthContext = React.createContext();
 

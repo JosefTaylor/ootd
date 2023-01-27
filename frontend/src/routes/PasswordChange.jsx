@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { API } from "../axiosApi.jsx";
+import { OOTD } from "../ootdApi.jsx";
 import Card from "../components/Card.jsx";
 
 export default function PasswordChange() {
@@ -13,7 +13,7 @@ export default function PasswordChange() {
   async function handleSubmit(event) {
     event.preventDefault();
     try {
-      await API.post("/dj-rest-auth/password/change/", {
+      await OOTD.post("/dj-rest-auth/password/change/", {
         old_password: old_password,
         new_password1: new_password1,
         new_password2: new_password2,

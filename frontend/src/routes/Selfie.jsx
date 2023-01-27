@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 
-import { getDashboardData, deleteWear } from "../axiosApi.jsx";
+import { getDashboardData, deleteWear } from "../ootdApi.jsx";
+import { getInference } from "../roboflowApi.jsx";
 import Card from "../components/Card.jsx";
 import DataTable from "../components/DataTable.jsx";
 import GarmentSelector from "../components/GarmentSelector.jsx";
@@ -11,6 +12,7 @@ export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [refreshData, setRefreshData] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [inference, setInference] = useState(null);
 
   useEffect(() => {
     async function func() {
@@ -33,11 +35,20 @@ export default function Dashboard() {
     return (date > yesterday) & (date <= new Date());
   });
 
-  // show only garments which are active today
+  // show only garments which are active today and which match the inferred tags
   const filteredGarments = dashboardData.garments.filter((garment) => {
     const aq_date = new Date(garment.purchase_date);
     const deaq_date = garment.deaq_date ? new Date(garment.deaq_date) : null;
-    return (aq_date <= new Date()) & (!deaq_date || new Date() <= deaq_date);
+    const inferenceTags = inference?.predictions?.flatmap(
+      (prediction) => prediction.class
+    );
+    return (aq_date <= new Date()) &
+      (!deaq_date || new Date() <= deaq_date) &
+      inference?.predictions
+      ? inferenceTags
+          .map((inferenceTag) => garment.tags.includes(inferenceTag))
+          .reduce((a, b) => a || b)
+      : true;
   });
 
   // Calculate the cost of the whole outfit
@@ -55,6 +66,14 @@ export default function Dashboard() {
             />
             {/* <br />  */}
             <button onClick={() => setSelectedImage(null)}>Remove</button>
+            <button
+              onClick={async () => {
+                const response = await getInference(selectedImage);
+                setInference(response);
+              }}
+            >
+              Submit
+            </button>
           </div>
         ) : (
           <div className="center">
