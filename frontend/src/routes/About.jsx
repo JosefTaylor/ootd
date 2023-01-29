@@ -24,6 +24,11 @@ export default function About() {
           up in the latest fad?
         </p>
         <p>Happy dressing!</p>
+        <p>
+          Brought to you by
+          <a href="https://www.joseftaylor.com">Josef Taylor</a>
+          <a href="https://nedludd.social/@joe" rel="me" hidden />
+        </p>
       </Card>
     </div>
   );
