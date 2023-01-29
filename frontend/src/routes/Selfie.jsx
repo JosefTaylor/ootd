@@ -44,7 +44,7 @@ export default function Dashboard() {
     );
     return (aq_date <= new Date()) &
       (!deaq_date || new Date() <= deaq_date) &
-      inference?.predictions
+      inferenceTags
       ? inferenceTags
           .map((inferenceTag) => garment.tags.includes(inferenceTag))
           .reduce((a, b) => a || b)
@@ -81,7 +81,6 @@ export default function Dashboard() {
               type="file"
               name="myImage"
               onChange={(event) => {
-                console.log(event.target.files[0]);
                 setSelectedImage(event.target.files[0]);
               }}
             />
