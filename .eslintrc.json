@@ -20,5 +20,8 @@
         "@typescript-eslint"
     ],
     "rules": {
+    },
+    "globals": {
+        "environment": true
     }
 }

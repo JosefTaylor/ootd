@@ -11,8 +11,8 @@ import { formatCost } from "./Wardrobe.jsx";
 export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [refreshData, setRefreshData] = useState(true);
-  const [selectedImage, setSelectedImage] = useState(null);
   const [inference, setInference] = useState(null);
+  const [imageEncoded, setImageEncoded] = useState(null);
 
   useEffect(() => {
     async function func() {
@@ -35,21 +35,54 @@ export default function Dashboard() {
     return (date > yesterday) & (date <= new Date());
   });
 
+  const inferenceTags = inference?.predictions?.flatMap(
+    (prediction) => prediction.class
+  );
+  console.log(inferenceTags, Boolean(inferenceTags));
+
   // show only garments which are active today and which match the inferred tags
-  const filteredGarments = dashboardData.garments.filter((garment) => {
+  let filteredGarments = dashboardData.garments.filter((garment) => {
     const aq_date = new Date(garment.purchase_date);
     const deaq_date = garment.deaq_date ? new Date(garment.deaq_date) : null;
-    const inferenceTags = inference?.predictions?.flatmap(
-      (prediction) => prediction.class
-    );
-    return (aq_date <= new Date()) &
-      (!deaq_date || new Date() <= deaq_date) &
-      inferenceTags
-      ? inferenceTags
-          .map((inferenceTag) => garment.tags.includes(inferenceTag))
-          .reduce((a, b) => a || b)
-      : true;
+
+    return aq_date <= new Date() && (!deaq_date || new Date() <= deaq_date);
   });
+
+  const rankByPrediction = (garment) => {
+    if (inferenceTags) {
+      return inferenceTags
+        .map(
+          (tag) =>
+            garment.tags.includes(tag) +
+            garment.name.toLowerCase().includes(tag.toLowerCase())
+        )
+        .reduce((a, b) => a + b);
+    } else {
+      return 0;
+    }
+  };
+
+  filteredGarments.sort((a, b) => rankByPrediction(b) - rankByPrediction(a));
+
+  console.log("filtered and sorted:", filteredGarments);
+
+  const handleEncodeFile = async (img) => {
+    const reader = new FileReader();
+
+    reader.addEventListener(
+      "load",
+      async () => {
+        // convert image file to base64 string
+        setImageEncoded(reader.result);
+
+        const response = await getInference(reader.result);
+        setInference(response);
+      },
+      false
+    );
+
+    reader.readAsDataURL(img);
+  };
 
   // Calculate the cost of the whole outfit
   const outfitCost = filteredWears.reduce((sum, wear) => sum + wear.cost, 0);
@@ -57,23 +90,15 @@ export default function Dashboard() {
   return (
     <div className="wrapper stack pad-1 wd-max ht-full">
       <Card className="ht-150-min" title="Take a selfie">
-        {selectedImage ? (
+        {imageEncoded ? (
           <div className="center">
             <img
               alt="A picture of a beautiful human being in a STUNNING outfit."
               width={"250px"}
-              src={URL.createObjectURL(selectedImage)}
+              src={imageEncoded}
             />
             {/* <br />  */}
-            <button onClick={() => setSelectedImage(null)}>Remove</button>
-            <button
-              onClick={async () => {
-                const response = await getInference(selectedImage);
-                setInference(response);
-              }}
-            >
-              Submit
-            </button>
+            <button onClick={() => setImageEncoded(null)}>Remove</button>
           </div>
         ) : (
           <div className="center">
@@ -81,7 +106,7 @@ export default function Dashboard() {
               type="file"
               name="myImage"
               onChange={(event) => {
-                setSelectedImage(event.target.files[0]);
+                handleEncodeFile(event.target.files[0]);
               }}
             />
           </div>
@@ -96,7 +121,8 @@ export default function Dashboard() {
                 currency: "USD",
                 style: "currency",
               }).format(garment.cost_per_wear) +
-              "/wear",
+              "/wear " +
+              rankByPrediction(garment),
           }))}
         </GarmentSelector>
         <DataTable>

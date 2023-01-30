@@ -6,32 +6,17 @@ export function ToPythonDate(date) {
   return new Date(date).toISOString().split("T")[0];
 }
 
-const access_token = "aEjCVqoJ4qbzNIg0nz4Q";
-const model = "ootd";
-const format = localStorage.getItem("rf.format");
+const access_token = environment.ROBOFLOW_API_KEY;
 const version = 1;
 
-export const Roboflow = axios.create({
-  baseURL: "https://detect.roboflow.com",
-  timeout: 50000,
-  headers: {},
-  withCredentials: true,
-});
-
-async function toDataURL(img) {
-  return "so sad";
-}
-
-export async function getInference(image) {
-  const imageText = await toDataURL(image);
-  console.log("image:", imageText);
+export async function getInference(encodedImage) {
   return axios({
     method: "POST",
-    url: "https://detect.roboflow.com/" + model + "/" + version,
+    url: "https://detect.roboflow.com/ootd/" + version,
     params: {
       api_key: access_token,
     },
-    data: imageText,
+    data: encodedImage,
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
