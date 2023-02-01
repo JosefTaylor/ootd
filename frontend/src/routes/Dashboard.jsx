@@ -129,8 +129,12 @@ export default function Dashboard() {
         {imageEncoded ? (
           <div className="center">
             <img
-              alt="A picture of a beautiful human being in a STUNNING outfit."
-              width={"250px"}
+              alt={
+                predictions
+                  ? "A picture of a beautiful human being in a STUNNING outfit."
+                  : null
+              } // images without alt text are blurred by reset.css. poor man's loading spinner.
+              height={"250px"}
               src={imageEncoded}
             />
             {/* <br />  */}
@@ -138,9 +142,14 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="center">
+            <label htmlFor="selfie">
+              Take a selfie and a robot will check your fit!
+            </label>
             <input
               type="file"
-              name="myImage"
+              id="selfie"
+              accept="image/*"
+              capture="user"
               onChange={(event) => {
                 handleEncodeFile(event.target.files[0]);
               }}
