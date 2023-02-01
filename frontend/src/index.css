@@ -54,7 +54,7 @@ button {
 
 .button {
   border: 1px solid rgba(0, 0, 0, 0.062);
-  background-color: rgba(255, 255, 255, 0.151);
+  background-color: rgba(255, 255, 255, 0.419);
   border-radius: 1rem;
   font-size: clamp(0.8rem, 2vw, 1rem);
   color: inherit;
@@ -72,6 +72,7 @@ button {
 @import "./components/layouts/Stack.css";
 @import "./components/layouts/Wrapper.css";
 @import "./components/layouts/Flow.css";
+@import "./components/layouts/ImgOverlay.css";
 
 /* Utilities */
 @import "./components/utilities/Padding.css";
