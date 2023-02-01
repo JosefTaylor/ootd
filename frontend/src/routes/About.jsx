@@ -25,9 +25,10 @@ export default function About() {
         </p>
         <p>Happy dressing!</p>
         <p>
-          Brought to you by
-          <a href="https://www.joseftaylor.com">Josef Taylor</a>
-          <a href="https://nedludd.social/@joe" rel="me" hidden />
+          Brought to you by{" "}
+          <a rel="me" href="https://www.joseftaylor.com">
+            Josef Taylor
+          </a>
         </p>
       </Card>
     </div>
