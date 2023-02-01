@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 
 import { getDashboardData, deleteWear } from "../ootdApi.jsx";
@@ -8,59 +7,40 @@ import Card from "../components/Card.jsx";
 import DataTable from "../components/DataTable.jsx";
 import GarmentSelector from "../components/GarmentSelector.jsx";
 import { formatCost } from "./Wardrobe.jsx";
-import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [daySelected, setDateSelected] = useState(new Date());
   const [refreshData, setRefreshData] = useState(true);
-  const [selectedTags, setSelectedTags] = useState({
-    top: false,
-    sweater: false,
-    "t-shirt": false,
-    pants: false,
-    jacket: false,
-    trousers: false,
-    jeans: false,
-    boots: false,
-    cap: false,
-    hat: false,
-    jumpsuit: false,
-    overalls: false,
-    shirt: false,
-    shorts: false,
-    slippers: false,
-    suit: false,
-  });
+  const [predictions, setPredictions] = useState(null);
   const [imageEncoded, setImageEncoded] = useState(null);
 
   useEffect(() => {
     async function func() {
       const newData = await getDashboardData();
       setDashboardData(newData);
-      addTags(newData.garments.flatMap((garment) => garment.tags));
       setRefreshData(false);
     }
     func();
   }, [refreshData]);
 
-  const addTags = (tags) => {
-    const newTags = {};
-    tags.forEach((tag) => {
-      if (!(tag in selectedTags)) {
-        newTags[tag] = false;
-      }
-    });
-    setSelectedTags({ ...selectedTags, ...newTags });
-  };
+  const handleEncodeFile = async (img) => {
+    const reader = new FileReader();
 
-  const handleTagSelect = (tag) => {
-    // TODO use a Set for this!
-    if (selectedTags && tag in selectedTags) {
-      setSelectedTags({ ...selectedTags, [tag]: !selectedTags[tag] });
-    } else {
-      setSelectedTags({ ...selectedTags, [tag]: true });
-    }
+    reader.addEventListener(
+      "load",
+      async () => {
+        // convert image file to base64 string
+        setImageEncoded(reader.result);
+
+        const response = await getInference(reader.result);
+        // setInference(response);
+        setPredictions(response?.predictions);
+      },
+      false
+    );
+
+    reader.readAsDataURL(img);
   };
 
   if (!dashboardData) {
@@ -82,46 +62,53 @@ export default function Dashboard() {
     return aq_date <= daySelected && (!deaq_date || daySelected <= deaq_date);
   });
 
-  const rankByPrediction = (garment) => {
-    if (selectedTags) {
-      return Object.keys(selectedTags)
-        .map(
-          (tag) =>
-            selectedTags[tag] &&
-            garment.tags.includes(tag) +
-              garment.name.toLowerCase().includes(tag)
+  const inPrediction = (garment) => {
+    const searchText = [garment.name, ...garment.tags].join(" ").toLowerCase();
+    if (predictions) {
+      return predictions
+        .map((prediction) =>
+          searchText.includes(prediction.class.toLowerCase())
         )
-        .reduce((a, b) => a + b);
+        .reduce((a, b) => a || b);
     } else {
-      return 0;
+      return false;
     }
   };
 
-  filteredGarments.sort((a, b) => rankByPrediction(b) - rankByPrediction(a));
-
-  const handleEncodeFile = async (img) => {
-    const reader = new FileReader();
-
-    reader.addEventListener(
-      "load",
-      async () => {
-        // convert image file to base64 string
-        setImageEncoded(reader.result);
-
-        const response = await getInference(reader.result);
-        // setInference(response);
-        const newTags = {};
-        response.predictions?.map((prediction) => {
-          const tag = prediction.class;
-          newTags[tag] = true;
-        });
-        setSelectedTags({ ...selectedTags, ...newTags });
-      },
-      false
-    );
-
-    reader.readAsDataURL(img);
+  const toSelectOption = (garment) => {
+    return {
+      value: garment,
+      label: [
+        garment.name,
+        Intl.NumberFormat("en-US", {
+          currency: "USD",
+          style: "currency",
+        }).format(garment.cost_per_wear) + "/wear",
+      ].join(" "),
+    };
   };
+
+  const inGroup = filteredGarments
+    .filter((garment) => inPrediction(garment))
+    .map((garment) => toSelectOption(garment));
+  const outGroup = filteredGarments
+    .filter((garment) => !inPrediction(garment))
+    .map((garment) => toSelectOption(garment));
+
+  console.log("in group:", inGroup);
+
+  const garmentGroups = predictions
+    ? [
+        { label: "predicted", options: inGroup },
+        {
+          label:
+            inGroup.length > 0
+              ? "others"
+              : "nothing matched the robot's guesses.",
+          options: outGroup,
+        },
+      ]
+    : outGroup;
 
   // Calculate the cost of the whole outfit
   const outfitCost = filteredWears.reduce((sum, wear) => sum + wear.cost, 0);
@@ -162,39 +149,9 @@ export default function Dashboard() {
             />
           </div>
         )}
-        <div className="flow">
-          {Object.keys(selectedTags).map((tag) => (
-            <button
-              className={selectedTags[tag] ? "active" : ""}
-              key={tag}
-              value={tag}
-              onClick={(event) => handleTagSelect(event.target.value)}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
-        <GarmentSelector
-          date={daySelected}
-          onChange={setRefreshData}
-          tags={Object.keys(selectedTags).filter((tag) => selectedTags[tag])}
-        >
-          {filteredGarments.map((garment) => ({
-            value: garment,
-            label:
-              garment.name +
-              "  " +
-              Intl.NumberFormat("en-US", {
-                currency: "USD",
-                style: "currency",
-              }).format(garment.cost_per_wear) +
-              "/wear" +
-              rankByPrediction(garment),
-          }))}
+        <GarmentSelector date={daySelected} onChange={setRefreshData}>
+          {garmentGroups}
         </GarmentSelector>
-        <Link className="button" to={"selfie/"}>
-          Or take a selfie
-        </Link>
         <DataTable>
           {filteredWears.map((wear) => (
             <div key={wear.id} className="data-item">
