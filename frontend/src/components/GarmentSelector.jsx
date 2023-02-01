@@ -8,6 +8,7 @@ export default function GarmentSelector(props) {
   const [value, setValue] = React.useState(null);
 
   async function handleCreate(name) {
+    // TODO pop up a thing to tag the new garment
     setIsLoading(true);
     const newGarment = await createGarment({
       name: name,
@@ -27,7 +28,9 @@ export default function GarmentSelector(props) {
       classNamePrefix="select"
       defaultValue={""}
       placeholder={
-        props.children.length > 0 ? "Select..." : "Name your garment..."
+        props.children.length > 0
+          ? "Select..."
+          : "Start typing to add a new garment"
       }
       isLoading={isLoading}
       isClearable={true}
