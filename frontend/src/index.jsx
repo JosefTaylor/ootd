@@ -13,7 +13,6 @@ import PasswordChange from "./routes/PasswordChange.jsx";
 import About from "./routes/About.jsx";
 import Register from "./routes/Register.jsx";
 import Wardrobe from "./routes/Wardrobe.jsx";
-import Selfie from "./routes/Selfie.jsx";
 import { Profile, Fashionista } from "./routes/Profile.jsx";
 
 const router = createBrowserRouter([
@@ -58,14 +57,6 @@ const router = createBrowserRouter([
         element: (
           <RequireAuth>
             <Wardrobe />
-          </RequireAuth>
-        ),
-      },
-      {
-        path: "selfie",
-        element: (
-          <RequireAuth>
-            <Selfie />
           </RequireAuth>
         ),
       },
