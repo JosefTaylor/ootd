@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import { getDashboardData, deleteWear } from "../axiosApi.jsx";
+import { getDashboardData, deleteWear } from "../ootdApi.jsx";
+import { getInference } from "../roboflowApi.jsx";
 import DateSelector from "../components/DateSelector.jsx";
 import Card from "../components/Card.jsx";
 import DataTable from "../components/DataTable.jsx";
@@ -11,7 +12,8 @@ export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [daySelected, setDateSelected] = useState(new Date());
   const [refreshData, setRefreshData] = useState(true);
-  const [tagFilter, setTagFilter] = useState([]);
+  const [predictions, setPredictions] = useState(null);
+  const [imageEncoded, setImageEncoded] = useState(null);
 
   useEffect(() => {
     async function func() {
@@ -22,13 +24,23 @@ export default function Dashboard() {
     func();
   }, [refreshData]);
 
-  const handleTagSelect = (tag) => {
-    if (tagFilter.includes(tag)) {
-      const newTagFilter = tagFilter.filter((oldTag) => oldTag != tag);
-      setTagFilter(newTagFilter);
-    } else {
-      setTagFilter([...tagFilter, tag]);
-    }
+  const handleEncodeFile = async (img) => {
+    const reader = new FileReader();
+
+    reader.addEventListener(
+      "load",
+      async () => {
+        // convert image file to base64 string
+        setImageEncoded(reader.result);
+
+        const response = await getInference(reader.result);
+        // setInference(response);
+        setPredictions(response?.predictions);
+      },
+      false
+    );
+
+    reader.readAsDataURL(img);
   };
 
   if (!dashboardData) {
@@ -43,31 +55,60 @@ export default function Dashboard() {
     return (date > yesterday) & (date <= daySelected);
   });
 
-  // show only garments which are active today, and which have the selected tags
+  // show only garments which are active today
   const filteredGarments = dashboardData.garments.filter((garment) => {
     const aq_date = new Date(garment.purchase_date);
     const deaq_date = garment.deaq_date ? new Date(garment.deaq_date) : null;
-    return (
-      (aq_date <= daySelected) &
-      (!deaq_date || daySelected <= deaq_date) &
-      (tagFilter.length === 0 ||
-        tagFilter
-          .map((tag) => garment.tags.includes(tag))
-          .reduce((a, b) => a & b))
-    );
+    return aq_date <= daySelected && (!deaq_date || daySelected <= deaq_date);
   });
 
-  // Show only the tags of the garments filtered
-  const tagArray = filteredGarments.flatMap((garment) => garment.tags);
-  const starterTags = [
-    "top",
-    "sweater",
-    "t-shirt",
-    "jacket",
-    "trousers",
-    "jeans",
-  ];
-  const filteredTags = [...new Set([...starterTags, ...tagArray])];
+  const inPrediction = (garment) => {
+    const searchText = [garment.name, ...garment.tags].join(" ").toLowerCase();
+    if (predictions) {
+      return predictions
+        .map((prediction) =>
+          searchText.includes(prediction.class.toLowerCase())
+        )
+        .reduce((a, b) => a || b);
+    } else {
+      return false;
+    }
+  };
+
+  const toSelectOption = (garment) => {
+    return {
+      value: garment,
+      label: [
+        garment.name,
+        Intl.NumberFormat("en-US", {
+          currency: "USD",
+          style: "currency",
+        }).format(garment.cost_per_wear) + "/wear",
+      ].join(" "),
+    };
+  };
+
+  const inGroup = filteredGarments
+    .filter((garment) => inPrediction(garment))
+    .map((garment) => toSelectOption(garment));
+  const outGroup = filteredGarments
+    .filter((garment) => !inPrediction(garment))
+    .map((garment) => toSelectOption(garment));
+
+  console.log("in group:", inGroup);
+
+  const garmentGroups = predictions
+    ? [
+        { label: "predicted", options: inGroup },
+        {
+          label:
+            inGroup.length > 0
+              ? "others"
+              : "nothing matched the robot's guesses.",
+          options: outGroup,
+        },
+      ]
+    : outGroup;
 
   // Calculate the cost of the whole outfit
   const outfitCost = filteredWears.reduce((sum, wear) => sum + wear.cost, 0);
@@ -87,34 +128,29 @@ export default function Dashboard() {
           }}
           name="Outfit on:  "
         />
-        <div className="flow">
-          {filteredTags.map((tag) => (
-            <button
-              className={tagFilter.includes(tag) ? "active" : ""}
-              key={tag}
-              value={tag}
-              onClick={(event) => handleTagSelect(event.target.value)}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
-        <GarmentSelector
-          date={daySelected}
-          onChange={setRefreshData}
-          tags={tagFilter}
-        >
-          {filteredGarments.map((garment) => ({
-            value: garment,
-            label:
-              garment.name +
-              "  " +
-              Intl.NumberFormat("en-US", {
-                currency: "USD",
-                style: "currency",
-              }).format(garment.cost_per_wear) +
-              "/wear",
-          }))}
+        {imageEncoded ? (
+          <div className="center">
+            <img
+              alt="A picture of a beautiful human being in a STUNNING outfit."
+              width={"250px"}
+              src={imageEncoded}
+            />
+            {/* <br />  */}
+            <button onClick={() => setImageEncoded(null)}>Remove</button>
+          </div>
+        ) : (
+          <div className="center">
+            <input
+              type="file"
+              name="myImage"
+              onChange={(event) => {
+                handleEncodeFile(event.target.files[0]);
+              }}
+            />
+          </div>
+        )}
+        <GarmentSelector date={daySelected} onChange={setRefreshData}>
+          {garmentGroups}
         </GarmentSelector>
         <DataTable>
           {filteredWears.map((wear) => (

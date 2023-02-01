@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet, NavLink } from "react-router-dom";
 
-import { updateUser } from "../axiosApi.jsx";
+import { updateUser } from "../ootdApi.jsx";
 import { useAuth } from "../components/Auth.jsx";
 import Card from "../components/Card.jsx";
 

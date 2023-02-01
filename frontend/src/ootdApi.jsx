@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // frontend/src/axiosApi.js
 
 import axios from "axios";
@@ -23,7 +24,7 @@ export function ToPythonDate(date) {
   return new Date(date).toISOString().split("T")[0];
 }
 
-export const API = axios.create({
+export const OOTD = axios.create({
   baseURL: environment.RENDER_EXTERNAL_URL
     ? environment.RENDER_EXTERNAL_URL + "/api/"
     : "http://localhost:8000/api/",
@@ -33,7 +34,7 @@ export const API = axios.create({
 });
 
 export async function getDashboardData() {
-  return API.get("/dashboard/")
+  return OOTD.get("/dashboard/")
     .then((response) => {
       const dashData = response.data[0];
       return dashData;
@@ -51,7 +52,7 @@ export async function getDashboardData() {
 
 export async function getUser() {
   try {
-    const response = await API.get("/fashionistas/");
+    const response = await OOTD.get("/fashionistas/");
     return response.data[0];
   } catch {
     return null;
@@ -61,7 +62,7 @@ export async function getUser() {
 export async function updateUser(user, newUser) {
   try {
     console.log(user.user.fashionista.user);
-    await API.patch(user.user.fashionista.user, { ...newUser });
+    await OOTD.patch(user.user.fashionista.user, { ...newUser });
   } catch (error) {
     console.log("Could not update the user profile.");
     return error;
@@ -70,11 +71,11 @@ export async function updateUser(user, newUser) {
 
 export async function login(username, password) {
   try {
-    await API.post("/dj-rest-auth/login/", {
+    await OOTD.post("/dj-rest-auth/login/", {
       username: username,
       password: password,
     });
-    API.defaults.headers = { "X-CSRFToken": GetCookie("csrftoken") };
+    OOTD.defaults.headers = { "X-CSRFToken": GetCookie("csrftoken") };
     return null;
   } catch (error) {
     console.log("I could not log you in.");
@@ -84,7 +85,7 @@ export async function login(username, password) {
 
 export async function logout() {
   try {
-    await API.post("/dj-rest-auth/logout/");
+    await OOTD.post("/dj-rest-auth/logout/");
     console.log("I think we're logged out");
     return null;
   } catch (error) {
@@ -95,12 +96,12 @@ export async function logout() {
 
 export async function register(username, password, email) {
   try {
-    await API.post("/dj-rest-auth/registration/", {
+    await OOTD.post("/dj-rest-auth/registration/", {
       username: username,
       password: password,
       email: email,
     });
-    API.defaults.headers = { "X-CSRFToken": GetCookie("csrftoken") };
+    OOTD.defaults.headers = { "X-CSRFToken": GetCookie("csrftoken") };
     return null;
   } catch (error) {
     console.log("Could not register!");
@@ -110,7 +111,7 @@ export async function register(username, password, email) {
 
 export async function createWear(garment, date) {
   try {
-    await API.post("/garmentwears/", {
+    await OOTD.post("/garmentwears/", {
       garment: garment.url,
       scan_date: date,
     });
@@ -121,7 +122,7 @@ export async function createWear(garment, date) {
 
 export async function deleteWear(wear) {
   try {
-    await API.delete(wear.url);
+    await OOTD.delete(wear.url);
   } catch {
     console.log("Could not delete the garment.");
   }
@@ -129,7 +130,7 @@ export async function deleteWear(wear) {
 
 export async function updateGarment(garmentId, newGarment) {
   try {
-    await API.patch("/garments/" + garmentId + "/", { ...newGarment });
+    await OOTD.patch("/garments/" + garmentId + "/", { ...newGarment });
   } catch {
     console.log("Could not update the garment.");
   }
@@ -137,7 +138,7 @@ export async function updateGarment(garmentId, newGarment) {
 
 export async function createGarment(garment) {
   try {
-    const response = await API.post("/garments/", { ...garment });
+    const response = await OOTD.post("/garments/", { ...garment });
     return response.data;
   } catch {
     console.log("Could not create the garment.");

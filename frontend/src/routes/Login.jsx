@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate, useLocation, Navigate, Link } from "react-router-dom";
 import Card from "../components/Card.jsx";
 import { useAuth } from "../components/Auth.jsx";
-import { login } from "../axiosApi.jsx";
 
 export function LoginPage() {
   const navigate = useNavigate();

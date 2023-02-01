@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLoaderData } from "react-router-dom";
 
-import { getDashboardData } from "../axiosApi.jsx";
+import { getDashboardData } from "../ootdApi.jsx";
 import Violin from "../components/ViolinPlot.jsx";
 import Histogram from "../components/HistogramPlot.jsx";
 import Card from "../components/Card.jsx";

@@ -1,5 +1,6 @@
+/* eslint-disable react/prop-types */
 import React, { Component } from "react";
-import { API } from "../axiosApi.jsx";
+import { API as OOTD } from "../ootdApi.jsx";
 // import axios from "axios";
 import Card from "../components/Card.jsx";
 
@@ -23,10 +24,10 @@ export default class PasswordReset extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    API.post("/dj-rest-auth/reset/", {
+    OOTD.post("/dj-rest-auth/reset/", {
       email: this.state.email,
     })
-      .then((response) => {
+      .then(() => {
         this.props.onLogin();
       })
       .catch((error) => {

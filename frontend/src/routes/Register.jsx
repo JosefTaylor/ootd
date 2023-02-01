@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { API, GetCookie, register } from "../axiosApi.jsx";
+import React from "react";
+import { register } from "../ootdApi.jsx";
 import Card from "../components/Card.jsx";
 import { useAuth } from "../components/Auth.jsx";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const auth = useAuth();

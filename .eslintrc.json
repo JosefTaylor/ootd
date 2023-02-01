@@ -20,5 +20,9 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "react/prop-types": "off"
+    },
+    "globals": {
+        "environment": true
     }
 }
