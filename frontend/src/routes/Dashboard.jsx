@@ -95,8 +95,6 @@ export default function Dashboard() {
     .filter((garment) => !inPrediction(garment))
     .map((garment) => toSelectOption(garment));
 
-  console.log("in group:", inGroup);
-
   const garmentGroups = predictions
     ? [
         { label: "predicted", options: inGroup },

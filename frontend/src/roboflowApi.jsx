@@ -6,7 +6,7 @@ export function ToPythonDate(date) {
   return new Date(date).toISOString().split("T")[0];
 }
 
-const access_token = environment.ROBOFLOW_API_KEY;
+const access_token = environment.ROBOFLOW_API_KEY ?? "";
 const version = 1;
 
 export async function getInference(encodedImage) {
