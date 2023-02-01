@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 import { getDashboardData, deleteWear } from "../ootdApi.jsx";
+import { getInference } from "../roboflowApi.jsx";
 import DateSelector from "../components/DateSelector.jsx";
 import Card from "../components/Card.jsx";
 import DataTable from "../components/DataTable.jsx";
@@ -13,23 +14,52 @@ export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [daySelected, setDateSelected] = useState(new Date());
   const [refreshData, setRefreshData] = useState(true);
-  const [tagFilter, setTagFilter] = useState([]);
+  const [selectedTags, setSelectedTags] = useState({
+    top: false,
+    sweater: false,
+    "t-shirt": false,
+    pants: false,
+    jacket: false,
+    trousers: false,
+    jeans: false,
+    boots: false,
+    cap: false,
+    hat: false,
+    jumpsuit: false,
+    overalls: false,
+    shirt: false,
+    shorts: false,
+    slippers: false,
+    suit: false,
+  });
+  const [imageEncoded, setImageEncoded] = useState(null);
 
   useEffect(() => {
     async function func() {
       const newData = await getDashboardData();
       setDashboardData(newData);
+      addTags(newData.garments.flatMap((garment) => garment.tags));
       setRefreshData(false);
     }
     func();
   }, [refreshData]);
 
+  const addTags = (tags) => {
+    const newTags = {};
+    tags.forEach((tag) => {
+      if (!(tag in selectedTags)) {
+        newTags[tag] = false;
+      }
+    });
+    setSelectedTags({ ...selectedTags, ...newTags });
+  };
+
   const handleTagSelect = (tag) => {
-    if (tagFilter.includes(tag)) {
-      const newTagFilter = tagFilter.filter((oldTag) => oldTag != tag);
-      setTagFilter(newTagFilter);
+    // TODO use a Set for this!
+    if (selectedTags && tag in selectedTags) {
+      setSelectedTags({ ...selectedTags, [tag]: !selectedTags[tag] });
     } else {
-      setTagFilter([...tagFilter, tag]);
+      setSelectedTags({ ...selectedTags, [tag]: true });
     }
   };
 
@@ -45,31 +75,53 @@ export default function Dashboard() {
     return (date > yesterday) & (date <= daySelected);
   });
 
-  // show only garments which are active today, and which have the selected tags
+  // show only garments which are active today
   const filteredGarments = dashboardData.garments.filter((garment) => {
     const aq_date = new Date(garment.purchase_date);
     const deaq_date = garment.deaq_date ? new Date(garment.deaq_date) : null;
-    return (
-      (aq_date <= daySelected) &
-      (!deaq_date || daySelected <= deaq_date) &
-      (tagFilter.length === 0 ||
-        tagFilter
-          .map((tag) => garment.tags.includes(tag))
-          .reduce((a, b) => a & b))
-    );
+    return aq_date <= daySelected && (!deaq_date || daySelected <= deaq_date);
   });
 
-  // Show only the tags of the garments filtered
-  const tagArray = filteredGarments.flatMap((garment) => garment.tags);
-  const starterTags = [
-    "top",
-    "sweater",
-    "t-shirt",
-    "jacket",
-    "trousers",
-    "jeans",
-  ];
-  const filteredTags = [...new Set([...starterTags, ...tagArray])];
+  const rankByPrediction = (garment) => {
+    if (selectedTags) {
+      return Object.keys(selectedTags)
+        .map(
+          (tag) =>
+            selectedTags[tag] &&
+            garment.tags.includes(tag) +
+              garment.name.toLowerCase().includes(tag)
+        )
+        .reduce((a, b) => a + b);
+    } else {
+      return 0;
+    }
+  };
+
+  filteredGarments.sort((a, b) => rankByPrediction(b) - rankByPrediction(a));
+
+  const handleEncodeFile = async (img) => {
+    const reader = new FileReader();
+
+    reader.addEventListener(
+      "load",
+      async () => {
+        // convert image file to base64 string
+        setImageEncoded(reader.result);
+
+        const response = await getInference(reader.result);
+        // setInference(response);
+        const newTags = {};
+        response.predictions?.map((prediction) => {
+          const tag = prediction.class;
+          newTags[tag] = true;
+        });
+        setSelectedTags({ ...selectedTags, ...newTags });
+      },
+      false
+    );
+
+    reader.readAsDataURL(img);
+  };
 
   // Calculate the cost of the whole outfit
   const outfitCost = filteredWears.reduce((sum, wear) => sum + wear.cost, 0);
@@ -89,10 +141,31 @@ export default function Dashboard() {
           }}
           name="Outfit on:  "
         />
+        {imageEncoded ? (
+          <div className="center">
+            <img
+              alt="A picture of a beautiful human being in a STUNNING outfit."
+              width={"250px"}
+              src={imageEncoded}
+            />
+            {/* <br />  */}
+            <button onClick={() => setImageEncoded(null)}>Remove</button>
+          </div>
+        ) : (
+          <div className="center">
+            <input
+              type="file"
+              name="myImage"
+              onChange={(event) => {
+                handleEncodeFile(event.target.files[0]);
+              }}
+            />
+          </div>
+        )}
         <div className="flow">
-          {filteredTags.map((tag) => (
+          {Object.keys(selectedTags).map((tag) => (
             <button
-              className={tagFilter.includes(tag) ? "active" : ""}
+              className={selectedTags[tag] ? "active" : ""}
               key={tag}
               value={tag}
               onClick={(event) => handleTagSelect(event.target.value)}
@@ -104,7 +177,7 @@ export default function Dashboard() {
         <GarmentSelector
           date={daySelected}
           onChange={setRefreshData}
-          tags={tagFilter}
+          tags={Object.keys(selectedTags).filter((tag) => selectedTags[tag])}
         >
           {filteredGarments.map((garment) => ({
             value: garment,
@@ -115,7 +188,8 @@ export default function Dashboard() {
                 currency: "USD",
                 style: "currency",
               }).format(garment.cost_per_wear) +
-              "/wear",
+              "/wear" +
+              rankByPrediction(garment),
           }))}
         </GarmentSelector>
         <Link className="button" to={"selfie/"}>
