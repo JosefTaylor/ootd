@@ -9,7 +9,7 @@ export default function Header() {
     if (fashionista) {
       return (
         <div className="header-end stack">
-          <Link className="button" to={"profile/"}>
+          <Link className="button" to={"user/"}>
             {fashionista.user.username}
           </Link>
           <Link className="button" to={"logout/"}>
