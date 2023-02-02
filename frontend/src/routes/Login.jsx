@@ -51,7 +51,7 @@ export function LoginPage() {
         </label>
         <button onClick={handleSubmit}>Log in</button>
         {loginError ? (
-          <div className="warning">That didn't work, please try again</div>
+          <div className="warning">That didn&apos;t work, please try again</div>
         ) : null}
         <Link className="button" to={"/register"}>
           Register

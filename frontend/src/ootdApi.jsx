@@ -59,16 +59,6 @@ export async function getUser() {
   }
 }
 
-export async function updateUser(user, newUser) {
-  try {
-    console.log(user.user.fashionista.user);
-    await OOTD.patch(user.user.fashionista.user, { ...newUser });
-  } catch (error) {
-    console.log("Could not update the user profile.");
-    return error;
-  }
-}
-
 export async function login(username, password) {
   try {
     await OOTD.post("/dj-rest-auth/login/", {

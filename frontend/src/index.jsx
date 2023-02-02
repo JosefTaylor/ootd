@@ -13,7 +13,7 @@ import PasswordChange from "./routes/PasswordChange.jsx";
 import About from "./routes/About.jsx";
 import Register from "./routes/Register.jsx";
 import Wardrobe from "./routes/Wardrobe.jsx";
-import { Profile, Fashionista } from "./routes/Profile.jsx";
+import { Settings, Profile } from "./routes/Profile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -70,16 +70,16 @@ const router = createBrowserRouter([
         loader: graphLoader,
       },
       {
-        path: "profile",
+        path: "user",
         element: (
           <RequireAuth>
-            <Profile />
+            <Settings />
           </RequireAuth>
         ),
         children: [
           {
             path: "",
-            element: <Fashionista />,
+            element: <Profile />,
           },
           {
             path: "password_change",
