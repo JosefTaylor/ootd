@@ -64,7 +64,7 @@ export default function Dashboard() {
 
   const inPrediction = (garment) => {
     const searchText = [garment.name, ...garment.tags].join(" ").toLowerCase();
-    if (predictions) {
+    if (predictions?.length > 0) {
       return predictions
         .map((prediction) =>
           searchText.includes(prediction.class.toLowerCase())
@@ -127,20 +127,29 @@ export default function Dashboard() {
           name="Outfit on:  "
         />
         {imageEncoded ? (
-          <div className="center">
+          <div className="img-overlay">
             <img
-              alt="A picture of a beautiful human being in a STUNNING outfit."
-              width={"250px"}
+              alt={
+                predictions
+                  ? "A picture of a beautiful human being in a STUNNING outfit."
+                  : null
+              } // images without alt text are blurred by reset.css. poor man's loading spinner.
               src={imageEncoded}
             />
-            {/* <br />  */}
-            <button onClick={() => setImageEncoded(null)}>Remove</button>
+            <button className="warning" onClick={() => setImageEncoded(null)}>
+              ✖️
+            </button>
           </div>
         ) : (
           <div className="center">
+            <label htmlFor="selfie">
+              Take a selfie and a robot will check your fit!
+            </label>
             <input
               type="file"
-              name="myImage"
+              id="selfie"
+              accept="image/*"
+              capture="user"
               onChange={(event) => {
                 handleEncodeFile(event.target.files[0]);
               }}
