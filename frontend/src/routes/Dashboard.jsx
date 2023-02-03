@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { getDashboardData, deleteWear } from "../ootdApi.jsx";
+import { getDashboardData, deleteWear, FromClosetDate } from "../ootdApi.jsx";
 import { getInference } from "../roboflowApi.jsx";
 import DateSelector from "../components/DateSelector.jsx";
 import Card from "../components/Card.jsx";
@@ -49,7 +49,7 @@ export default function Dashboard() {
 
   // show only those wears which occur today
   const filteredWears = dashboardData.garment_wears.filter((wear) => {
-    const date = new Date(wear.date);
+    const date = FromClosetDate(wear.date);
     let yesterday = new Date(daySelected);
     yesterday.setDate(yesterday.getDate() - 1);
     return (date > yesterday) & (date <= daySelected);
@@ -57,8 +57,10 @@ export default function Dashboard() {
 
   // show only garments which are active today
   const filteredGarments = dashboardData.garments.filter((garment) => {
-    const aq_date = new Date(garment.purchase_date);
-    const deaq_date = garment.deaq_date ? new Date(garment.deaq_date) : null;
+    const aq_date = FromClosetDate(garment.purchase_date);
+    const deaq_date = garment.deaq_date
+      ? FromClosetDate(garment.deaq_date)
+      : null;
     return aq_date <= daySelected && (!deaq_date || daySelected <= deaq_date);
   });
 
@@ -91,6 +93,7 @@ export default function Dashboard() {
   const inGroup = filteredGarments
     .filter((garment) => inPrediction(garment))
     .map((garment) => toSelectOption(garment));
+
   const outGroup = filteredGarments
     .filter((garment) => !inPrediction(garment))
     .map((garment) => toSelectOption(garment));

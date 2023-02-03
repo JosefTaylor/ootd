@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import CreatableSelect from "react-select/creatable";
-import { createGarment, createWear, ToPythonDate } from "../ootdApi.jsx";
+import { createGarment, createWear, ToClosetDate } from "../ootdApi.jsx";
 
 export default function GarmentSelector(props) {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -12,11 +12,11 @@ export default function GarmentSelector(props) {
     setIsLoading(true);
     const newGarment = await createGarment({
       name: name,
-      purchase_date: props.date.toISOString().split("T")[0],
+      purchase_date: ToClosetDate(props.date),
       tags: props.tags,
     });
     console.log("in garmentSelector:handleCreate, newGarment:", newGarment);
-    await createWear(newGarment, ToPythonDate(props.date));
+    await createWear(newGarment, ToClosetDate(props.date));
     await props.onChange();
     setValue(null);
     setIsLoading(false);
@@ -41,7 +41,7 @@ export default function GarmentSelector(props) {
       onCreateOption={handleCreate}
       onChange={async (newValue) => {
         const garment = newValue?.value;
-        await createWear(garment, ToPythonDate(props.date));
+        await createWear(garment, ToClosetDate(props.date));
         await props.onChange();
         setValue(null);
       }}

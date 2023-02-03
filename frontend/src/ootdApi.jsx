@@ -20,8 +20,12 @@ export function GetCookie(name) {
   return cookieValue;
 }
 
-export function ToPythonDate(date) {
+export function ToClosetDate(date) {
   return new Date(date).toISOString().split("T")[0];
+}
+
+export function FromClosetDate(date) {
+  return new Date(date);
 }
 
 export const OOTD = axios.create({

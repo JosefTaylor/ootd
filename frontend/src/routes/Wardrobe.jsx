@@ -4,7 +4,7 @@ import React from "react";
 import {
   createGarment,
   getDashboardData,
-  ToPythonDate,
+  ToClosetDate,
   updateGarment,
 } from "../ootdApi.jsx";
 import Card from "../components/Card.jsx";
@@ -198,7 +198,7 @@ function EditRow(props) {
   const [purchase_date, setPurchase_date] = React.useState(
     props.garment.purchase_date
       ? props.garment.purchase_date
-      : ToPythonDate(new Date())
+      : ToClosetDate(new Date())
   );
   const [purchase_price, setPurchase_price] = React.useState(
     props.garment.purchase_price ? props.garment.purchase_price : 0
@@ -277,7 +277,7 @@ function EditRow(props) {
 }
 
 function DeclutterRow(props) {
-  const [deaq_date, setDeaq_date] = React.useState(ToPythonDate(props.date));
+  const [deaq_date, setDeaq_date] = React.useState(ToClosetDate(props.date));
   const [deaq_price, setDeaq_price] = React.useState(0);
 
   async function handleSubmit() {
