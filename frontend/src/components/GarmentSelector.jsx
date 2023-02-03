@@ -25,7 +25,6 @@ export default function GarmentSelector(props) {
       purchase_date: ToClosetDate(props.date),
       tags: tags,
     });
-    console.log("in garmentSelector:handleCreate, newGarment:", newGarment);
     await createWear(newGarment, ToClosetDate(props.date));
     await props.onChange();
     setValue(null);
