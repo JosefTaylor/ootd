@@ -36,7 +36,7 @@ class GarmentWearSerializer(serializers.HyperlinkedModelSerializer):
             "url",
             "id",
             "garment",
-            "scan_date",
+            "date",
             "wearer",
             "wearer_name",
             "owner_name",

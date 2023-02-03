@@ -103,7 +103,7 @@ export async function createWear(garment, date) {
   try {
     await OOTD.post("/garmentwears/", {
       garment: garment.url,
-      scan_date: date,
+      date: date,
     });
   } catch {
     console.log("Could not create the garment wear");

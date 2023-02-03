@@ -13,7 +13,7 @@ export default function Violin(props) {
       return wear.garment_id === garment.id;
     });
 
-    const x = wears.map((wear) => new Date(wear.scan_date));
+    const x = wears.map((wear) => new Date(wear.date));
 
     return {
       type: "violin",

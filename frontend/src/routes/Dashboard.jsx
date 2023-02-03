@@ -49,7 +49,7 @@ export default function Dashboard() {
 
   // show only those wears which occur today
   const filteredWears = dashboardData.garment_wears.filter((wear) => {
-    const date = new Date(wear.scan_date);
+    const date = new Date(wear.date);
     let yesterday = new Date(daySelected);
     yesterday.setDate(yesterday.getDate() - 1);
     return (date > yesterday) & (date <= daySelected);
