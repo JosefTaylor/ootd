@@ -53,7 +53,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "wardrobe",
+        path: "wardrobe/:garmentId?",
         element: (
           <RequireAuth>
             <Wardrobe />
