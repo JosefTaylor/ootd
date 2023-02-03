@@ -74,7 +74,7 @@ class Garment(models.Model):
 
 class GarmentWear(models.Model):
     garment = models.ForeignKey(Garment, on_delete=models.CASCADE)
-    date = models.DateTimeField()
+    date = models.DateField(default=datetime.date.today)
     wearer = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     # wearer - is the creator of the table row stored? if so, no need to store
 
@@ -119,7 +119,7 @@ class Outfit(models.Model):
 
 class OutfitWear(models.Model):
     outfit = models.ForeignKey(Outfit, on_delete=models.CASCADE)
-    date = models.DateTimeField()
+    date = models.DateField(default=datetime.date.today)
     wearer = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
 
