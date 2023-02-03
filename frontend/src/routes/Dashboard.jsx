@@ -111,6 +111,23 @@ export default function Dashboard() {
       ]
     : outGroup;
 
+  //Remove tags from garment wears from the prediction list
+  const garmentsWorn = filteredWears.map((wear) => wear.garment_id);
+  const tagsWorn = new Set(
+    filteredGarments
+      .filter((garment) => garmentsWorn.includes(garment.id))
+      .map((garment) => [garment.name, ...garment.tags].join(" ").toLowerCase())
+      .join(" ")
+      .split(" ")
+  );
+  const predictionsRemaining = !predictions
+    ? null
+    : tagsWorn
+    ? predictions.filter((pred) => {
+        return !tagsWorn.has(pred.class);
+      })
+    : predictions;
+
   // Calculate the cost of the whole outfit
   const outfitCost = filteredWears.reduce((sum, wear) => sum + wear.cost, 0);
 
@@ -159,7 +176,11 @@ export default function Dashboard() {
             />
           </div>
         )}
-        <GarmentSelector date={daySelected} onChange={setRefreshData}>
+        <GarmentSelector
+          date={daySelected}
+          tags={predictionsRemaining?.map((pred) => pred.class)}
+          onChange={setRefreshData}
+        >
           {garmentGroups}
         </GarmentSelector>
         <DataTable>
@@ -174,7 +195,11 @@ export default function Dashboard() {
             </div>
           ))}
         </DataTable>
-        <p>Your outfit cost you {formatCost(outfitCost)} today</p>
+        {filteredWears.length > 0 ? (
+          <p>Your outfit cost you {formatCost(outfitCost)} today</p>
+        ) : (
+          ""
+        )}
       </Card>
     </div>
   );
