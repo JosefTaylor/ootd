@@ -10,10 +10,20 @@ export default function GarmentSelector(props) {
   async function handleCreate(name) {
     // TODO pop up a thing to tag the new garment
     setIsLoading(true);
+    const userTags = prompt(
+      `Please tag your ${name}!
+      multiple tags separated by commas`,
+      props.tags?.join(", ")
+    );
+    if (!userTags) {
+      setIsLoading(false);
+      return;
+    }
+    const tags = userTags ? userTags.split(",").map((tag) => tag.trim()) : [];
     const newGarment = await createGarment({
       name: name,
       purchase_date: ToClosetDate(props.date),
-      tags: props.tags ?? [],
+      tags: tags,
     });
     console.log("in garmentSelector:handleCreate, newGarment:", newGarment);
     await createWear(newGarment, ToClosetDate(props.date));
