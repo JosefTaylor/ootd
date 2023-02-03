@@ -13,7 +13,7 @@ export default function GarmentSelector(props) {
     const newGarment = await createGarment({
       name: name,
       purchase_date: ToClosetDate(props.date),
-      tags: props.tags,
+      tags: props.tags ?? [],
     });
     console.log("in garmentSelector:handleCreate, newGarment:", newGarment);
     await createWear(newGarment, ToClosetDate(props.date));
