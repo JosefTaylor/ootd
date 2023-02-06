@@ -7,6 +7,7 @@ import Card from "../components/Card.jsx";
 import DataTable from "../components/DataTable.jsx";
 import GarmentSelector from "../components/GarmentSelector.jsx";
 import { formatCost } from "./Wardrobe.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
@@ -206,9 +207,18 @@ export default function Dashboard() {
 }
 
 export function WearLine(props) {
+  const navigate = useNavigate();
   return (
     <div className="splitter">
-      <div className="garment-name">{props.wear.garment_name}</div>
+      <button
+        className="invisible"
+        onClick={() => {
+          console.log();
+          navigate("/wardrobe/" + props.wear.garment_id.toString());
+        }}
+      >
+        <div className="garment-name">{props.wear.garment_name}</div>
+      </button>
       <div className="cost-per-wear">{formatCost(props.wear.cost)}/wear</div>
       <div>
         <button
