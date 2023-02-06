@@ -48,6 +48,14 @@ export default function Wardrobe() {
       .reduce((a, b) => a & b);
   });
 
+  const toTags = (text) => {
+    const allTags = new Set(
+      filteredGarments.flatMap((garment) => garment.tags)
+    );
+    const textTags = text.split(new RegExp("[ ,;]+", "i"));
+    return textTags.filter((tag) => allTags.has(tag));
+  };
+
   return (
     <div className="wrapper stack pad-1 ht-full">
       <Card className="ht-150-min" title="Your Wardrobe">
@@ -111,13 +119,26 @@ export default function Wardrobe() {
             </div>
           ))}
         </DataTable>
-        {/* <WardrobeGarment
-          mode={"new"}
-          garment={{
-            name: filterText,
-          }}
-          onChange={() => setRefreshData(true)}
-        /> */}
+        {location.state === "new" ? (
+          <EditRow
+            garment={{
+              name: filterText,
+              purchase_date: ToClosetDate(new Date()),
+              tags: toTags(filterText),
+            }}
+            onSave={() => {
+              navigate("/wardrobe");
+              setRefreshData(true);
+            }}
+            onCancel={() => {
+              navigate("/wardrobe");
+            }}
+          />
+        ) : (
+          <button onClick={() => navigate("/wardrobe", { state: "new" })}>
+            {filterText ? `create "${filterText}"` : "new"}
+          </button>
+        )}
       </Card>
     </div>
   );
