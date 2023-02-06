@@ -9,7 +9,7 @@ import {
 } from "../ootdApi.jsx";
 import Card from "../components/Card.jsx";
 import DataTable from "../components/DataTable.jsx";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 export default function Wardrobe() {
   const [dashboardData, setDashboardData] = React.useState(null);
@@ -17,6 +17,7 @@ export default function Wardrobe() {
   const [refreshData, setRefreshData] = React.useState(true);
   const params = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const fields = [
     { label: "Aquisition Date", field: "purchase_date" },
@@ -70,19 +71,34 @@ export default function Wardrobe() {
           {filteredGarments.map((garment) => (
             <div key={garment.id} className="data-item">
               {garment.id === parseInt(params.garmentId) ? (
-                <EditRow
-                  garment={garment}
-                  onSave={() => {
-                    navigate("/wardrobe");
-                    setRefreshData(true);
-                  }}
-                  onCancel={() => {
-                    navigate("/wardrobe");
-                  }}
-                  // onDeclutter={() => {
-                  //   navigate("/wardrobe/" + garment.id.toString(), {state: "declutter"});
-                  // }}
-                />
+                location.state === "declutter" ? (
+                  <DeclutterRow
+                    garment={garment}
+                    onCancel={() => {
+                      navigate("/wardrobe");
+                    }}
+                    onDeclutter={() => {
+                      navigate("/wardrobe");
+                      setRefreshData(true);
+                    }}
+                  />
+                ) : (
+                  <EditRow
+                    garment={garment}
+                    onSave={() => {
+                      navigate("/wardrobe");
+                      setRefreshData(true);
+                    }}
+                    onCancel={() => {
+                      navigate("/wardrobe");
+                    }}
+                    onDeclutter={() => {
+                      navigate("/wardrobe/" + garment.id.toString(), {
+                        state: "declutter",
+                      });
+                    }}
+                  />
+                )
               ) : (
                 <DisplayRow
                   garment={garment}
@@ -105,69 +121,6 @@ export default function Wardrobe() {
       </Card>
     </div>
   );
-}
-
-export function WardrobeGarment(props) {
-  // Props:
-  // mode - string, see switch below for options.
-  // garment - directly aligning with API call
-  // onChange - call to refresh the wardrobe data in the parent
-  // fields - array of strings; which fields to display
-
-  const [mode, setMode] = React.useState(props.mode);
-
-  switch (mode) {
-    case "declutter":
-      return (
-        <DeclutterRow
-          garment={props.garment}
-          date={props.date}
-          onCancel={() => {
-            setMode(props.mode);
-          }}
-          onChange={() => {
-            setMode(props.mode);
-            props.onChange();
-          }}
-        />
-      );
-    case "edit":
-      return (
-        <EditRow
-          garment={props.garment}
-          onCancel={() => {
-            setMode(props.mode);
-          }}
-          onDeclutter={() => {
-            setMode("declutter");
-          }}
-          onChange={() => {
-            setMode(props.mode);
-            props.onChange();
-          }}
-        />
-      );
-    case "new":
-      return (
-        <button
-          onClick={() => {
-            setMode("edit");
-          }}
-        >
-          New Garment
-        </button>
-      );
-    default:
-      return (
-        <DisplayRow
-          garment={props.garment}
-          fields={props.fields}
-          onEdit={() => {
-            setMode("edit");
-          }}
-        />
-      );
-  }
 }
 
 function DisplayRow(props) {
@@ -295,7 +248,7 @@ function EditRow(props) {
 }
 
 function DeclutterRow(props) {
-  const [deaq_date, setDeaq_date] = React.useState(ToClosetDate(props.date));
+  const [deaq_date, setDeaq_date] = React.useState(ToClosetDate(new Date()));
   const [deaq_price, setDeaq_price] = React.useState(0);
 
   async function handleSubmit() {
@@ -310,7 +263,7 @@ function DeclutterRow(props) {
         deaq_date,
         deaq_price,
       });
-      props.onChange();
+      props.onDeclutter();
     } else {
       props.onCancel();
     }
@@ -318,7 +271,6 @@ function DeclutterRow(props) {
 
   return (
     <div className="flow">
-      <h3>Declutter {props.garment.name}?</h3>
       <label>
         De-acquisition date:
         <input
@@ -338,7 +290,9 @@ function DeclutterRow(props) {
         />
       </label>
       <button onClick={props.onCancel}>Cancel</button>
-      <button onClick={handleSubmit}>Declutter</button>
+      <button onClick={handleSubmit} className="warning">
+        Declutter
+      </button>
     </div>
   );
 }
