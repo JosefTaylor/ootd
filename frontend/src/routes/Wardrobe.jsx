@@ -9,11 +9,14 @@ import {
 } from "../ootdApi.jsx";
 import Card from "../components/Card.jsx";
 import DataTable from "../components/DataTable.jsx";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function Wardrobe() {
   const [dashboardData, setDashboardData] = React.useState(null);
   const [filterText, setFilterText] = React.useState("");
   const [refreshData, setRefreshData] = React.useState(true);
+  const params = useParams();
+  const navigate = useNavigate();
 
   const fields = [
     { label: "Aquisition Date", field: "purchase_date" },
@@ -66,24 +69,39 @@ export default function Wardrobe() {
           </div>
           {filteredGarments.map((garment) => (
             <div key={garment.id} className="data-item">
-              <WardrobeGarment
-                key={garment.id}
-                mode={"display"}
-                isActive={garment.is_active}
-                fields={fields}
-                garment={garment}
-                onChange={() => setRefreshData(true)}
-              />
+              {garment.id === parseInt(params.garmentId) ? (
+                <EditRow
+                  garment={garment}
+                  onSave={() => {
+                    navigate("/wardrobe");
+                    setRefreshData(true);
+                  }}
+                  onCancel={() => {
+                    navigate("/wardrobe");
+                  }}
+                  // onDeclutter={() => {
+                  //   navigate("/wardrobe/" + garment.id.toString(), {state: "declutter"});
+                  // }}
+                />
+              ) : (
+                <DisplayRow
+                  garment={garment}
+                  fields={fields}
+                  onEdit={() => {
+                    navigate("/wardrobe/" + garment.id.toString());
+                  }}
+                />
+              )}
             </div>
           ))}
         </DataTable>
-        <WardrobeGarment
+        {/* <WardrobeGarment
           mode={"new"}
           garment={{
             name: filterText,
           }}
           onChange={() => setRefreshData(true)}
-        />
+        /> */}
       </Card>
     </div>
   );
@@ -218,7 +236,7 @@ function EditRow(props) {
     } else {
       await createGarment({ name, purchase_date, purchase_price, tags });
     }
-    props.onChange();
+    props.onSave();
   }
 
   return (
