@@ -29,9 +29,7 @@ export function FromClosetDate(date) {
 }
 
 export const OOTD = axios.create({
-  baseURL: environment.RENDER_EXTERNAL_URL
-    ? environment.RENDER_EXTERNAL_URL + "/api/"
-    : "http://localhost:8000/api/",
+  baseURL: "/api/",
   timeout: 50000,
   headers: { "X-CSRFToken": GetCookie("csrftoken") },
   withCredentials: true,
