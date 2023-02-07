@@ -6,12 +6,16 @@ import Footer from "../components/Footer.jsx";
 
 export default function Root() {
   return (
-    <div className="global-stack">
-      <Header />
-      <main className="field">
+    <div id="app">
+      <header>
+        <Header />
+      </header>
+      <main>
         <Outlet />
       </main>
-      <Footer />
+      <footer>
+        <Footer />
+      </footer>
     </div>
   );
 }

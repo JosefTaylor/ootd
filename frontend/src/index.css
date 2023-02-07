@@ -82,5 +82,3 @@ button {
 /* Components */
 @import "./components/Card.css";
 @import "./components/DataTable.css";
-@import "./components/Header.css";
-@import "./components/Field.css";
