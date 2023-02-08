@@ -20,6 +20,8 @@
   background-color: white;
   display: grid;
   padding: var(--pad-m);
+  justify-items: center;
+  align-items: center;
 }
 
 #app>footer {
