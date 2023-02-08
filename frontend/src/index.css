@@ -1,5 +1,11 @@
 @import "./reset.css";
 
+:root {
+  --pad-l: clamp(0px, 6vw, 120px);
+  --pad-m: clamp(0px, calc(4vw - 20px), 80px);
+  --pad-s: clamp(0px, calc(2vw - 10px), 40px);
+}
+
 body {
   background-color: rgb(255, 164, 164);
   color: black;
@@ -24,14 +30,13 @@ h2 {
   font-size: clamp(1rem, 5vw, 3.5rem);
 }
 
-input, button {
+input, button, .button {
   border: 1px solid rgba(0, 0, 0, 0.062);
   background-color: rgba(255, 255, 255, 0.151);
-  border-radius: 1rem;
+  border-radius: 0.8rem;
+  margin: var(--pad-s);
   font-size: clamp(0.8rem, 1.8vw, 1.1rem);
   color: inherit;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
   text-align: center;
 }
 
@@ -48,21 +53,12 @@ input {
   cursor: text;
 }
 
-button {
+button, .button {
   cursor: pointer;
 }
 
-.button {
-  border: 1px solid rgba(0, 0, 0, 0.062);
-  background-color: rgba(255, 255, 255, 0.419);
-  border-radius: 1rem;
-  font-size: clamp(0.8rem, 2vw, 1rem);
-  color: inherit;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-  text-align: center;
-  cursor: pointer;
-}
+
+
 
 /* Layouts */
 @import "./components/layouts/Center.css";
