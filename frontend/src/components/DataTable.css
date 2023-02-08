@@ -40,12 +40,12 @@
 /* ellipses????*/
 .garment-name {
     text-align: start;
-    width: 13em;
+    width: 11em;
 }
 
 .cost-per-wear {
     text-align: end;
-    width: 10em;
+    width: 6em;
 }
 
 .invisible {
