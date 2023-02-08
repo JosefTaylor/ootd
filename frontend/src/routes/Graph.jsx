@@ -39,7 +39,7 @@ export default function Graph() {
       content = [];
   }
   return (
-    <div className="sidebar pad-1">
+    <div className="sidebar">
       <Card className="side">
         <div className="stack ht-full">
           <button

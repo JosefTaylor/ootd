@@ -133,76 +133,74 @@ export default function Dashboard() {
   const outfitCost = filteredWears.reduce((sum, wear) => sum + wear.cost, 0);
 
   return (
-    <div className="wrapper stack pad-1 wd-max ht-full">
-      <Card className="ht-150-min" title="What are you wearing?">
-        <DateSelector
-          date={daySelected}
-          onClick={(n) => () => {
-            let newDay = new Date(daySelected);
-            newDay.setDate(daySelected.getDate() + n);
-            setDateSelected(newDay);
-          }}
-          onChange={(event) => {
-            setDateSelected(new Date(event.target.value));
-          }}
-          name="Outfit on:  "
-        />
-        {imageEncoded ? (
-          <div className="img-overlay">
-            <img
-              alt={
-                predictions
-                  ? "A picture of a beautiful human being in a STUNNING outfit."
-                  : null
-              } // images without alt text are blurred by reset.css. poor man's loading spinner.
-              src={imageEncoded}
-            />
-            <button className="warning" onClick={() => setImageEncoded(null)}>
-              ✖️
-            </button>
-          </div>
-        ) : (
-          <div className="center">
-            <label htmlFor="selfie">
-              Take a selfie and a robot will check your fit!
-            </label>
-            <input
-              type="file"
-              id="selfie"
-              accept="image/*"
-              capture="user"
-              onChange={(event) => {
-                handleEncodeFile(event.target.files[0]);
+    <Card className="ht-150-min" title="What are you wearing?">
+      <DateSelector
+        date={daySelected}
+        onClick={(n) => () => {
+          let newDay = new Date(daySelected);
+          newDay.setDate(daySelected.getDate() + n);
+          setDateSelected(newDay);
+        }}
+        onChange={(event) => {
+          setDateSelected(new Date(event.target.value));
+        }}
+        name="Outfit on:  "
+      />
+      {imageEncoded ? (
+        <div className="img-overlay">
+          <img
+            alt={
+              predictions
+                ? "A picture of a beautiful human being in a STUNNING outfit."
+                : null
+            } // images without alt text are blurred by reset.css. poor man's loading spinner.
+            src={imageEncoded}
+          />
+          <button className="warning" onClick={() => setImageEncoded(null)}>
+            ✖️
+          </button>
+        </div>
+      ) : (
+        <div className="center">
+          <label htmlFor="selfie">
+            Take a selfie and a robot will check your fit!
+          </label>
+          <input
+            type="file"
+            id="selfie"
+            accept="image/*"
+            capture="user"
+            onChange={(event) => {
+              handleEncodeFile(event.target.files[0]);
+            }}
+          />
+        </div>
+      )}
+      <GarmentSelector
+        date={daySelected}
+        tags={predictionsRemaining?.map((pred) => pred.class)}
+        onChange={setRefreshData}
+      >
+        {garmentGroups}
+      </GarmentSelector>
+      <DataTable>
+        {filteredWears.map((wear) => (
+          <div key={wear.id} className="data-item">
+            <WearLine
+              wear={wear}
+              onChange={() => {
+                setRefreshData(true);
               }}
             />
           </div>
-        )}
-        <GarmentSelector
-          date={daySelected}
-          tags={predictionsRemaining?.map((pred) => pred.class)}
-          onChange={setRefreshData}
-        >
-          {garmentGroups}
-        </GarmentSelector>
-        <DataTable>
-          {filteredWears.map((wear) => (
-            <div key={wear.id} className="data-item">
-              <WearLine
-                wear={wear}
-                onChange={() => {
-                  setRefreshData(true);
-                }}
-              />
-            </div>
-          ))}
-        </DataTable>
-        {filteredWears.length > 0 ? (
-          <p>Your outfit cost you {formatCost(outfitCost)} today</p>
-        ) : (
-          ""
-        )}
-      </Card>
-    </div>
+        ))}
+      </DataTable>
+      {filteredWears.length > 0 ? (
+        <p>Your outfit cost you {formatCost(outfitCost)} today</p>
+      ) : (
+        ""
+      )}
+    </Card>
   );
 }
 
@@ -222,12 +220,13 @@ export function WearLine(props) {
       <div className="cost-per-wear">{formatCost(props.wear.cost)}/wear</div>
       <div>
         <button
+          className="invisible"
           onClick={async () => {
             await deleteWear(props.wear);
             props.onChange();
           }}
         >
-          Remove
+          ✖️
         </button>
       </div>
     </div>

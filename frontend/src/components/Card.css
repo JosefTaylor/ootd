@@ -1,5 +1,8 @@
 .card {
-    border-radius: 10px;
+    max-height: calc(100% - 2 * var(--pad-m));
+    max-width: calc(100% - 2 * var(--pad-m));
+    border-radius: var(--pad-m);
     background-color: rgb(238, 238, 238);
-    padding: 15px;
+    padding: var(--pad-m);
+    align-self: center;
 }

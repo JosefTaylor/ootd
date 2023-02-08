@@ -37,26 +37,24 @@ export default class PasswordReset extends Component {
 
   render() {
     return (
-      <div className="wrapper pad-1 wd-small center">
-        <Card title="Reset my password">
-          <label htmlFor="email" hidden>
-            Username
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={this.state.username}
-            onChange={this.handleChange}
-            placeholder="email"
-            required
-          />
-          <button onClick={this.handleSubmit}>Submit</button>
-          <div className="warning" hidden={!this.state.loginError}>
-            That didnt work, please try again.
-          </div>
-        </Card>
-      </div>
+      <Card title="Reset my password">
+        <label htmlFor="email" hidden>
+          Username
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={this.state.username}
+          onChange={this.handleChange}
+          placeholder="email"
+          required
+        />
+        <button onClick={this.handleSubmit}>Submit</button>
+        <div className="warning" hidden={!this.state.loginError}>
+          That didnt work, please try again.
+        </div>
+      </Card>
     );
   }
 }

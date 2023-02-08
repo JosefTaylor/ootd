@@ -57,90 +57,88 @@ export default function Wardrobe() {
   };
 
   return (
-    <div className="wrapper stack pad-1 ht-full">
-      <Card className="ht-150-min" title="Your Wardrobe">
-        <input
-          value={filterText}
-          onChange={(event) => setFilterText(event.target.value)}
-        />
-        <DataTable>
-          <div className="data-item">
-            <button className="invisible">
-              <div className="splitter">
-                <div className="garment-name">Garment</div>
-                {fields.map((field, index) => (
-                  <div key={index} className="cost-per-wear">
-                    {field.label}
-                  </div>
-                ))}
-              </div>
-            </button>
-          </div>
-          {filteredGarments.map((garment) => (
-            <div key={garment.id} className="data-item">
-              {garment.id === parseInt(params.garmentId) ? (
-                location.state === "declutter" ? (
-                  <DeclutterRow
-                    garment={garment}
-                    onCancel={() => {
-                      navigate("/wardrobe");
-                    }}
-                    onDeclutter={() => {
-                      navigate("/wardrobe");
-                      setRefreshData(true);
-                    }}
-                  />
-                ) : (
-                  <EditRow
-                    garment={garment}
-                    onSave={() => {
-                      navigate("/wardrobe");
-                      setRefreshData(true);
-                    }}
-                    onCancel={() => {
-                      navigate("/wardrobe");
-                    }}
-                    onDeclutter={() => {
-                      navigate("/wardrobe/" + garment.id.toString(), {
-                        state: "declutter",
-                      });
-                    }}
-                  />
-                )
-              ) : (
-                <DisplayRow
+    <Card className="ht-150-min" title="Your Wardrobe">
+      <input
+        value={filterText}
+        onChange={(event) => setFilterText(event.target.value)}
+      />
+      <DataTable>
+        <div className="data-item">
+          <button className="invisible">
+            <div className="splitter">
+              <div className="garment-name">Garment</div>
+              {fields.map((field, index) => (
+                <div key={index} className="cost-per-wear">
+                  {field.label}
+                </div>
+              ))}
+            </div>
+          </button>
+        </div>
+        {filteredGarments.map((garment) => (
+          <div key={garment.id} className="data-item">
+            {garment.id === parseInt(params.garmentId) ? (
+              location.state === "declutter" ? (
+                <DeclutterRow
                   garment={garment}
-                  fields={fields}
-                  onEdit={() => {
-                    navigate("/wardrobe/" + garment.id.toString());
+                  onCancel={() => {
+                    navigate("/wardrobe");
+                  }}
+                  onDeclutter={() => {
+                    navigate("/wardrobe");
+                    setRefreshData(true);
                   }}
                 />
-              )}
-            </div>
-          ))}
-        </DataTable>
-        {location.state === "new" ? (
-          <EditRow
-            garment={{
-              name: filterText,
-              purchase_date: ToClosetDate(new Date()),
-              tags: toTags(filterText),
-            }}
-            onSave={() => {
-              navigate("/wardrobe");
-              setRefreshData(true);
-            }}
-            onCancel={() => {
-              navigate("/wardrobe");
-            }}
-          />
-        ) : (
-          <button onClick={() => navigate("/wardrobe", { state: "new" })}>
-            {filterText ? `create "${filterText}"` : "new"}
-          </button>
-        )}
-      </Card>
-    </div>
+              ) : (
+                <EditRow
+                  garment={garment}
+                  onSave={() => {
+                    navigate("/wardrobe");
+                    setRefreshData(true);
+                  }}
+                  onCancel={() => {
+                    navigate("/wardrobe");
+                  }}
+                  onDeclutter={() => {
+                    navigate("/wardrobe/" + garment.id.toString(), {
+                      state: "declutter",
+                    });
+                  }}
+                />
+              )
+            ) : (
+              <DisplayRow
+                garment={garment}
+                fields={fields}
+                onEdit={() => {
+                  navigate("/wardrobe/" + garment.id.toString());
+                }}
+              />
+            )}
+          </div>
+        ))}
+      </DataTable>
+      {location.state === "new" ? (
+        <EditRow
+          garment={{
+            name: filterText,
+            purchase_date: ToClosetDate(new Date()),
+            tags: toTags(filterText),
+          }}
+          onSave={() => {
+            navigate("/wardrobe");
+            setRefreshData(true);
+          }}
+          onCancel={() => {
+            navigate("/wardrobe");
+          }}
+        />
+      ) : (
+        <button onClick={() => navigate("/wardrobe", { state: "new" })}>
+          {filterText ? `create "${filterText}"` : "new"}
+        </button>
+      )}
+    </Card>
   );
 }
 
