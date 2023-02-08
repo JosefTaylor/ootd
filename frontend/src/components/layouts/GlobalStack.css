@@ -18,6 +18,8 @@
   grid-area: main;
   overflow: auto;
   background-color: white;
+  display: grid;
+  padding: var(--pad-m);
 }
 
 #app>footer {
