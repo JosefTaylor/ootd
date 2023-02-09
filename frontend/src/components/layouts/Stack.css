@@ -4,8 +4,5 @@
     flex-direction: column;
     justify-content: center;
     align-items: stretch;
-}
-
-.stack > * + * {
-    margin-top: 5px;
+    gap: var(--pad-s);
 }
