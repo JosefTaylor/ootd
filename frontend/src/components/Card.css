@@ -1,6 +1,4 @@
 .card {
-    max-height: calc(100% - 2 * var(--pad-m));
-    width: calc(100% - 2 * var(--pad-m));
     min-height: 200px;
     min-width: 100px;
     border-radius: var(--pad-m);
@@ -12,4 +10,19 @@
 /* make sure cards get proper gaps when stacked together */
 .card + .card {
     margin-inline-start: var(--pad-m);
+}
+
+.card.fullsize {
+    height: calc(100% - 2 * var(--pad-m));
+    width: calc(100% - 2 * var(--pad-m));
+}
+
+.card.small {
+    width: 25em;
+    margin: var(--pad-m);
+}
+
+.card.medium {
+    max-width: 30em;
+    margin: var(--pad-m);
 }

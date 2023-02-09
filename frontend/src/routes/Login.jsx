@@ -26,7 +26,7 @@ export function LoginPage() {
   }
 
   return (
-    <Card title="Log in">
+    <Card className="small" title="Log in">
       <label>
         Username
         <input

@@ -58,7 +58,7 @@ export default function Wardrobe() {
   };
 
   return (
-    <Card title="Your Wardrobe">
+    <Card className="fullsize" title="Your Wardrobe">
       <input
         value={filterText}
         onChange={(event) => setFilterText(event.target.value)}

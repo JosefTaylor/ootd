@@ -135,7 +135,7 @@ export default function Dashboard() {
   const outfitCost = filteredWears.reduce((sum, wear) => sum + wear.cost, 0);
 
   return (
-    <Card title="What are you wearing?">
+    <Card className="fullsize" title="What are you wearing?">
       <DateSelector
         date={daySelected}
         onClick={(n) => () => {

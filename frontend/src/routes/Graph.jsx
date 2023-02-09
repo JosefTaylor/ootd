@@ -12,7 +12,7 @@ export async function loader() {
 export function Graph() {
   return (
     <Card
-      className="side"
+      className="fullsize"
       title={
         <div className="splitter">
           <NavLink to={"violin"}>Violin</NavLink>
