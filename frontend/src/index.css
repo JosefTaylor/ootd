@@ -34,7 +34,6 @@ input, button, .button {
   border: 1px solid rgba(0, 0, 0, 0.062);
   background-color: rgba(255, 255, 255, 0.151);
   border-radius: 0.8rem;
-  margin: var(--pad-s);
   font-size: clamp(0.8rem, 1.8vw, 1.1rem);
   color: inherit;
   text-align: center;
