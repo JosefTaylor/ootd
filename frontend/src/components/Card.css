@@ -8,3 +8,8 @@
     padding: var(--pad-m);
     gap: var(--pad-s);
 }
+
+/* make sure cards get proper gaps when stacked together */
+.card + .card {
+    margin-inline-start: var(--pad-m);
+}

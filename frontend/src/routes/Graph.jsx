@@ -1,62 +1,26 @@
-import React, { useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import React from "react";
+import { Outlet, NavLink } from "react-router-dom";
 
 import { getDashboardData } from "../ootdApi.jsx";
-import Violin from "../components/ViolinPlot.jsx";
-import Histogram from "../components/HistogramPlot.jsx";
 import Card from "../components/Card.jsx";
 
 export async function loader() {
-  console.log("in Graph Loader, trying to get some data");
   const dashboardData = await getDashboardData();
   return { dashboardData };
 }
 
-export default function Graph() {
-  const { dashboardData } = useLoaderData();
-  const [page, setPage] = useState("violin");
-
-  let content = [];
-  switch (page) {
-    case "violin":
-      content = (
-        <Violin
-          garmentList={dashboardData.garments ?? []}
-          wearList={dashboardData.garment_wears ?? []}
-        />
-      );
-      break;
-    case "histogram":
-      content = (
-        <Histogram
-          garmentList={dashboardData.garments ?? []}
-          wearList={dashboardData.garment_wears ?? []}
-        />
-      );
-      break;
-    default:
-      console.log("I couldn't find a graph called " + page);
-      content = [];
-  }
+export function Graph() {
   return (
-    <div className="sidebar">
+    <div id="graph-route" className="sidebar">
       <Card className="side">
-        <button
-          onClick={() => {
-            setPage("violin");
-          }}
-        >
+        <NavLink className="button" to={"violin"}>
           Violin
-        </button>
-        <button
-          onClick={() => {
-            setPage("histogram");
-          }}
-        >
+        </NavLink>
+        <NavLink className="button" to={"histogram"}>
           Histogram
-        </button>
+        </NavLink>
       </Card>
-      <Card className="content">{content}</Card>
+      <Outlet />
     </div>
   );
 }

@@ -1,15 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Plot from "react-plotly.js";
 
-export default function Violin(props) {
-  let garmentList = [...props.garmentList];
+import { getDashboardData } from "../ootdApi.jsx";
+import Card from "./Card.jsx";
+
+export default function Violin() {
+  const [dashboardData, setDashboardData] = React.useState();
+
+  useEffect(() => {
+    async function func() {
+      const newData = await getDashboardData();
+      setDashboardData(newData);
+    }
+    func();
+  }, []);
+
+  if (!dashboardData) {
+    return <p>Loading...</p>;
+  }
+
+  console.log(dashboardData);
+
+  let garmentList = dashboardData.garments;
+  let wearList = dashboardData.garment_wears;
 
   garmentList.sort((a, b) => {
     return new Date(b.purchase_date) - new Date(a.purchase_date);
   });
 
-  const data = garmentList.map((garment, index) => {
-    const wears = props.wearList.filter((wear) => {
+  const data = garmentList.map((garment) => {
+    const wears = wearList.filter((wear) => {
       return wear.garment_id === garment.id;
     });
 
@@ -68,14 +88,16 @@ export default function Violin(props) {
   };
 
   return (
-    <Plot
-      data={data}
-      layout={layout}
-      useResizeHandler={true}
-      style={{
-        width: "100%",
-        height: "100%",
-      }}
-    />
+    <Card className="content">
+      <Plot
+        data={data}
+        layout={layout}
+        useResizeHandler={true}
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+      />
+    </Card>
   );
 }
