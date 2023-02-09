@@ -41,22 +41,20 @@ export default function Graph() {
   return (
     <div className="sidebar">
       <Card className="side">
-        <div className="stack ht-full">
-          <button
-            onClick={() => {
-              setPage("violin");
-            }}
-          >
-            Violin
-          </button>
-          <button
-            onClick={() => {
-              setPage("histogram");
-            }}
-          >
-            Histogram
-          </button>
-        </div>
+        <button
+          onClick={() => {
+            setPage("violin");
+          }}
+        >
+          Violin
+        </button>
+        <button
+          onClick={() => {
+            setPage("histogram");
+          }}
+        >
+          Histogram
+        </button>
       </Card>
       <Card className="content">{content}</Card>
     </div>

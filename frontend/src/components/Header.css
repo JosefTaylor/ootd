@@ -1,4 +1,4 @@
- .header {
+#header {
   width: 100%;
 
   display: grid;
@@ -8,17 +8,17 @@
       'left main right';
 }
 
-.header>.left {
+#header>.left {
   grid-area: left;
   align-self: center;
   justify-self: start;
 }
 
-.header>.main {
+#header>.main {
   grid-area: main;
 }
 
-.header>.right {
+#header>.right {
   grid-area: right;
   align-self: center;
   justify-self: end;

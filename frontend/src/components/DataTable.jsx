@@ -2,7 +2,7 @@ import React from "react";
 
 export default function DataTable(props) {
   return (
-    <div className="scroll">
+    <div id="data-table-wrapper">
       <table id="data-table" className={props.className}>
         {props.header ? (
           <thead>

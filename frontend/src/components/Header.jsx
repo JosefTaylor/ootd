@@ -6,7 +6,7 @@ export default function Header() {
   const { fashionista } = useAuth();
 
   return (
-    <div className="header">
+    <div id="header">
       {fashionista ? (
         <div className="left splitter">
           <Link to={"/"}>🪞</Link>

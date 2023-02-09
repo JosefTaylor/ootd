@@ -135,7 +135,7 @@ export default function Dashboard() {
   const outfitCost = filteredWears.reduce((sum, wear) => sum + wear.cost, 0);
 
   return (
-    <Card className="ht-150-min" title="What are you wearing?">
+    <Card title="What are you wearing?">
       <DateSelector
         date={daySelected}
         onClick={(n) => () => {
@@ -163,20 +163,19 @@ export default function Dashboard() {
           </button>
         </div>
       ) : (
-        <div className="center">
-          <label htmlFor="selfie">
-            Take a selfie and a robot will check your fit!
-          </label>
+        <label htmlFor="selfie">
+          Take a selfie and a robot will check your fit!
           <input
             type="file"
             id="selfie"
             accept="image/*"
             capture="user"
+            placeholder="butts"
             onChange={(event) => {
               handleEncodeFile(event.target.files[0]);
             }}
           />
-        </div>
+        </label>
       )}
       <GarmentSelector
         date={daySelected}

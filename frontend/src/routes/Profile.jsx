@@ -5,9 +5,9 @@ import Card from "../components/Card.jsx";
 
 export function Settings() {
   return (
-    <div className="sidebar pad-1">
-      <Card className="side">
-        <div className="stack ht-full">
+    <div className="sidebar">
+      <div className="side">
+        <Card>
           <NavLink className="button" to={""}>
             Profile
           </NavLink>
@@ -15,9 +15,11 @@ export function Settings() {
             <p>Change </p>
             <p>password</p>
           </NavLink>
-        </div>
-      </Card>
-      <Outlet />
+        </Card>
+      </div>
+      <div className="content">
+        <Outlet />
+      </div>
     </div>
   );
 }
@@ -28,11 +30,9 @@ export function Profile() {
   const newEmail = auth.fashionista.user.email;
 
   return (
-    <div className="wrapper pad-1 wd-small center">
-      <Card className="content" title="Profile">
-        <p>Username: {newUsername}</p>
-        <p>e-mail address: {newEmail}</p>
-      </Card>
-    </div>
+    <Card title="Profile">
+      <p>Username: {newUsername}</p>
+      <p>e-mail address: {newEmail}</p>
+    </Card>
   );
 }
