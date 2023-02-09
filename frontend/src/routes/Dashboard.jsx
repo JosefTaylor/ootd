@@ -16,6 +16,8 @@ export default function Dashboard() {
   const [predictions, setPredictions] = useState(null);
   const [imageEncoded, setImageEncoded] = useState(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function func() {
       const newData = await getDashboardData();
@@ -185,14 +187,31 @@ export default function Dashboard() {
       </GarmentSelector>
       <DataTable>
         {filteredWears.map((wear) => (
-          <div key={wear.id} className="data-item">
-            <WearLine
-              wear={wear}
-              onChange={() => {
-                setRefreshData(true);
-              }}
-            />
-          </div>
+          <tr key={wear.id}>
+            <td>
+              <button
+                className="invisible"
+                onClick={() => {
+                  console.log();
+                  navigate("/wardrobe/" + wear.garment_id.toString());
+                }}
+              >
+                {wear.garment_name}
+              </button>
+            </td>
+            <td>{formatCost(wear.cost)}/wear</td>
+            <td>
+              <button
+                className="invisible"
+                onClick={async () => {
+                  await deleteWear(wear);
+                  setRefreshData(true);
+                }}
+              >
+                ✖️
+              </button>
+            </td>
+          </tr>
         ))}
       </DataTable>
       {filteredWears.length > 0 ? (
@@ -201,34 +220,5 @@ export default function Dashboard() {
         ""
       )}
     </Card>
-  );
-}
-
-export function WearLine(props) {
-  const navigate = useNavigate();
-  return (
-    <div className="splitter">
-      <button
-        className="invisible"
-        onClick={() => {
-          console.log();
-          navigate("/wardrobe/" + props.wear.garment_id.toString());
-        }}
-      >
-        <div className="garment-name">{props.wear.garment_name}</div>
-      </button>
-      <div className="cost-per-wear">{formatCost(props.wear.cost)}/wear</div>
-      <div>
-        <button
-          className="invisible"
-          onClick={async () => {
-            await deleteWear(props.wear);
-            props.onChange();
-          }}
-        >
-          ✖️
-        </button>
-      </div>
-    </div>
   );
 }

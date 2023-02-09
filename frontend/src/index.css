@@ -48,6 +48,15 @@ input, button, .button {
   color: darkred;
 }
 
+.invisible {
+  border: 0;
+  background-color: rgba(255, 255, 255, 0);
+  border-radius: inherit;
+  font-size: inherit;
+  margin-top: inherit;
+  margin-bottom: inherit;
+}
+
 input {
   cursor: text;
 }
