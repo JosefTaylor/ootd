@@ -1,6 +1,5 @@
 .data-table {
     overflow: auto;
-    display: inline-block;
 }
 
 .data-table>div {

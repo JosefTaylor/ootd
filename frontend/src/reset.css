@@ -36,8 +36,6 @@ html {
 
 /* Set core body defaults */
 body {
-  min-height: 100vh;
-  max-height: 100vh; /*JT added */
   text-rendering: optimizeSpeed;
   line-height: 1.5;
 }
