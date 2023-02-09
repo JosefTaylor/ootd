@@ -79,3 +79,4 @@ button, .button {
 
 /* Routes */
 @import "./routes/Root.css";
+@import "./routes/About.css";
