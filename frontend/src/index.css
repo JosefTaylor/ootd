@@ -83,6 +83,7 @@ button, .button {
 @import "./components/utilities/Padding.css";
 @import "./components/utilities/Height.css";
 @import "./components/utilities/Width.css";
+@import "./components/utilities/Scroll.css";
 
 /* Components */
 @import "./components/Card.css";

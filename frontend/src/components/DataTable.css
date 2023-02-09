@@ -4,8 +4,6 @@
     border-collapse: collapse;
 }
 
-#data-table 
-
 #data-table tr {
     padding: var(--pad-s);
 }
