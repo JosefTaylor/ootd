@@ -1,16 +1,12 @@
 .sidebar {
-    height: 100%;
-    width: 100%;
     display: flex;
-    gap: var(--pad-m);
     align-items: stretch;
 }
 
 .sidebar > .side {
+    flex: 3 3 600px;
 }
 
 .sidebar > .content {
     flex: 3 3 600px;
-    overflow: scroll;
-    display: inline-block;
 }

@@ -1,0 +1,6 @@
+#edit-row {
+  display: flex;
+  box-sizing: border-box;
+  flex-flow: row wrap;
+  gap: 1em;
+}

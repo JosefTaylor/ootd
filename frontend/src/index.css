@@ -66,8 +66,6 @@ button, .button {
 }
 
 /* Layouts */
-@import "./components/layouts/Flow.css";
-@import "./components/layouts/GlobalStack.css";
 @import "./components/layouts/ImgOverlay.css";
 @import "./components/layouts/Sidebar.css";
 @import "./components/layouts/Splitter.css";
@@ -77,3 +75,7 @@ button, .button {
 @import "./components/Card.css";
 @import "./components/DataTable.css";
 @import "./components/Header.css";
+@import "./components/EditRow.css";
+
+/* Routes */
+@import "./routes/Root.css";

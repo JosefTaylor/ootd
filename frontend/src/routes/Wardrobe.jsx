@@ -195,7 +195,7 @@ function EditRow(props) {
 
   return (
     <td colSpan={props.fields.length}>
-      <div className="flow">
+      <div id="edit-row">
         <label>
           garment name:
           <input
@@ -278,7 +278,7 @@ function DeclutterRow(props) {
 
   return (
     <td colSpan={props.fields.length}>
-      <div className="flow">
+      <div id="edit-row">
         <label>
           De-acquisition date:
           <input

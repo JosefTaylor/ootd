@@ -12,6 +12,8 @@
   grid-area: left;
   align-self: center;
   justify-self: start;
+  padding-left: 1em; 
+  gap: 1em;
 }
 
 #header>.main {
@@ -22,4 +24,6 @@
   grid-area: right;
   align-self: center;
   justify-self: end;
+  padding-right: 1em;
+  gap: 1em;
 }

@@ -149,22 +149,28 @@ export default function Dashboard() {
         name="Outfit on:  "
       />
       {imageEncoded ? (
-        <div className="img-overlay">
-          <img
-            alt={
-              predictions
-                ? "A picture of a beautiful human being in a STUNNING outfit."
-                : null
-            } // images without alt text are blurred by reset.css. poor man's loading spinner.
-            src={imageEncoded}
-          />
-          <button className="warning" onClick={() => setImageEncoded(null)}>
-            ✖️
-          </button>
+        <div className="splitter">
+          <div></div>
+          <div className="img-overlay">
+            <img
+              alt={
+                predictions
+                  ? "A picture of a beautiful human being in a STUNNING outfit."
+                  : null
+              } // images without alt text are blurred by reset.css. poor man's loading spinner.
+              src={imageEncoded}
+            />
+            <button className="warning" onClick={() => setImageEncoded(null)}>
+              ✖️
+            </button>
+          </div>
+          <div></div>
         </div>
       ) : (
-        <label htmlFor="selfie">
-          Take a selfie and a robot will check your fit!
+        <div className="stack">
+          <label htmlFor="selfie">
+            Take a selfie and a robot will check your fit!
+          </label>
           <input
             type="file"
             id="selfie"
@@ -175,7 +181,7 @@ export default function Dashboard() {
               handleEncodeFile(event.target.files[0]);
             }}
           />
-        </label>
+        </div>
       )}
       <GarmentSelector
         date={daySelected}
