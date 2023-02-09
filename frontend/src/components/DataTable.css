@@ -4,8 +4,7 @@
 }
 
 .data-table>div {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: var(--pad-s);
 }
 
 .data-table>div:nth-child(7n - 6) {
