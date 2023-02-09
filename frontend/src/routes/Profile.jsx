@@ -5,22 +5,18 @@ import Card from "../components/Card.jsx";
 
 export function Settings() {
   return (
-    <div className="sidebar">
-      <div className="side">
-        <Card>
-          <NavLink className="button" to={""}>
-            Profile
+    <Card
+      title={
+        <div className="splitter">
+          <NavLink to={""}>Profile</NavLink>
+          <NavLink to={"password_change/"}>
+            <p>Change password</p>
           </NavLink>
-          <NavLink className="button" to={"password_change/"}>
-            <p>Change </p>
-            <p>password</p>
-          </NavLink>
-        </Card>
-      </div>
-      <div className="content">
-        <Outlet />
-      </div>
-    </div>
+        </div>
+      }
+    >
+      <Outlet />
+    </Card>
   );
 }
 

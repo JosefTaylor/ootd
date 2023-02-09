@@ -67,7 +67,6 @@ button, .button {
 
 /* Layouts */
 @import "./components/layouts/ImgOverlay.css";
-@import "./components/layouts/Sidebar.css";
 @import "./components/layouts/Splitter.css";
 @import "./components/layouts/Stack.css";
 
