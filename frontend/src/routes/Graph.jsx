@@ -11,16 +11,16 @@ export async function loader() {
 
 export function Graph() {
   return (
-    <div id="graph-route" className="sidebar">
-      <Card className="side">
-        <NavLink className="button" to={"violin"}>
-          Violin
-        </NavLink>
-        <NavLink className="button" to={"histogram"}>
-          Histogram
-        </NavLink>
-      </Card>
+    <Card
+      className="side"
+      title={
+        <div className="splitter">
+          <NavLink to={"violin"}>Violin</NavLink>
+          <NavLink to={"histogram"}>Histogram</NavLink>
+        </div>
+      }
+    >
       <Outlet />
-    </div>
+    </Card>
   );
 }

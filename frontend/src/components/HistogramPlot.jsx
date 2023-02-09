@@ -68,16 +68,14 @@ export default function Histogram() {
   };
 
   return (
-    <Card className="content">
-      <Plot
-        data={data}
-        layout={layout}
-        useResizeHandler={true}
-        style={{
-          width: "100%",
-          height: "100%",
-        }}
-      />
-    </Card>
+    <Plot
+      data={data}
+      layout={layout}
+      useResizeHandler={true}
+      style={{
+        width: "100%",
+        height: "100%",
+      }}
+    />
   );
 }
