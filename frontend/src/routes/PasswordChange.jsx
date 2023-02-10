@@ -26,61 +26,59 @@ export default function PasswordChange() {
   }
 
   return (
-    <div className="wrapper pad-1 wd-small center">
-      <Card title="Change Password">
-        <label>
-          Current Password
-          <input
-            type="password"
-            name="old_password"
-            value={old_password}
-            onChange={(event) => {
-              setOld_password(event.target.value);
-              setLoginError(null);
-            }}
-            required
-          />
-        </label>
-        <div className="warning" hidden={!loginError?.old_password}>
-          {loginError?.old_password}
-        </div>
-        <label>
-          New Password
-          <input
-            type="password"
-            name="new_password1"
-            value={new_password1}
-            onChange={(event) => {
-              setNew_password1(event.target.value);
-              setLoginError(null);
-            }}
-            required
-          />
-        </label>
-        <div className="warning" hidden={!loginError?.new_password1}>
-          {loginError?.new_password1}
-        </div>
-        <label>
-          Confirm Password
-          <input
-            type="password"
-            name="new_password2"
-            value={new_password2}
-            onChange={(event) => {
-              setNew_password2(event.target.value);
-              setLoginError(null);
-            }}
-            required
-          />
-        </label>
-        <div className="warning" hidden={!loginError?.new_password2}>
-          {loginError?.new_password2}
-        </div>
-        <button onClick={handleSubmit}>Change Password</button>
-        <div className="warning" hidden={!loginError}>
-          That didnt work, please try again.
-        </div>
-      </Card>
-    </div>
+    <Card title="Change Password">
+      <label>
+        Current Password
+        <input
+          type="password"
+          name="old_password"
+          value={old_password}
+          onChange={(event) => {
+            setOld_password(event.target.value);
+            setLoginError(null);
+          }}
+          required
+        />
+      </label>
+      <div className="warning" hidden={!loginError?.old_password}>
+        {loginError?.old_password}
+      </div>
+      <label>
+        New Password
+        <input
+          type="password"
+          name="new_password1"
+          value={new_password1}
+          onChange={(event) => {
+            setNew_password1(event.target.value);
+            setLoginError(null);
+          }}
+          required
+        />
+      </label>
+      <div className="warning" hidden={!loginError?.new_password1}>
+        {loginError?.new_password1}
+      </div>
+      <label>
+        Confirm Password
+        <input
+          type="password"
+          name="new_password2"
+          value={new_password2}
+          onChange={(event) => {
+            setNew_password2(event.target.value);
+            setLoginError(null);
+          }}
+          required
+        />
+      </label>
+      <div className="warning" hidden={!loginError?.new_password2}>
+        {loginError?.new_password2}
+      </div>
+      <button onClick={handleSubmit}>Change Password</button>
+      <div className="warning" hidden={!loginError}>
+        That didnt work, please try again.
+      </div>
+    </Card>
   );
 }

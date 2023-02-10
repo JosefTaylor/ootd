@@ -1,60 +1,49 @@
-.data-table {
-    overflow: auto;
-    display: inline-block;
+#data-table-wrapper {
+    overflow: scroll;
 }
 
-.data-table>div {
-    padding-left: 10px;
-    padding-right: 10px;
+#data-table {
+    height: 100%;
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.data-table>div:nth-child(7n - 6) {
+#data-table tr {
+    padding: var(--pad-s);
+}
+
+#data-table>tbody>tr:nth-child(7n - 6) {
     background: rgb(255, 220, 220);
 }
 
-.data-table>div:nth-child(7n - 5) {
+#data-table>tbody>tr:nth-child(7n - 5) {
     background: rgb(255, 234, 195);
 }
 
-.data-table>div:nth-child(7n - 4) {
+#data-table>tbody>tr:nth-child(7n - 4) {
     background: rgb(255, 255, 193);
 }
 
-.data-table>div:nth-child(7n - 3) {
+#data-table>tbody>tr:nth-child(7n - 3) {
     background: rgb(193, 255, 193);
 }
 
-.data-table>div:nth-child(7n - 2) {
+#data-table>tbody>tr:nth-child(7n - 2) {
     background: rgb(193, 193, 255);
 }
 
-.data-table>div:nth-child(7n - 1) {
+#data-table>tbody>tr:nth-child(7n - 1) {
     background: rgb(229, 192, 255);
 }
 
-.data-table>div:nth-child(7n - 0) {
+#data-table>tbody>tr:nth-child(7n - 0) {
     background: rgb(255, 194, 255);
 }
 
-/* Data Fields */
-/* ellipses????*/
-.garment-name {
-    text-align: start;
-    width: 13em;
+#data-table th {
+    font-weight: bold;
 }
 
-.cost-per-wear {
-    text-align: end;
-    width: 10em;
-}
-
-.invisible {
-    border: 0;
-    background-color: rgba(255, 255, 255, 0);
-    border-radius: inherit;
-    font-size: inherit;
-    color: inherit;
-    margin-top: inherit;
-    margin-bottom: inherit;
-    text-align: inherit;
+#data-table td:first-child, #data-table th:first-child{
+text-align: start;
 }

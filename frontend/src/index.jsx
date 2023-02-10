@@ -5,7 +5,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Root from "./routes/Root.jsx";
 import ErrorPage from "./routes/ErrorPage.jsx";
-import Graph, { loader as graphLoader } from "./routes/Graph.jsx";
+import { Graph, loader as graphLoader } from "./routes/Graph.jsx";
+import Histogram from "./components/HistogramPlot.jsx";
+import Violin from "./components/ViolinPlot.jsx";
 import Dashboard from "./routes/Dashboard.jsx";
 import { LoginPage, LogoutPage } from "./routes/Login.jsx";
 import { RequireAuth, AuthProvider } from "./components/Auth.jsx";
@@ -67,7 +69,18 @@ const router = createBrowserRouter([
             <Graph />
           </RequireAuth>
         ),
-        loader: graphLoader,
+        children: [
+          {
+            path: "violin",
+            element: <Violin />,
+            loader: graphLoader,
+          },
+          {
+            path: "histogram",
+            element: <Histogram />,
+            loader: graphLoader,
+          },
+        ],
       },
       {
         path: "user",

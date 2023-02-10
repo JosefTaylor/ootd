@@ -33,68 +33,66 @@ export default function Register() {
   };
 
   return (
-    <div className="wrapper pad-1 wd-small">
-      <Card title="Register">
-        <label>
-          Username
-          <input
-            type="text"
-            name="username"
-            value={username}
-            onChange={(event) => {
-              setUsername(event.target.value);
-              setErrors(null);
-            }}
-            required
-          />
-        </label>
-        {errors?.username ? errors.username : null}
-        <label>
-          Email
-          <input
-            type="text"
-            name="email"
-            value={email}
-            onChange={(event) => {
-              setEmail(event.target.value);
-              setErrors(null);
-            }}
-            required
-          />
-        </label>
-        {errors?.email ? errors.email : null}
-        <label>
-          New Password
-          <input
-            type="password"
-            name="password1"
-            value={password1}
-            onChange={(event) => {
-              setPassword1(event.target.value);
-              setErrors(null);
-            }}
-            minLength="8"
-            required
-          />
-        </label>
-        {errors?.password ? errors.password : null}
-        <label>
-          Confirm Password
-          <input
-            type="password"
-            name="password2"
-            value={password2}
-            onChange={(event) => {
-              setPassword2(event.target.value);
-              setErrors(null);
-            }}
-            minLength="8"
-            required
-          />
-        </label>
-        {errors?.password2 ? errors.password2 : null}
-        <button onClick={handleSubmit}>Register</button>
-      </Card>
-    </div>
+    <Card title="Register">
+      <label>
+        Username
+        <input
+          type="text"
+          name="username"
+          value={username}
+          onChange={(event) => {
+            setUsername(event.target.value);
+            setErrors(null);
+          }}
+          required
+        />
+      </label>
+      {errors?.username ? errors.username : null}
+      <label>
+        Email
+        <input
+          type="text"
+          name="email"
+          value={email}
+          onChange={(event) => {
+            setEmail(event.target.value);
+            setErrors(null);
+          }}
+          required
+        />
+      </label>
+      {errors?.email ? errors.email : null}
+      <label>
+        New Password
+        <input
+          type="password"
+          name="password1"
+          value={password1}
+          onChange={(event) => {
+            setPassword1(event.target.value);
+            setErrors(null);
+          }}
+          minLength="8"
+          required
+        />
+      </label>
+      {errors?.password ? errors.password : null}
+      <label>
+        Confirm Password
+        <input
+          type="password"
+          name="password2"
+          value={password2}
+          onChange={(event) => {
+            setPassword2(event.target.value);
+            setErrors(null);
+          }}
+          minLength="8"
+          required
+        />
+      </label>
+      {errors?.password2 ? errors.password2 : null}
+      <button onClick={handleSubmit}>Register</button>
+    </Card>
   );
 }

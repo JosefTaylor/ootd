@@ -16,6 +16,8 @@ export default function Dashboard() {
   const [predictions, setPredictions] = useState(null);
   const [imageEncoded, setImageEncoded] = useState(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function func() {
       const newData = await getDashboardData();
@@ -133,21 +135,22 @@ export default function Dashboard() {
   const outfitCost = filteredWears.reduce((sum, wear) => sum + wear.cost, 0);
 
   return (
-    <div className="wrapper stack pad-1 wd-max ht-full">
-      <Card className="ht-150-min" title="What are you wearing?">
-        <DateSelector
-          date={daySelected}
-          onClick={(n) => () => {
-            let newDay = new Date(daySelected);
-            newDay.setDate(daySelected.getDate() + n);
-            setDateSelected(newDay);
-          }}
-          onChange={(event) => {
-            setDateSelected(new Date(event.target.value));
-          }}
-          name="Outfit on:  "
-        />
-        {imageEncoded ? (
+    <Card className="fullsize" title="What are you wearing?">
+      <DateSelector
+        date={daySelected}
+        onClick={(n) => () => {
+          let newDay = new Date(daySelected);
+          newDay.setDate(daySelected.getDate() + n);
+          setDateSelected(newDay);
+        }}
+        onChange={(event) => {
+          setDateSelected(new Date(event.target.value));
+        }}
+        name="Outfit on:  "
+      />
+      {imageEncoded ? (
+        <div className="splitter">
+          <div></div>
           <div className="img-overlay">
             <img
               alt={
@@ -161,75 +164,66 @@ export default function Dashboard() {
               ✖️
             </button>
           </div>
-        ) : (
-          <div className="center">
-            <label htmlFor="selfie">
-              Take a selfie and a robot will check your fit!
-            </label>
-            <input
-              type="file"
-              id="selfie"
-              accept="image/*"
-              capture="user"
-              onChange={(event) => {
-                handleEncodeFile(event.target.files[0]);
-              }}
-            />
-          </div>
-        )}
-        <GarmentSelector
-          date={daySelected}
-          tags={predictionsRemaining?.map((pred) => pred.class)}
-          onChange={setRefreshData}
-        >
-          {garmentGroups}
-        </GarmentSelector>
-        <DataTable>
-          {filteredWears.map((wear) => (
-            <div key={wear.id} className="data-item">
-              <WearLine
-                wear={wear}
-                onChange={() => {
+          <div></div>
+        </div>
+      ) : (
+        <div className="stack">
+          <label htmlFor="selfie">
+            Take a selfie and a robot will check your fit!
+          </label>
+          <input
+            type="file"
+            id="selfie"
+            accept="image/*"
+            capture="user"
+            placeholder="butts"
+            onChange={(event) => {
+              handleEncodeFile(event.target.files[0]);
+            }}
+          />
+        </div>
+      )}
+      <GarmentSelector
+        date={daySelected}
+        tags={predictionsRemaining?.map((pred) => pred.class)}
+        onChange={setRefreshData}
+      >
+        {garmentGroups}
+      </GarmentSelector>
+      <DataTable>
+        {filteredWears.map((wear) => (
+          <tr key={wear.id}>
+            <td>
+              <button
+                className="invisible"
+                onClick={() => {
+                  console.log();
+                  navigate("/wardrobe/" + wear.garment_id.toString());
+                }}
+              >
+                {wear.garment_name}
+              </button>
+            </td>
+            <td>{formatCost(wear.cost)}/wear</td>
+            <td>
+              <button
+                className="invisible"
+                onClick={async () => {
+                  await deleteWear(wear);
                   setRefreshData(true);
                 }}
-              />
-            </div>
-          ))}
-        </DataTable>
-        {filteredWears.length > 0 ? (
-          <p>Your outfit cost you {formatCost(outfitCost)} today</p>
-        ) : (
-          ""
-        )}
-      </Card>
-    </div>
-  );
-}
-
-export function WearLine(props) {
-  const navigate = useNavigate();
-  return (
-    <div className="splitter">
-      <button
-        className="invisible"
-        onClick={() => {
-          console.log();
-          navigate("/wardrobe/" + props.wear.garment_id.toString());
-        }}
-      >
-        <div className="garment-name">{props.wear.garment_name}</div>
-      </button>
-      <div className="cost-per-wear">{formatCost(props.wear.cost)}/wear</div>
-      <div>
-        <button
-          onClick={async () => {
-            await deleteWear(props.wear);
-            props.onChange();
-          }}
-        >
-          Remove
-        </button>
-      </div>
-    </div>
+              >
+                ✖️
+              </button>
+            </td>
+          </tr>
+        ))}
+      </DataTable>
+      {filteredWears.length > 0 ? (
+        <p>Your outfit cost you {formatCost(outfitCost)} today</p>
+      ) : (
+        ""
+      )}
+    </Card>
   );
 }

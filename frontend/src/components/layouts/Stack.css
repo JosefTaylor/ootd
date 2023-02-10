@@ -5,7 +5,3 @@
     justify-content: center;
     align-items: stretch;
 }
-
-.stack > * + * {
-    margin-top: 5px;
-}

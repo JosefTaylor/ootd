@@ -1,0 +1,31 @@
+#app {
+  height: 100vh;
+  width: 100vw;
+
+  display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      'header'
+      'main'
+      'footer';
+}
+
+#app>header {
+  grid-area: header;
+}
+
+#app>main {
+  width: 100%;
+  grid-area: main;
+  overflow: auto;
+  background-color: white;
+  display: grid;
+  padding: var(--pad-m);
+  justify-items: center;
+  align-items: center;
+}
+
+#app>footer {
+  grid-area: footer;
+}

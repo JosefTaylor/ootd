@@ -1,8 +1,29 @@
-.splitter>.header-end {
-    width: 100px;
-    padding: 16px;
+#header {
+  width: 100%;
+
+  display: grid;
+    grid-template-columns: 0.5fr auto 0.5fr;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+      'left main right';
 }
 
-.header {
-    align-items: center;
+#header>.left {
+  grid-area: left;
+  align-self: center;
+  justify-self: start;
+  padding-left: 1em; 
+  gap: 1em;
+}
+
+#header>.main {
+  grid-area: main;
+}
+
+#header>.right {
+  grid-area: right;
+  align-self: center;
+  justify-self: end;
+  padding-right: 1em;
+  gap: 1em;
 }

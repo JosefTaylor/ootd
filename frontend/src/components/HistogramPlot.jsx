@@ -1,8 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Plot from "react-plotly.js";
 
-export default function Histogram(props) {
-  const purchaseDateList = props.garmentList.map(
+import { getDashboardData } from "../ootdApi.jsx";
+import Card from "./Card.jsx";
+
+export default function Histogram() {
+  const [dashboardData, setDashboardData] = React.useState();
+
+  useEffect(() => {
+    async function func() {
+      const newData = await getDashboardData();
+      setDashboardData(newData);
+    }
+    func();
+  }, []);
+
+  if (!dashboardData) {
+    return <p>Loading...</p>;
+  }
+
+  const purchaseDateList = dashboardData?.garments.map(
     (garment) => new Date(garment.purchase_date)
   );
 

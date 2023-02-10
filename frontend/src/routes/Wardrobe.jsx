@@ -20,6 +20,7 @@ export default function Wardrobe() {
   const location = useLocation();
 
   const fields = [
+    { label: "Garment", field: "name" },
     { label: "Aquisition Date", field: "purchase_date" },
     { label: "Price", field: "purchase_price" },
     { label: "Cost/Wear", field: "cost_per_wear" },
@@ -57,90 +58,79 @@ export default function Wardrobe() {
   };
 
   return (
-    <div className="wrapper stack pad-1 ht-full">
-      <Card className="ht-150-min" title="Your Wardrobe">
-        <input
-          value={filterText}
-          onChange={(event) => setFilterText(event.target.value)}
-        />
-        <DataTable>
-          <div className="data-item">
-            <button className="invisible">
-              <div className="splitter">
-                <div className="garment-name">Garment</div>
-                {fields.map((field, index) => (
-                  <div key={index} className="cost-per-wear">
-                    {field.label}
-                  </div>
-                ))}
-              </div>
-            </button>
-          </div>
-          {filteredGarments.map((garment) => (
-            <div key={garment.id} className="data-item">
-              {garment.id === parseInt(params.garmentId) ? (
-                location.state === "declutter" ? (
-                  <DeclutterRow
-                    garment={garment}
-                    onCancel={() => {
-                      navigate("/wardrobe");
-                    }}
-                    onDeclutter={() => {
-                      navigate("/wardrobe");
-                      setRefreshData(true);
-                    }}
-                  />
-                ) : (
-                  <EditRow
-                    garment={garment}
-                    onSave={() => {
-                      navigate("/wardrobe");
-                      setRefreshData(true);
-                    }}
-                    onCancel={() => {
-                      navigate("/wardrobe");
-                    }}
-                    onDeclutter={() => {
-                      navigate("/wardrobe/" + garment.id.toString(), {
-                        state: "declutter",
-                      });
-                    }}
-                  />
-                )
-              ) : (
-                <DisplayRow
+    <Card className="fullsize" title="Your Wardrobe">
+      <input
+        value={filterText}
+        onChange={(event) => setFilterText(event.target.value)}
+      />
+      <DataTable header={fields.map((field) => field.label)}>
+        {filteredGarments.map((garment) => (
+          <tr key={garment.id}>
+            {garment.id === parseInt(params.garmentId) ? (
+              location.state === "declutter" ? (
+                <DeclutterRow
                   garment={garment}
                   fields={fields}
-                  onEdit={() => {
-                    navigate("/wardrobe/" + garment.id.toString());
+                  onCancel={() => {
+                    navigate("/wardrobe");
+                  }}
+                  onDeclutter={() => {
+                    navigate("/wardrobe");
+                    setRefreshData(true);
                   }}
                 />
-              )}
-            </div>
-          ))}
-        </DataTable>
-        {location.state === "new" ? (
-          <EditRow
-            garment={{
-              name: filterText,
-              purchase_date: ToClosetDate(new Date()),
-              tags: toTags(filterText),
-            }}
-            onSave={() => {
-              navigate("/wardrobe");
-              setRefreshData(true);
-            }}
-            onCancel={() => {
-              navigate("/wardrobe");
-            }}
-          />
-        ) : (
-          <button onClick={() => navigate("/wardrobe", { state: "new" })}>
-            {filterText ? `create "${filterText}"` : "new"}
-          </button>
-        )}
-      </Card>
-    </div>
+              ) : (
+                <EditRow
+                  garment={garment}
+                  fields={fields}
+                  onSave={() => {
+                    navigate("/wardrobe");
+                    setRefreshData(true);
+                  }}
+                  onCancel={() => {
+                    navigate("/wardrobe");
+                  }}
+                  onDeclutter={() => {
+                    navigate("/wardrobe/" + garment.id.toString(), {
+                      state: "declutter",
+                    });
+                  }}
+                />
+              )
+            ) : (
+              <DisplayRow
+                garment={garment}
+                fields={fields}
+                onEdit={() => {
+                  navigate("/wardrobe/" + garment.id.toString());
+                }}
+              />
+            )}
+          </tr>
+        ))}
+      </DataTable>
+      {location.state === "new" ? (
+        <EditRow
+          garment={{
+            name: filterText,
+            purchase_date: ToClosetDate(new Date()),
+            tags: toTags(filterText),
+          }}
+          fields={fields}
+          onSave={() => {
+            navigate("/wardrobe");
+            setRefreshData(true);
+          }}
+          onCancel={() => {
+            navigate("/wardrobe");
+          }}
+        />
+      ) : (
+        <button onClick={() => navigate("/wardrobe", { state: "new" })}>
+          {filterText ? `create "${filterText}"` : "new"}
+        </button>
+      )}
+    </Card>
   );
 }
 
@@ -170,19 +160,9 @@ function DisplayRow(props) {
       deaq_price: formatCost(props.garment.deaq_price),
     };
   }
-
-  return (
-    <button className="invisible" type="cancel" onClick={props.onEdit}>
-      <div className="splitter">
-        <div className="garment-name">{displayGarment.name}</div>
-        {props.fields.map((field, index) => (
-          <div key={index} className="cost-per-wear">
-            {displayGarment[field.field]}
-          </div>
-        ))}
-      </div>
-    </button>
-  );
+  return props.fields.map((field, index) => (
+    <td key={index}>{displayGarment[field.field]}</td>
+  ));
 }
 
 function EditRow(props) {
@@ -214,57 +194,63 @@ function EditRow(props) {
   }
 
   return (
-    <div className="flow">
-      <label>
-        garment name:
-        <input
-          type="text"
-          name="name"
-          value={name}
-          onChange={(event) => {
-            setName(event.target.value);
-          }}
-        />
-      </label>
-      <label>
-        purchase date:
-        <input
-          type="date"
-          name="purchase_date"
-          value={purchase_date}
-          onChange={(event) => {
-            setPurchase_date(event.target.value);
-          }}
-        />
-      </label>
-      <label>
-        purchase price:
-        <input
-          type="number"
-          name="purchase_price"
-          value={purchase_price}
-          onChange={(event) => {
-            setPurchase_price(event.target.value);
-          }}
-        />
-      </label>
-      <label>
-        tags:
-        <input
-          type="text"
-          name="tags"
-          value={tags}
-          onChange={(event) => {
-            setTags(event.target.value);
-          }}
-        />
-      </label>
-      <button onClick={handleSubmit}>Save</button>
-      <button onClick={props.onCancel}>Cancel</button>
-      <button onClick={props.onDeclutter} className="warning">
-        Declutter
-      </button>
-    </div>
+    <td colSpan={props.fields.length}>
+      <div id="edit-row">
+        <label>
+          garment name:
+          <input
+            type="text"
+            name="name"
+            value={name}
+            onChange={(event) => {
+              setName(event.target.value);
+            }}
+          />
+        </label>
+        <label>
+          purchase date:
+          <input
+            type="date"
+            name="purchase_date"
+            value={purchase_date}
+            onChange={(event) => {
+              setPurchase_date(event.target.value);
+            }}
+          />
+        </label>
+        <label>
+          purchase price:
+          <input
+            type="number"
+            name="purchase_price"
+            value={purchase_price}
+            onChange={(event) => {
+              setPurchase_price(event.target.value);
+            }}
+          />
+        </label>
+        <label>
+          tags:
+          <input
+            type="text"
+            name="tags"
+            value={tags}
+            onChange={(event) => {
+              setTags(event.target.value);
+            }}
+          />
+        </label>
+        <button onClick={handleSubmit}>Save</button>
+        <button onClick={props.onCancel}>Cancel</button>
+        {props.garment.id ? (
+          <button onClick={props.onDeclutter} className="warning">
+            Declutter
+          </button>
+        ) : (
+          ""
+        )}
+      </div>
+    </td>
   );
 }
 
@@ -291,30 +277,32 @@ function DeclutterRow(props) {
   }
 
   return (
-    <div className="flow">
-      <label>
-        De-acquisition date:
-        <input
-          type="date"
-          name="deaq_date"
-          value={deaq_date}
-          onChange={(event) => setDeaq_date(event.target.value)}
-        />
-      </label>
-      <label>
-        Sale price:
-        <input
-          type="number"
-          name="deaq_price"
-          value={deaq_price}
-          onChange={(event) => setDeaq_price(event.target.value)}
-        />
-      </label>
-      <button onClick={props.onCancel}>Cancel</button>
-      <button onClick={handleSubmit} className="warning">
-        Declutter
-      </button>
-    </div>
+    <td colSpan={props.fields.length}>
+      <div id="edit-row">
+        <label>
+          De-acquisition date:
+          <input
+            type="date"
+            name="deaq_date"
+            value={deaq_date}
+            onChange={(event) => setDeaq_date(event.target.value)}
+          />
+        </label>
+        <label>
+          Sale price:
+          <input
+            type="number"
+            name="deaq_price"
+            value={deaq_price}
+            onChange={(event) => setDeaq_price(event.target.value)}
+          />
+        </label>
+        <button onClick={props.onCancel}>Cancel</button>
+        <button onClick={handleSubmit} className="warning">
+          Declutter
+        </button>
+      </div>
+    </td>
   );
 }
 

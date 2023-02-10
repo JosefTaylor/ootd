@@ -1,5 +1,11 @@
 @import "./reset.css";
 
+:root {
+  --pad-l: clamp(0px, 6vw, 120px);
+  --pad-m: clamp(0px, calc(4vw - 20px), 80px);
+  --pad-s: clamp(0px, calc(2vw - 10px), 40px);
+}
+
 body {
   background-color: rgb(255, 164, 164);
   color: black;
@@ -17,21 +23,19 @@ h1, h2, h3, h4 {
 }
 
 h1 {
-  font-size: clamp(3rem, 7vw, 6rem);
+  font-size: clamp(1rem, 7vw, 6rem);
 }
 
 h2 {
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(1rem, 5vw, 3.5rem);
 }
 
-input, button {
+input, button, .button {
   border: 1px solid rgba(0, 0, 0, 0.062);
   background-color: rgba(255, 255, 255, 0.151);
-  border-radius: 1rem;
+  border-radius: 0.8rem;
   font-size: clamp(0.8rem, 1.8vw, 1.1rem);
   color: inherit;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
   text-align: center;
 }
 
@@ -44,43 +48,33 @@ input, button {
   color: darkred;
 }
 
+.invisible {
+  border: 0;
+  background-color: rgba(255, 255, 255, 0);
+  border-radius: inherit;
+  font-size: inherit;
+  margin-top: inherit;
+  margin-bottom: inherit;
+}
+
 input {
   cursor: text;
 }
 
-button {
-  cursor: pointer;
-}
-
-.button {
-  border: 1px solid rgba(0, 0, 0, 0.062);
-  background-color: rgba(255, 255, 255, 0.419);
-  border-radius: 1rem;
-  font-size: clamp(0.8rem, 2vw, 1rem);
-  color: inherit;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-  text-align: center;
+button, .button {
   cursor: pointer;
 }
 
 /* Layouts */
-@import "./components/layouts/Center.css";
-@import "./components/layouts/GlobalStack.css";
-@import "./components/layouts/Sidebar.css";
+@import "./components/layouts/ImgOverlay.css";
 @import "./components/layouts/Splitter.css";
 @import "./components/layouts/Stack.css";
-@import "./components/layouts/Wrapper.css";
-@import "./components/layouts/Flow.css";
-@import "./components/layouts/ImgOverlay.css";
-
-/* Utilities */
-@import "./components/utilities/Padding.css";
-@import "./components/utilities/Height.css";
-@import "./components/utilities/Width.css";
 
 /* Components */
 @import "./components/Card.css";
 @import "./components/DataTable.css";
 @import "./components/Header.css";
-@import "./components/Field.css";
+@import "./components/EditRow.css";
+
+/* Routes */
+@import "./routes/Root.css";

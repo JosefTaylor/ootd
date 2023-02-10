@@ -1,7 +1,0 @@
-.flow {
-    height: 100%;
-    display: flex;
-    box-sizing: border-box;
-    flex-flow: row wrap;
-    gap: 10px;
-}
