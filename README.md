@@ -1,3 +1,3 @@
 # OutfitOfTheDay
-
-[Track your outfits every day](https://ootd-api.onrender.com/)
+Track your outfits every day
+[outfitoftheday.net](https://www.outfitoftheday.net/)
