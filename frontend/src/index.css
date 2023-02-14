@@ -10,7 +10,7 @@ body {
   background-color: rgb(255, 164, 164);
   color: black;
   font-size: clamp(0.8rem, 1.8vw, 1.1rem);
-  font-family: Montserrat,Futura,sans-serif;
+  font-family: 'Space Grotesk',sans-serif;
   text-align: center;
 }
 
@@ -19,7 +19,7 @@ img {
 }
 
 h1, h2, h3, h4 {
-  font-family: Bodoni MT,serif;
+  font-family: 'Bodoni Moda',serif;
 }
 
 h1 {
