@@ -135,6 +135,7 @@ export default function Wardrobe() {
 }
 
 function DisplayRow(props) {
+  const navigate = useNavigate();
   let displayGarment = { ...props.garment };
   if (props.garment.cost_per_wear) {
     displayGarment = {
@@ -161,7 +162,17 @@ function DisplayRow(props) {
     };
   }
   return props.fields.map((field, index) => (
-    <td key={index}>{displayGarment[field.field]}</td>
+    <td key={index}>
+      <button
+        className="invisible"
+        onClick={() => {
+          console.log();
+          navigate("/wardrobe/" + displayGarment.id.toString());
+        }}
+      >
+        {displayGarment[field.field]}
+      </button>
+    </td>
   ));
 }
 

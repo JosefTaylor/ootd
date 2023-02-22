@@ -19,7 +19,7 @@ export default function PasswordChange() {
         new_password2: new_password2,
       });
 
-      navigate("/home", { replace: true });
+      navigate("/", { replace: true });
     } catch (error) {
       setLoginError(error.response.data);
     }
